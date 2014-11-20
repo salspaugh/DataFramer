@@ -1,3 +1,4 @@
-Template.datasets.helpers({
-    
+Template.dataset.helpers({
+    // dataset: Datasets.findOne()
+    // name: dataset.name
 });

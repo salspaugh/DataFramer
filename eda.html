@@ -1,18 +1,80 @@
+
+
+<!-- <template name="hello">
+  <button>Click Me</button>
+  <p>You've pressed the button {{counter}} times.</p>
+</template> -->
+
+<template name="upload">
+    <input type="file" name="csv" value="" class="csv-upload"/>
+</template>
+
+
+<!-- <body ng-controller="HomeController"> -->
+
 <head>
   <title>eda</title>
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
 
-  {{> upload}}
+    <div id="wrapper">
+        <!-- /.sidebar -->
+        <div id="sidebar-wrapper">
+            <div>
+                <ul class="sidebar-nav" >
+                	{{> upload}}
+                	<br>
+                	<input type="text" placeholder="Search variable names" class="search-box">
+                    <li class="sidebar-brand">
+                      <a href="#">Variables</a>
+<!--                       {{> dataset}}
+ -->                    </li>
+                    <hr>
+                    <!-- <li ng-repeat="var in data | filter:searchText">
+                        <a class="side-nav-link"  href="#"> {{ var.name }} </a> -->
+                </ul>
+            </div>
+        </div>    
+        
+
+        <!-- Page Content -->
+        <div class="container" id="page-content-wrapper">
+            
+            <div class="row">
+                <br>
+                <!-- <div class="col-md-4 thumb" ng-repeat="var in data"> -->
+                <div class="col-md-4 thumb">
+                    <a class="thumbnail" href="#">
+
+                        <!-- <div class="var-name" > {{ var.name }} </div> -->
+                        <!-- <div hist="{{data}}"> </div> -->
+                         <!-- <span>{{title}}</span>
+                            <hist data="d3Data" label="name" on-click="d3OnClick(item)"></d3-bars> -->
+                            
+                    </a>    
+                    <!-- <div d3-bars bar-height="20" bar-padding="5"></div> -->
+                    <!-- <bars data> {{ var.array }}</bars> -->
+                </div>
+
+                <!-- <div class="col-md-4 thumb" ng-repeat="entry in entries | filter:searchText">
+                    <a class="thumbnail" ng-click="openExpanded(entry)" href="#">
+                        <span class="product-name"> {{ entry.productName }} </span>
+                        <div class="user-goal text-muted" > #{{ entry.userGoal }} </div>
+                        <img class="img-responsive" ng-src= "{{ entry.image }}" alt="">
+                    </a>
+                     <ng-view></ng-view> -->
+            </div>
+
+
+            <!-- Footer -->
+            <footer>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p></p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>    
 </body>
-
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
-</template>
-
-<template name="upload">
-    <input type="file" name="csv" value="" class="csv-upload"/>
-</template>

@@ -50,6 +50,7 @@ iron:url@1.0.0
 jquery@1.0.1
 json@1.0.1
 launch-screen@1.0.0
+less@1.0.11
 livedata@1.0.11
 logging@1.0.5
 meteor-platform@1.2.0
@@ -61,6 +62,8 @@ mongo-livedata@1.0.6
 mongo@1.0.8
 mrt:jquery-csv@0.7.1
 mrt:moment@2.8.1
+nemo64:bootstrap-data@3.3.0_1
+nemo64:bootstrap@3.3.0_1
 observe-sequence@1.0.3
 ordered-dict@1.0.1
 raix:eventemitter@0.0.1
