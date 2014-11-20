@@ -39,16 +39,16 @@ CSV()
             }, 0);
 
             var mean = sum / col.values.length;
-            // col.mean = roundToPrecision(mean, 2);
+            col.mean = roundToPrecision(mean, 2);
 
             // variance and standard deviation
-            // var variance = _.reduce(col.values, function(memo, num) {
-            //     return Math.pow(num - mean, 2);
-            // }) / col.values.length;
-            // col.variance = roundToPrecision(variance, 3);
+            var variance = _.reduce(col.values, function(memo, num) {
+                return Math.pow(num - mean, 2);
+            }) / col.values.length;
+            col.variance = roundToPrecision(variance, 3);
 
-            // var deviation = Math.sqrt(variance);
-            // col.stddev = roundToPrecision(deviation, 4);
+            var deviation = Math.sqrt(variance);
+            col.stddev = roundToPrecision(deviation, 4);
 
         } else if (datatype[0] == 'integer') {
             _.each(col.values, function(v,i,a){
@@ -61,16 +61,16 @@ CSV()
             }, 0);
 
             var mean = sum / col.values.length;
-            // col.mean = roundToPrecision(mean, 2);
+            col.mean = roundToPrecision(mean, 2);
 
             // variance and standard deviation
-            // var variance = _.reduce(col.values, function(memo, num) {
-            //     return Math.pow(num - mean, 2);
-            // }) / col.values.length;
-            // col.variance = roundToPrecision(variance, 3);
+            var variance = _.reduce(col.values, function(memo, num) {
+                return Math.pow(num - mean, 2);
+            }) / col.values.length;
+            col.variance = roundToPrecision(variance, 3);
 
-            // var deviation = Math.sqrt(variance);
-            // col.stddev = roundToPrecision(deviation, 4);
+            var deviation = Math.sqrt(variance);
+            col.stddev = roundToPrecision(deviation, 4);
 
         } else if (datatype[0] == 'date') {
             _.each(col.values, function(v,i,a){
