@@ -3,3 +3,28 @@
     	{{> name}}
     {{/each}} -->
 </template>
+
+<template name="datasets">
+<br>
+<!-- <div class="col-md-4 thumb" ng-repeat="var in data"> -->
+<div class="col-md-4 thumb">
+    <a class="thumbnail" href="#">
+
+        <!-- <div class="var-name" > {{ var.name }} </div> -->
+        <!-- <div hist="{{data}}"> </div> -->
+         <!-- <span>{{title}}</span>
+            <hist data="d3Data" label="name" on-click="d3OnClick(item)"></d3-bars> -->
+
+    </a>
+    <!-- <div d3-bars bar-height="20" bar-padding="5"></div> -->
+    <!-- <bars data> {{ var.array }}</bars> -->
+</div>
+
+<!-- <div class="col-md-4 thumb" ng-repeat="entry in entries | filter:searchText">
+    <a class="thumbnail" ng-click="openExpanded(entry)" href="#">
+        <span class="product-name"> {{ entry.productName }} </span>
+        <div class="user-goal text-muted" > #{{ entry.userGoal }} </div>
+        <img class="img-responsive" ng-src= "{{ entry.image }}" alt="">
+    </a>
+     <ng-view></ng-view> -->
+</template>

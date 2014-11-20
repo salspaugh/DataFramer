@@ -135,7 +135,7 @@ CSV()
                             return false;
                         }
                 })
-            };   
+            };
              _.each(col.values, function(v,i,a){
                 a[i] = checkNull(v, true)? undefined : v.unix();
             });
@@ -153,15 +153,7 @@ CSV()
 
     dataset["columns"] =  cols;
 
-    // return dataset;
-    // names = _.each(dataset, function(v,i,a){
-    //              v;
-    //         });
-   console.log(dataset);
-
-    // console.log(dataset);
     // add to database
-    // TODO: why is this not working
     Datasets.insert(dataset);
 }));
 

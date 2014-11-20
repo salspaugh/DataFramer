@@ -1,0 +1,47 @@
+<template name="twoColumns">
+<head>
+  <title>eda</title>
+</head>
+
+<body>
+
+    <div id="wrapper">
+        <!-- /.sidebar -->
+        <div id="sidebar-wrapper">
+            <div>
+                <ul class="sidebar-nav" >
+                    {{> yield "sidebar-top" }}
+                    <br>
+                    <input type="text" placeholder="Search variable names" class="search-box">
+                    <li class="sidebar-brand">
+                      <a href="#">Variables</a>
+<!--                       {{> dataset}}
+ -->                    </li>
+                    <hr>
+                    <!-- <li ng-repeat="var in data | filter:searchText">
+                        <a class="side-nav-link"  href="#"> {{ var.name }} </a> -->
+                </ul>
+            </div>
+        </div>
+
+
+        <!-- Page Content -->
+        <div class="container" id="page-content-wrapper">
+
+            <div class="row">
+                {{> yield }}
+            </div>
+
+
+            <!-- Footer -->
+            <footer>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p></p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>
+</template>
