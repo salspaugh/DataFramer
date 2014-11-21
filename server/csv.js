@@ -1,163 +1,174 @@
-var csvfile = CSVs.findOne();
+// watch for new CSV uploads
+CSVs.find().observeChanges({
+    // NOTE: this event also fires when the server starts, so it will reprocess everything
+    added: function(id, fields){
+        var stream = CSVs.findOne({'_id': id}).createReadStream();
+        stream.on('data', Meteor.bindEnvironment(function(buff){
+            processCsv(buff, fields.original.name);
+        }));
+    }
+});
 
-// using collectionFS package
+function processCsv(csvfile, name){
+    // var csvfile = CSVs.findOne({'_id': csvfile_id});
 
-CSV()
-.from(csvfile.createReadStream())
-// need to bind Meteor environment to callbacks in other libraries
-.to.array(Meteor.bindEnvironment(function(data){
+    // using collectionFS package
+    CSV()
+    .from.string(csvfile)
+    // need to bind Meteor environment to callbacks in other libraries
+    .to.array(Meteor.bindEnvironment(function(data){
 
-    var dataset = {
-        "name": csvfile.name(),
-        "rowCount": data.length - 1, // subtract the header row
-        "columns": []
-    };
-
-    // convert rows to columns
-    var cols = _.zip.apply(_, data);
-    // convert arrays to objects, separate name from values
-    _.each(cols, function(v,i,a){
-        a[i] = {
-            name: v[0],
-            values: _.rest(v)
+        var dataset = {
+            "name": name,
+            "rowCount": data.length - 1, // subtract the header row
         };
-    });
 
-    // detect the datatype
-    _.each(cols, function(col){
-        var datatype = detectDataType(col.values);
-        col['datatype'] = datatype[0];
-
-        // cast numbers and dates before storing
-        if (datatype[0] == 'float'){
-            _.each(col.values, function(v,i,a){
-                a[i] = checkNull(v, true)? undefined : parseFloat(v);
-            });
-            // calculate the mean
-            var sum = _.reduce(col.values, function(memo, num){
-                return memo + num
-            }, 0);
-
-            var mean = sum / col.values.length;
-            col.mean = roundToPrecision(mean, 2);
-
-            // variance and standard deviation
-            var variance = _.reduce(col.values, function(memo, num) {
-                return Math.pow(num - mean, 2);
-            }) / col.values.length;
-            col.variance = roundToPrecision(variance, 3);
-
-            var deviation = Math.sqrt(variance);
-            col.stddev = roundToPrecision(deviation, 4);
-
-        } else if (datatype[0] == 'integer') {
-            _.each(col.values, function(v,i,a){
-                a[i] = checkNull(v, true)? undefined : parseInt(v);
-
-            });
-            // calculate the mean
-            var sum = _.reduce(col.values, function(memo, num){
-                return memo + num
-            }, 0);
-
-            var mean = sum / col.values.length;
-            col.mean = roundToPrecision(mean, 2);
-
-            // variance and standard deviation
-            var variance = _.reduce(col.values, function(memo, num) {
-                return Math.pow(num - mean, 2);
-            }) / col.values.length;
-            col.variance = roundToPrecision(variance, 3);
-
-            var deviation = Math.sqrt(variance);
-            col.stddev = roundToPrecision(deviation, 4);
-
-        } else if (datatype[0] == 'date') {
-            _.each(col.values, function(v,i,a){
-                a[i] = checkNull(v, true)? undefined : moment(v);
-            });
-
-            col.values = _.sortBy(col.values); // will this cause problems?
-
-            // formatted for Rickshaw js input
-            col.timeSeries = _.each(_.uniq(col.values), function(v,i,a){
-                a[i] = {'x': moment(+v.key).unix(), 'y': v.values};
-            });
-
-            col.max = _.last(col.values);
-            col.min = _.first(col.values);
-            col.range = moment.duration(col.max - col.min);
-            // NOTE: call humanize() method to get col.range in plain English
-
-            // to determine intervals:
-            // check the range,
-            // and also make sure the diffs aren't all exactly the next largest interval
-
-            col.intervals = {
-                'year': col.max.diff(col.min, 'years') > 0,
-                'month': col.max.diff(col.min, 'months') > 0 && _.some(col.values,
-                    function(v,i,a){
-                        if (a[i+1] != undefined){
-                            return v.diff(a[i+1], 'years', true) != v.diff(a[i+1], 'years');
-                        } else {
-                            return false;
-                        }
-                }),
-                'day': col.max.diff(col.min, 'day') > 0 && _.some(col.values,
-                    function(v,i,a){
-                        if (a[i+1] != undefined){
-                            return v.diff(a[i+1], 'months', true) != v.diff(a[i+1], 'months');
-                        } else {
-                            return false;
-                        }
-                }),
-                'hour': col.max.diff(col.min, 'hours') > 0 && _.some(col.values,
-                    function(v,i,a){
-                        if (a[i+1] != undefined){
-                            return v.diff(a[i+1], 'days', true) != v.diff(a[i+1], 'days');
-                        } else {
-                            return false;
-                        }
-                }),
-                'minute': col.max.diff(col.min, 'minutes') > 0 && _.some(col.values,
-                    function(v,i,a){
-                        if (a[i+1] != undefined){
-                            return v.diff(a[i+1], 'hours', true) != v.diff(a[i+1], 'hours');
-                        } else {
-                            return false;
-                        }
-                }),
-                'second': col.max.diff(col.min, 'seconds') > 0 && _.some(col.values,
-                    function(v,i,a){
-                        if (a[i+1] != undefined){
-                            return v.diff(a[i+1], 'minutes', true) != v.diff(a[i+1], 'minutes');
-                        } else {
-                            return false;
-                        }
-                })
+        // convert rows to columns
+        var cols = _.zip.apply(_, data);
+        // convert arrays to objects, separate name from values
+        _.each(cols, function(v,i,a){
+            a[i] = {
+                name: v[0],
+                values: _.rest(v)
             };
-             _.each(col.values, function(v,i,a){
-                a[i] = checkNull(v, true)? undefined : v.unix();
-            });
-        }
+        });
 
-        // store the set of unique values
-        col.set = _.uniq(col.values);
+        // detect the datatype
+        _.each(cols, function(col){
+            var datatype = detectDataType(col.values);
+            col['datatype'] = datatype[0];
 
-        // store count of nulls
-        col.nulls = _.reduce(col.values, function(memo, v){
-            return _.isUndefined(v)? memo + 1 : memo;
-        }, 0);
+            // cast numbers and dates before storing
+            if (datatype[0] == 'float'){
+                _.each(col.values, function(v,i,a){
+                    a[i] = checkNull(v, true)? undefined : parseFloat(v);
+                });
+                // calculate the mean
+                var sum = _.reduce(col.values, function(memo, num){
+                    return memo + num
+                }, 0);
 
-    });
+                var mean = sum / col.values.length;
+                col.mean = roundToPrecision(mean, 2);
 
-    dataset["columns"] =  cols;
+                // variance and standard deviation
+                var variance = _.reduce(col.values, function(memo, num) {
+                    return Math.pow(num - mean, 2);
+                }) / col.values.length;
+                col.variance = roundToPrecision(variance, 3);
 
-    // add to database
-    Datasets.insert(dataset);
-}));
+                var deviation = Math.sqrt(variance);
+                col.stddev = roundToPrecision(deviation, 4);
 
+            } else if (datatype[0] == 'integer') {
+                _.each(col.values, function(v,i,a){
+                    a[i] = checkNull(v, true)? undefined : parseInt(v);
 
+                });
+                // calculate the mean
+                var sum = _.reduce(col.values, function(memo, num){
+                    return memo + num
+                }, 0);
+
+                var mean = sum / col.values.length;
+                col.mean = roundToPrecision(mean, 2);
+
+                // variance and standard deviation
+                var variance = _.reduce(col.values, function(memo, num) {
+                    return Math.pow(num - mean, 2);
+                }) / col.values.length;
+                col.variance = roundToPrecision(variance, 3);
+
+                var deviation = Math.sqrt(variance);
+                col.stddev = roundToPrecision(deviation, 4);
+
+            } else if (datatype[0] == 'date') {
+                _.each(col.values, function(v,i,a){
+                    a[i] = checkNull(v, true)? undefined : moment(v);
+                });
+
+                col.values = _.sortBy(col.values); // will this cause problems?
+
+                // formatted for Rickshaw js input
+                col.timeSeries = _.each(_.uniq(col.values), function(v,i,a){
+                    a[i] = {'x': moment(+v.key).unix(), 'y': v.values};
+                });
+
+                col.max = _.last(col.values);
+                col.min = _.first(col.values);
+                col.range = moment.duration(col.max - col.min);
+                // NOTE: call humanize() method to get col.range in plain English
+
+                // to determine intervals:
+                // check the range,
+                // and also make sure the diffs aren't all exactly the next largest interval
+
+                col.intervals = {
+                    'year': col.max.diff(col.min, 'years') > 0,
+                    'month': col.max.diff(col.min, 'months') > 0 && _.some(col.values,
+                        function(v,i,a){
+                            if (a[i+1] != undefined){
+                                return v.diff(a[i+1], 'years', true) != v.diff(a[i+1], 'years');
+                            } else {
+                                return false;
+                            }
+                    }),
+                    'day': col.max.diff(col.min, 'day') > 0 && _.some(col.values,
+                        function(v,i,a){
+                            if (a[i+1] != undefined){
+                                return v.diff(a[i+1], 'months', true) != v.diff(a[i+1], 'months');
+                            } else {
+                                return false;
+                            }
+                    }),
+                    'hour': col.max.diff(col.min, 'hours') > 0 && _.some(col.values,
+                        function(v,i,a){
+                            if (a[i+1] != undefined){
+                                return v.diff(a[i+1], 'days', true) != v.diff(a[i+1], 'days');
+                            } else {
+                                return false;
+                            }
+                    }),
+                    'minute': col.max.diff(col.min, 'minutes') > 0 && _.some(col.values,
+                        function(v,i,a){
+                            if (a[i+1] != undefined){
+                                return v.diff(a[i+1], 'hours', true) != v.diff(a[i+1], 'hours');
+                            } else {
+                                return false;
+                            }
+                    }),
+                    'second': col.max.diff(col.min, 'seconds') > 0 && _.some(col.values,
+                        function(v,i,a){
+                            if (a[i+1] != undefined){
+                                return v.diff(a[i+1], 'minutes', true) != v.diff(a[i+1], 'minutes');
+                            } else {
+                                return false;
+                            }
+                    })
+                };
+                 _.each(col.values, function(v,i,a){
+                    a[i] = checkNull(v, true)? undefined : v.unix();
+                });
+            }
+
+            // store the set of unique values
+            col.set = _.uniq(col.values);
+
+            // store count of nulls
+            col.nulls = _.reduce(col.values, function(memo, v){
+                return _.isUndefined(v)? memo + 1 : memo;
+            }, 0);
+
+        });
+
+        dataset["columns"] =  cols;
+
+        // add to database or replace existing with same name
+        Datasets.upsert({"name": name}, dataset);
+    }));
+}
+
+// utility functions for processor
 function detectDataType(items){
     // remove nulls
     var new_items = _.filter(items, function(item, index) {
