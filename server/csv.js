@@ -1,13 +1,7 @@
-// watch for new CSV uploads
-CSVs.find().observeChanges({
-    // NOTE: this event also fires when the server starts, so it will reprocess everything
-    added: function(id, fields){
-        var stream = CSVs.findOne({'_id': id}).createReadStream();
-        stream.on('data', Meteor.bindEnvironment(function(buff){
-            processCsv(buff, fields.original.name);
-        }));
-    }
+Meteor.methods({
+    'processCsv': processCsv,
 });
+
 
 function processCsv(csvfile, name){
     // var csvfile = CSVs.findOne({'_id': csvfile_id});
@@ -164,7 +158,8 @@ function processCsv(csvfile, name){
         dataset["columns"] =  cols;
 
         // add to database or replace existing with same name
-        Datasets.upsert({"name": name}, dataset);
+        Datasets.insert(dataset);
+        console.log('added dataset', name);
     }));
 }
 
