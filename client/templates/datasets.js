@@ -1,4 +1,4 @@
 Template.dataset.helpers({
-    // dataset: Datasets.findOne()
+     datset: Datasets.findOne()
     // name: dataset.name
 });
