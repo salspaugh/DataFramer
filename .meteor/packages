@@ -10,8 +10,7 @@ mrt:moment
 iron:router
 dsyko:meteor-node-csv
 mrt:jquery-csv
-cfs:standard-packages
-cfs:filesystem
 nemo64:bootstrap
 less
+urigo:angular
 
