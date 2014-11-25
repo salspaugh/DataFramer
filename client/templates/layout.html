@@ -8,19 +8,19 @@
     <div id="wrapper">
         <!-- /.sidebar -->
         <div id="sidebar-wrapper">
-            <div>
-                <ul class="sidebar-nav" >
+            <div ng-controller="VarsController">
+                <div class="sidebar-nav" >
                     {{> yield "sidebar-top" }}
                     <br>
                     <input type="text" placeholder="Search variable names" class="search-box">
-                    <li class="sidebar-brand">
-                      <a href="#">Variables</a>
-<!--                       {{> dataset}}
- -->                    </li>
+                    <h2>Variables</h2>
                     <hr>
-                    <!-- <li ng-repeat="var in data | filter:searchText">
-                        <a class="side-nav-link"  href="#"> {{ var.name }} </a> -->
-                </ul>
+                    <ul>
+                    <li ng-repeat="col in datasets | filter:searchText">
+                        <a class="side-nav-link"  href="#"> [[col]] </a>
+                    </li>  
+                    </ul>  
+                </div>
             </div>
         </div>
 
