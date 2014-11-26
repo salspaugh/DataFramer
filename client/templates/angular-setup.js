@@ -18,19 +18,30 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                     controller: 'DatasetsController',
                 }
             },
-
-
-            // template: UiRouter.template('datasets.html'),
-            // controller: 'VarsController',
-            // name: 'sidebar'
+        })
+        .state('dataset', {
+            url: '/dataset/:datasetId',
+            // really just a placeholder; needs views
+            views: {
+                "sidebar": {
+                    template: UiRouter.template('vars-list'),
+                    controller: 'VarsController',
+                },
+                "main": {
+                    template: UiRouter.template('questions-list'),
+                    
+                }
+            }
         })
         ;
 
 }]);
 
-angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
-  function($scope, $collection){
+angular.module('data_qs').controller('VarsController', ['$scope', '$collection', '$stateParams',
+  function($scope, $collection, $stateParams){
     $collection(Datasets).bind($scope, 'datasets', true, true);
+    $scope.datasetId = $stateParams.datasetId;
+
 }]);
 
 angular.module('data_qs').controller('DatasetsController', ['$scope', '$collection',

@@ -1,7 +1,26 @@
 <template name="datasets-list">
     <input type="text" placeholder="Search variable names" class="search-box"/>
     <h2>my datasets</h2>
-    <ul>
-        <li ng-repeat="dataset in datasets">[[ dataset.name ]]</li>
+    <ul class="nav nav-stacked">
+        <li ng-repeat="dataset in datasets">
+            <a href="/dataset/[[ dataset._id ]]">[[ dataset.name ]]</a>
+        </li>
     </ul>
+</template>
+
+<template name="vars-list">
+    <h2>variables</h2>
+    <ul ng-repeat="dataset in datasets | filter: dataset._id : datasetId">
+        <li ng-repeat="col in dataset.columns">
+            [[ col.name ]]
+        </li>
+    </ul>
+</template>
+
+<template name="vars-grid">
+    <h2>vars grid</h2>
+</template>
+
+<template name="questions-list">
+    <h2>questions list</h2>
 </template>

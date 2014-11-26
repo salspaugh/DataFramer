@@ -13,7 +13,7 @@
   "glyphicons":           false,
   "button-groups":        false,
   "input-groups":         false,
-  "navs":                 false,
+  "navs":                 true,
   "navbar":               false,
   "breadcrumbs":          false,
   "pagination":           false,
