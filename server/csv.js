@@ -15,13 +15,14 @@ function processCsv(csvfile, name){
         var dataset = {
             "name": name,
             "rowCount": data.length - 1, // subtract the header row
-            "questions": {
-                "q_id": null,
-                "q_text": null,
-                "q_notes": null,
-                "answerable": null,
-                "col_refs": []
-            }
+            "questions": []
+            //{
+            //     "q_id": null,
+            //     "q_text": null,
+            //     "q_notes": null,
+            //     "answerable": null,
+            //     "col_refs": []
+            // }
         };
 
         // convert rows to columns

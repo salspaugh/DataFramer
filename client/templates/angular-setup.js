@@ -29,7 +29,7 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                 },
                 "main": {
                     template: UiRouter.template('questions-list'),
-
+                    controller: 'VarsController',
                 }
             }
         })
@@ -50,7 +50,9 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
   function($scope, $collection, $stateParams){
     $collection(Datasets).bind($scope, 'datasets', true, true);
     $scope.datasetId = $stateParams.datasetId;
-
+    // $scope.new_qID = function() {
+    //     $scope.qID = new Mongo.ObjectID();
+    // }
 }]);
 
 angular.module('data_qs').controller('DatasetsController', ['$scope', '$collection',

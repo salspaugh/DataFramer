@@ -22,6 +22,23 @@
 </template>
 
 <template name="questions-list">
-    <h2>questions list</h2>
-    <h3>add a new question</h3>
+    <div ng-repeat="dataset in datasets | filter:datasetId">    
+        <form>
+            <label>Add a new question: </label>
+            <input ng-model="newQuestion.text">
+            <!-- <div ng-model="newQuestion.qID"></div> -->
+            <button ng-click="dataset.questions.push(newQuestion)">Add</button>
+        </form>
+    </div>
+    <div ng-repeat="dataset in datasets | filter:datasetId">
+        <h2>My Questions</h2>
+        <ul>
+            <li ng-repeat="question in dataset.questions">
+                [[ question.text ]]
+                <!-- <button ng-click="dataset.questions.push(question.answerable == true)">Answerable</button>
+                <button ng-click="dataset.questions.push(question.answerable == false)">Not Answerable</button> -->
+            </li>
+        </ul>
+    </div>
+
 </template>
