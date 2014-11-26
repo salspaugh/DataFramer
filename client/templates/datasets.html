@@ -9,10 +9,10 @@
 </template>
 
 <template name="vars-list">
-    <div ng-repeat="dataset in datasets | filter:datasetId">
+    <div>
         <h2>[[ dataset.name ]]</h2>
         <h3>variables</h3>
-        <div ng-controller="VarsController">
+        <div>
             <div ng-repeat="type in datatypes">
                 <h4>[[ type ]]</h4>
                 <ul class="nav nav-stacked">
@@ -32,23 +32,24 @@
 </template>
 
 <template name="questions-list">
-    <div ng-repeat="dataset in datasets | filter:datasetId">    
-        <form>
-            <label>Add a new question: </label>
-            <input ng-model="newQuestion.text">
-            <!-- <div ng-model="newQuestion.qID"></div> -->
-            <button ng-click="dataset.questions.push(newQuestion)">Add</button>
-        </form>
-    </div>
-    <div ng-repeat="dataset in datasets | filter:datasetId">
-        <h2>My Questions</h2>
-        <ul>
-            <li ng-repeat="question in dataset.questions">
-                [[ question.text ]]
-                <!-- <button ng-click="dataset.questions.push(question.answerable == true)">Answerable</button>
-                <button ng-click="dataset.questions.push(question.answerable == false)">Not Answerable</button> -->
-            </li>
-        </ul>
-    </div>
+     <div>    
+         <form>
+             <label>Add a new question: </label>
+             <input ng-model="newQuestion.text">
+             <div ng-model="newQuestion.qID"></div>
+             <button ng-click="dataset.questions.push(newQuestion)">Add</button>
+         </form>
+     </div>
+     <div>
+         <h2>My Questions</h2>
+         <ul>
+             <li ng-repeat="question in dataset.questions">
+                 [[ question.text ]]
+                 <!-- <button ng-click="dataset.questions.push(question.answerable == true)">Answerable</button>
+                 <button ng-click="dataset.questions.push(question.answerable == false)">Not Answerable</button> -->
+             </li>
+         </ul>
+     </div>
+ 
+ </template>
 
-</template>

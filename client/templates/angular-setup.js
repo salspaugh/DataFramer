@@ -25,11 +25,11 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
             views: {
                 "sidebar": {
                     template: UiRouter.template('vars-list'),
-                    controller: 'DatasetsController',
+                    controller: 'VarsController',
                 },
                 "main": {
                     template: UiRouter.template('questions-list'),
-                    controller: 'VarsController',
+                    controller: 'QsController',
                 }
             }
         })
@@ -50,9 +50,6 @@ angular.module('data_qs').controller('DatasetsController', ['$scope', '$collecti
   function($scope, $collection, $stateParams){
     $collection(Datasets).bind($scope, 'datasets', true, true);
     $scope.datasetId = $stateParams.datasetId;
-    // $scope.new_qID = function() {
-    //     $scope.qID = new Mongo.ObjectID();
-    // }
 }]);
 
 angular.module('data_qs').controller('VarsController', ['$scope', '$collection', '$stateParams',
@@ -60,6 +57,13 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
         $collection(Datasets).bindOne($scope, 'dataset', {_id: $stateParams.datasetId});
         $scope.datatypes = _.uniq(_.pluck($scope.dataset.columns, 'datatype'),
             false)
+        $scope.datasetId = $stateParams.datasetId;
+}]);
+
+angular.module('data_qs').controller('QsController', ['$scope', '$collection', '$stateParams',
+    function($scope, $collection, $stateParams){
+        $collection(Datasets).bindOne($scope, 'dataset', {_id: $stateParams.datasetId}, true, true);
+        $scope.qID = new Mongo.ObjectID();
     }]);
 
 angular.module('data_qs').controller('UploadController', ['$scope',
