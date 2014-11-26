@@ -25,7 +25,7 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
             views: {
                 "sidebar": {
                     template: UiRouter.template('vars-list'),
-                    controller: 'VarsController',
+                    controller: 'DatasetsController',
                 },
                 "main": {
                     template: UiRouter.template('questions-list'),
@@ -46,16 +46,20 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
 
 }]);
 
-angular.module('data_qs').controller('VarsController', ['$scope', '$collection', '$stateParams',
+angular.module('data_qs').controller('DatasetsController', ['$scope', '$collection', '$stateParams',
   function($scope, $collection, $stateParams){
     $collection(Datasets).bind($scope, 'datasets', true, true);
     $scope.datasetId = $stateParams.datasetId;
+    // list of datatypes
+
 
 }]);
 
-angular.module('data_qs').controller('DatasetsController', ['$scope', '$collection',
-    function($scope, $collection){
-        $collection(Datasets).bind($scope, 'datasets', true, true);
+angular.module('data_qs').controller('VarsController', ['$scope', '$collection', '$stateParams',
+    function($scope, $collection, $stateParams){
+        $collection(Datasets).bindOne($scope, 'dataset', {_id: $stateParams.datasetId});
+        $scope.datatypes = _.uniq(_.pluck($scope.dataset.columns, 'datatype'),
+            false)
     }]);
 
 angular.module('data_qs').controller('UploadController', ['$scope',
