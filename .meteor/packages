@@ -7,10 +7,10 @@ meteor-platform
 autopublish
 insecure
 mrt:moment
-iron:router
 dsyko:meteor-node-csv
 mrt:jquery-csv
 nemo64:bootstrap
 less
 urigo:angular
+urigo:angular-ui-router
 

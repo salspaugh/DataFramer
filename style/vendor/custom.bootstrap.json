@@ -2,10 +2,10 @@
   "normalize":            true,
   "print":                false,
 
-  "scaffolding":          false,
-  "type":                 false,
+  "scaffolding":          true,
+  "type":                 true,
   "code":                 false,
-  "grid":                 false,
+  "grid":                 true,
   "tables":               false,
   "forms":                false,
   "buttons":              false,
@@ -37,7 +37,7 @@
   "tooltip":              false,
   "popovers":             false,
   "carousel":             false,
-  
+
   "affix":                false,
   "alert":                false,
   "button":               false,
@@ -46,6 +46,6 @@
   "tab":                  false,
   "transition":           false,
 
-  "utilities":            false,
-  "responsive-utilities": false
+  "utilities":            true,
+  "responsive-utilities": true
 }}
