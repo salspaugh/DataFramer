@@ -32,24 +32,25 @@
 </template>
 
 <template name="questions-list">
-     <div>    
-         <form>
-             <label>Add a new question: </label>
-             <input ng-model="newQuestion.text">
-             <div ng-model="newQuestion.qID"></div>
-             <button ng-click="dataset.questions.push(newQuestion)">Add</button>
-         </form>
-     </div>
      <div>
          <h2>My Questions</h2>
+         <div>
+             <form>
+                 <label>Add a new question: </label>
+                 <input ng-model="newQuestion.text">
+                 <div ng-model="newQuestion.qID"></div>
+                 <button ng-click="dataset.questions.push(newQuestion)">Add</button>
+             </form>
+         </div>
          <ul>
              <li ng-repeat="question in dataset.questions">
-                 [[ question.text ]]
+                 <a href="/dataset/[[ dataset._id ]]/question/[[ question.$$hashKey ]]">
+                     [[ question.text ]]
+                 </a>
                  <!-- <button ng-click="dataset.questions.push(question.answerable == true)">Answerable</button>
                  <button ng-click="dataset.questions.push(question.answerable == false)">Not Answerable</button> -->
              </li>
          </ul>
      </div>
- 
- </template>
 
+ </template>
