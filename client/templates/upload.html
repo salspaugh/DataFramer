@@ -1,6 +1,6 @@
 <template name="upload">
-    <div class="col-md-12 jumbotron">
+    <div class="col-md-9 jumbotron">
         <h1>Upload a new dataset</h1>
-        <input type="file" name="csv" value="" class="csv-upload"/>
+        <input type="file" name="csv" value="" class="csv-upload" onchange="angular.element(this).scope().preprocess(event)"/>
     </div>
 </template>

@@ -1,5 +1,6 @@
 Template.upload.events({
     'change .csv-upload': function(event, template) {
+        console.log('change');
         var files = event.target.files;
         for (var i = 0, ln = files.length; i < ln; i++) {
             var file = files[i];

@@ -10,7 +10,7 @@
 
 <template name="vars-list">
     <h2>variables</h2>
-    <ul ng-repeat="dataset in datasets | filter: dataset._id : datasetId">
+    <ul ng-repeat="dataset in datasets track by dataset._id">
         <li ng-repeat="col in dataset.columns">
             [[ col.name ]]
         </li>
@@ -23,4 +23,5 @@
 
 <template name="questions-list">
     <h2>questions list</h2>
+    <h3>add a new question</h3>
 </template>

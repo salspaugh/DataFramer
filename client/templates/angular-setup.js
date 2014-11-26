@@ -29,7 +29,16 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                 },
                 "main": {
                     template: UiRouter.template('questions-list'),
-                    
+
+                }
+            }
+        })
+        .state('upload', {
+            url: '/upload',
+            views: {
+                "main": {
+                    template: UiRouter.template('upload'),
+                    controller: 'UploadController'
                 }
             }
         })
@@ -45,6 +54,31 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
 }]);
 
 angular.module('data_qs').controller('DatasetsController', ['$scope', '$collection',
-function($scope, $collection){
-    $collection(Datasets).bind($scope, 'datasets', true, true);
-}]);
+    function($scope, $collection){
+        $collection(Datasets).bind($scope, 'datasets', true, true);
+    }]);
+
+angular.module('data_qs').controller('UploadController', ['$scope',
+    function($scope){
+        $scope.preprocess = function(event) {
+            var files = event.target.files;
+            for (var i = 0, ln = files.length; i < ln; i++) {
+                var file = files[i];
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    var contents = event.target.result;
+                    Meteor.call('processCsv', contents, file.name);
+                };
+
+                reader.onerror = function(event) {
+                    console.error("File could not be read! Code " + event.target.error.code);
+                };
+
+                reader.readAsText(file);
+
+                // reset the upload form
+                event.target.value = '';
+            }
+        }
+    }
+]);
