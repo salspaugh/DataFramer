@@ -10,7 +10,7 @@
 
 <template name="vars-list">
     <div>
-        <h2>[[ dataset.name ]]</h2>
+        <h2>[[dataset.name]]</h2>
         <input type="text" placeholder="Search variable names" class="search-box" ng-model="searchBox"/>
         <h3>variables</h3>
         <div>
@@ -22,8 +22,6 @@
                     </li>
                 </ul>
             </div>
-
-
         </div>
     </div>
 </template>
@@ -36,11 +34,10 @@
      <div>
          <h2>My Questions</h2>
          <div>
-             <form>
+             <form onsubmit="return false;" name="qAdd">
                  <label>Add a new question: </label>
-                 <input ng-model="newQuestion.text">
-                 <div ng-model="newQuestion.qID"></div>
-                 <button ng-click="dataset.questions.push(newQuestion)">Add</button>
+                 <input ng-model="newQuestion.text" name="text">
+                 <button ng-click="addQuestion(qAdd.text)">Add</button>
              </form>
          </div>
          <ul>
@@ -54,4 +51,8 @@
          </ul>
      </div>
 
+ </template>
+
+ <template name="question-single">
+     <h1>[[ question.text ]]</h1>
  </template>

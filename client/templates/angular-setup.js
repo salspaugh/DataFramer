@@ -21,18 +21,30 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
         })
         .state('dataset', {
             url: '/dataset/:datasetId',
-            // really just a placeholder; needs views
             views: {
                 "sidebar": {
                     template: UiRouter.template('vars-list'),
                     controller: 'VarsController',
-                },
-                "main": {
-                    template: UiRouter.template('questions-list'),
-                    controller: 'QsController',
                 }
             }
         })
+        // .state('dataset.questions', {
+        //     views: {
+        //         "main@": {
+        //             template: UiRouter.template('questions-list'),
+        //             controller: 'QsController',
+        //         }
+        //     }
+        // })
+        // .state('dataset.question', {
+        //     url: '/question/:questionId',
+        //     views: {
+        //         "main": {
+        //             controller: 'QuestController',
+        //             template: UiRouter.template('question-single'),
+        //         }
+        //     }
+        // })
         .state('upload', {
             url: '/upload',
             views: {
@@ -48,23 +60,52 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
 
 angular.module('data_qs').controller('DatasetsController', ['$scope', '$collection', '$stateParams',
   function($scope, $collection, $stateParams){
-    $collection(Datasets).bind($scope, 'datasets', true, true);
+    $collection(Datasets).bind($scope, 'datasets', true);
     $scope.datasetId = $stateParams.datasetId;
 }]);
 
 angular.module('data_qs').controller('VarsController', ['$scope', '$collection', '$stateParams',
     function($scope, $collection, $stateParams){
-        $collection(Datasets).bindOne($scope, 'dataset', {_id: $stateParams.datasetId});
-        $scope.datatypes = _.uniq(_.pluck($scope.dataset.columns, 'datatype'),
-            false)
+        $collection(Datasets).bindOne($scope, 'dataset', $stateParams.datasetId, true, false);
         $scope.datasetId = $stateParams.datasetId;
-}]);
 
-angular.module('data_qs').controller('QsController', ['$scope', '$collection', '$stateParams',
-    function($scope, $collection, $stateParams){
-        $collection(Datasets).bindOne($scope, 'dataset', {_id: $stateParams.datasetId}, true, true);
-        $scope.qID = new Mongo.ObjectID();
-    }]);
+        // sometimes the binding executes before meteor is fully initialized;
+        // the bindOne parameters are not all reactive. this should fix that
+        // https://github.com/Urigo/angular-meteor/issues/60
+        $scope.$watch('dataset', function(val){
+            if (val) {
+                if (val.columns) {
+                    $scope.datatypes = _.uniq(_.pluck(val.columns, 'datatype'),
+                    false);
+                }
+            }
+        });
+    }
+]);
+
+// angular.module('data_qs').controller('QsController', ['$scope', '$collection', '$stateParams',
+//     function($scope, $collection, $stateParams){
+//         $collection(Datasets, {_id: $stateParams.datasetId}).bindOne($scope, 'dataset', true);
+//         console.log($scope.dataset.questions)
+//         $scope.addQuestion = function(text){
+//             var new_question = {
+//                 "q_id": new Mongo.ObjectID(),
+//                 "text": text.$modelValue
+//             }
+//
+//         }
+//     }]);
+//
+// angular.module('data_qs').controller('QuestController', ['$scope', '$collection', '$stateParams',
+//     function($scope, $collection, $stateParams){
+//         $collection(Datasets).bindOne($scope, 'dataset',
+//             {_id: $stateParams.datasetId}, true);
+//         // console.log($scope);
+//         $scope.question = _.findWhere($scope.dataset.questions,
+//             {'$$hashKey': $stateParams.questionId});
+//
+//     }
+// ]);
 
 angular.module('data_qs').controller('UploadController', ['$scope',
     function($scope){
