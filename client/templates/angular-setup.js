@@ -32,15 +32,15 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                 }
             }
         })
-        // .state('dataset.question', {
-        //     url: '/question/:questionId',
-        //     views: {
-        //         "main": {
-        //             controller: 'QuestController',
-        //             template: UiRouter.template('question-single'),
-        //         }
-        //     }
-        // })
+        .state('dataset.question', {
+            url: '/question/:questionId',
+            views: {
+                "main@": {
+                    controller: 'QuestController',
+                    template: UiRouter.template('question-single'),
+                }
+            }
+        })
         .state('upload', {
             url: '/upload',
             views: {
@@ -84,7 +84,7 @@ angular.module('data_qs').controller('QsController', ['$scope', '$collection', '
         $collection(Datasets).bindOne($scope, 'dataset', $stateParams.datasetId, true);
         $scope.addQuestion = function(text){
             var new_question = {
-                "id": new Mongo.ObjectID(),
+                "id": new Mongo.ObjectID().valueOf(),
                 "text": text.$modelValue,
                 "notes": null,
                 "answerable": null,
@@ -94,16 +94,22 @@ angular.module('data_qs').controller('QsController', ['$scope', '$collection', '
         }
     }]);
 
-// angular.module('data_qs').controller('QuestController', ['$scope', '$collection', '$stateParams',
-//     function($scope, $collection, $stateParams){
-//         $collection(Datasets).bindOne($scope, 'dataset',
-//             {_id: $stateParams.datasetId}, true);
-//         // console.log($scope);
-//         $scope.question = _.findWhere($scope.dataset.questions,
-//             {'$$hashKey': $stateParams.questionId});
-//
-//     }
-// ]);
+angular.module('data_qs').controller('QuestController', ['$scope', '$collection', '$stateParams',
+    function($scope, $collection, $stateParams){
+        $collection(Datasets).bindOne($scope, 'dataset',
+            {_id: $stateParams.datasetId}, true);
+        $scope.$watch('dataset', function(val){
+            if (val) {
+                if (val.questions) {
+                    $scope.question = _.findWhere(val.questions,
+                        {'id': $stateParams.questionId});
+                }
+            }
+        });
+
+
+    }
+]);
 
 angular.module('data_qs').controller('UploadController', ['$scope',
     function($scope){

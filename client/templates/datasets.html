@@ -41,8 +41,8 @@
              </form>
          </div>
          <ul>
-             <li ng-repeat="question in dataset.questions">
-                 <a href="/dataset/[[ dataset._id ]]/question/[[ question.$$hashKey ]]">
+             <li ng-repeat="question in dataset.questions track by question.id">
+                 <a ui-sref="dataset.question({questionId: question.id})">
                      [[ question.text ]]
                  </a>
                  <!-- <button ng-click="dataset.questions.push(question.answerable == true)">Answerable</button>
