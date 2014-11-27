@@ -17,9 +17,9 @@ function processCsv(csvfile, name){
             "rowCount": data.length - 1, // subtract the header row
             "questions": []
             //{
-            //     "q_id": null,
-            //     "q_text": null,
-            //     "q_notes": null,
+            //     "id": null,
+            //     "text": null,
+            //     "notes": null,
             //     "answerable": null,
             //     "col_refs": []
             // }

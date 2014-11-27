@@ -25,17 +25,13 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                 "sidebar": {
                     template: UiRouter.template('vars-list'),
                     controller: 'VarsController',
+                },
+                "main": {
+                    template: UiRouter.template('questions-list'),
+                    controller: 'QsController',
                 }
             }
         })
-        // .state('dataset.questions', {
-        //     views: {
-        //         "main@": {
-        //             template: UiRouter.template('questions-list'),
-        //             controller: 'QsController',
-        //         }
-        //     }
-        // })
         // .state('dataset.question', {
         //     url: '/question/:questionId',
         //     views: {
@@ -83,19 +79,21 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
     }
 ]);
 
-// angular.module('data_qs').controller('QsController', ['$scope', '$collection', '$stateParams',
-//     function($scope, $collection, $stateParams){
-//         $collection(Datasets, {_id: $stateParams.datasetId}).bindOne($scope, 'dataset', true);
-//         console.log($scope.dataset.questions)
-//         $scope.addQuestion = function(text){
-//             var new_question = {
-//                 "q_id": new Mongo.ObjectID(),
-//                 "text": text.$modelValue
-//             }
-//
-//         }
-//     }]);
-//
+angular.module('data_qs').controller('QsController', ['$scope', '$collection', '$stateParams',
+    function($scope, $collection, $stateParams){
+        $collection(Datasets).bindOne($scope, 'dataset', $stateParams.datasetId, true);
+        $scope.addQuestion = function(text){
+            var new_question = {
+                "id": new Mongo.ObjectID(),
+                "text": text.$modelValue,
+                "notes": null,
+                "answerable": null,
+                "col_refs": [],
+            }
+            $scope.dataset.questions.push(new_question);
+        }
+    }]);
+
 // angular.module('data_qs').controller('QuestController', ['$scope', '$collection', '$stateParams',
 //     function($scope, $collection, $stateParams){
 //         $collection(Datasets).bindOne($scope, 'dataset',
