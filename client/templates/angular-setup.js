@@ -62,17 +62,18 @@ angular.module('data_qs').controller('DatasetsController', ['$scope', '$collecti
 
 angular.module('data_qs').controller('VarsController', ['$scope', '$collection', '$stateParams',
     function($scope, $collection, $stateParams){
-        $collection(Datasets).bindOne($scope, 'dataset', $stateParams.datasetId, true, false);
-        $scope.datasetId = $stateParams.datasetId;
+        $collection(Datasets, $stateParams.datasetId,
+            {fields: {'columns.datatype': 1, 'columns.name': 1}})
+            .bind($scope, '_d', false);
 
-        // sometimes the binding executes before meteor is fully initialized;
-        // the bindOne parameters are not all reactive. this should fix that
-        // https://github.com/Urigo/angular-meteor/issues/60
-        $scope.$watch('dataset', function(val){
+        $scope.$watch('_d', function(val){
             if (val) {
-                if (val.columns) {
-                    $scope.datatypes = _.uniq(_.pluck(val.columns, 'datatype'),
-                    false);
+                if (val[0]){
+                    if (val[0].columns) {
+                        $scope.dataset = val[0];
+                        $scope.datatypes = _.uniq(_.pluck($scope.dataset.columns,
+                            'datatype'), false);
+                    }
                 }
             }
         });
