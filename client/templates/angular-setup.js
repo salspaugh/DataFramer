@@ -54,10 +54,9 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
 
 }]);
 
-angular.module('data_qs').controller('DatasetsController', ['$scope', '$collection', '$stateParams',
-  function($scope, $collection, $stateParams){
-    $collection(Datasets).bind($scope, 'datasets', true);
-    $scope.datasetId = $stateParams.datasetId;
+angular.module('data_qs').controller('DatasetsController', ['$scope', '$collection',
+  function($scope, $collection){
+    $collection(Datasets, {}, {fields: {name: 1}}).bind($scope, 'datasets', true);
 }]);
 
 angular.module('data_qs').controller('VarsController', ['$scope', '$collection', '$stateParams',
