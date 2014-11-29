@@ -7,7 +7,7 @@
   "code":                 false,
   "grid":                 true,
   "tables":               false,
-  "forms":                false,
+  "forms":                true,
   "buttons":              false,
 
   "glyphicons":           false,

@@ -13,4 +13,5 @@ nemo64:bootstrap
 less
 urigo:angular
 urigo:angular-ui-router
+fortawesome:fontawesome
 

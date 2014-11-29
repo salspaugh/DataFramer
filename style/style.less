@@ -81,6 +81,7 @@ a{
 /****NAVBAR****/
 
 #sidebar-wrapper {
+    padding-bottom: 25px;
     background: #c6ceed;
     position: fixed;
     height: 100%;
@@ -131,4 +132,68 @@ hr {
 
 .navbar.container {
     color: #344A5F;
+}
+
+ul.questions-list {
+    list-style: none;
+    padding-left: 0;
+
+    li {
+
+        font-size: 24px;
+        margin-top: 30px;
+    }
+}
+
+// set some color variables so we can lighten/darken
+@ans-unk: #b9b9b9;
+@ans-true: #0fa007;
+@ans-false: #ec2424;
+
+.ans {
+    display: inline-block;
+    margin-right: .5em;
+    color: #ffffff;
+    width: 1.75em;
+    text-align: center;
+
+    &.unknown {
+        background-color: @ans-unk;
+        &.fade {
+            background-color: lighten(desaturate(@ans-unk, 50%), 25%);
+        }
+    }
+
+    &.true {
+        background-color: @ans-true;
+        &.fade {
+            background-color: lighten(desaturate(@ans-true, 75%), 25%);
+        }
+    }
+
+    &.false {
+        background-color: @ans-false;
+        &.fade {
+            background-color: lighten(desaturate(@ans-false, 50%), 25%);
+        }
+    }
+
+}
+
+.question-single {
+    // same as height of floating column
+    margin-bottom: 175px;
+}
+.floating-column {
+    position:fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 175px;
+    .answerable-form {
+        padding-top: 20px;
+        font-size: 20px;
+        background-color: rgba(255,255,255,0.9);
+    }
+
 }
