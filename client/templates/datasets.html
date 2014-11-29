@@ -57,7 +57,8 @@
                      <i class="fa ng-class:answerableIcon(question.id);"></i>
                  </span>
                  <a ui-sref="dataset.question({questionId: question.id})">
-                     [[ question.text ]]
+                     [[ question.text ]]<br/>
+                     <small class="text-muted">[[ question.notes ]]</small>
                  </a>
              </li>
          </ul>
@@ -88,7 +89,9 @@
                             </span>
                         </div>
                         <div class="form-group">
-                            <textarea class="form-control" rows="4" ng-model="question.notes" placeholder="Notes"></textarea>
+                            <textarea class="form-control" rows="4"
+                            ng-model="question.notes"
+                            placeholder="Notes"></textarea>
                         </div>
 
                     </form>
