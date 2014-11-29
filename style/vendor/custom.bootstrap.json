@@ -8,11 +8,11 @@
   "grid":                 true,
   "tables":               false,
   "forms":                true,
-  "buttons":              false,
+  "buttons":              true,
 
   "glyphicons":           false,
   "button-groups":        false,
-  "input-groups":         false,
+  "input-groups":         true,
   "navs":                 true,
   "navbar":               false,
   "breadcrumbs":          false,

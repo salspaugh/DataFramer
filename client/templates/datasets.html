@@ -33,13 +33,24 @@
 <template name="questions-list">
      <div>
          <h2>My Questions</h2>
-         <div>
-             <form onsubmit="this.reset(); return false;" name="qAdd">
+
+         <form onsubmit="this.reset(); return false;" name="qAdd" role="form">
+             <div class="form-group">
                  <label>Add a new question: </label>
-                 <input ng-model="newQuestion.text" name="text">
-                 <button ng-click="addQuestion(qAdd.text)">Add</button>
-             </form>
-         </div>
+                 <div class="input-group">
+                     <input type="text" ng-model="newQuestion.text" name="text" class="form-control"/>
+                     <span class="input-group-btn">
+                         <button ng-click="addQuestion(qAdd.text)" class="btn btn-primary">
+                             Add
+                         </button>
+                     </span>
+
+                 </div>
+
+             </div>
+
+         </form>
+
          <ul class="questions-list">
              <li ng-repeat="question in dataset.questions track by question.id">
                  <span ng-class="answerable(question.id)">
@@ -57,7 +68,7 @@
  <template name="question-single">
      <div class="question-single">
          <h1>[[ question.text ]]</h1>
-         <!-- variable charts go here -->
+         <h2>select variables to add them to your question</h2>
      </div>
 
      <div class="floating-column">

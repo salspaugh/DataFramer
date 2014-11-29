@@ -136,7 +136,6 @@ angular.module('data_qs').controller('QuestController', ['$scope', '$collection'
                     };
 
                     $scope.setAns = function(ans_value){
-                        console.log(val);
                         $scope.question.answerable = ans_value;
                     }
                 }
