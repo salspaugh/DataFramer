@@ -41,10 +41,10 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                 }
             }
         })
-        .state('upload', {
-            url: '/upload',
+        .state('home.upload', {
+            url: 'upload',
             views: {
-                "main": {
+                "main@": {
                     template: UiRouter.template('upload'),
                     controller: 'UploadController'
                 }
