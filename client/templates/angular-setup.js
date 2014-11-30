@@ -1,4 +1,4 @@
-angular.module('data_qs',['angular-meteor', 'ui.router']);
+angular.module('data_qs',['angular-meteor', 'ui.router', 'd3']);
 
 Meteor.startup(function () {
   angular.bootstrap(document, ['data_qs']);
@@ -27,8 +27,10 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                     controller: 'VarsController',
                 },
                 "main": {
-                    template: UiRouter.template('questions-list'),
-                    controller: 'QsController',
+                    template: UiRouter.template('charts'),
+                    controller: 'ChartsController',
+                    // template: UiRouter.template('questions-list'),
+                    // controller: 'QsController',
                 }
             }
         })
@@ -147,6 +149,12 @@ angular.module('data_qs').controller('QuestController', ['$scope', '$collection'
 
     }
 ]);
+angular.module('data_qs').controller('ChartsController', ['$scope', '$collection', '$stateParams',
+    function($scope, $collection, $stateParams){
+        $collection(Datasets).bindOne($scope, 'dataset', {_id: $stateParams.datasetId});
+        $scope.datatypes = _.uniq(_.pluck($scope.dataset.columns, 'datatype'),
+            false)
+}]);
 
 angular.module('data_qs').controller('UploadController', ['$scope',
     function($scope){

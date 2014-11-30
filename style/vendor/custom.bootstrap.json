@@ -21,7 +21,7 @@
   "labels":               false,
   "badges":               false,
   "jumbotron":            false,
-  "thumbnails":           false,
+  "thumbnails":           true,
   "alerts":               false,
   "progress-bars":        false,
   "media":                false,
@@ -40,7 +40,7 @@
 
   "affix":                false,
   "alert":                false,
-  "button":               false,
+  "button":               true,
   "collapse":             false,
   "scrollspy":            false,
   "tab":                  false,

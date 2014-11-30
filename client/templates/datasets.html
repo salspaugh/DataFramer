@@ -1,6 +1,6 @@
 <template name="datasets-list">
     <h2>my datasets</h2>
-    <input type="text" placeholder="Search variable names" class="search-box" ng-model="searchBox"/>
+    <input type="text" placeholder="Search datasets" class="search-box" ng-model="searchBox"/>
     <ul class="nav nav-stacked">
         <li ng-repeat="dataset in datasets | filter:searchBox">
             <a ui-sref="dataset({datasetId: dataset._id})">[[ dataset.name ]]</a>
@@ -10,8 +10,8 @@
 
 <template name="vars-list">
     <div>
-        <h2>[[dataset.name]]</h2>
-        <input type="text" placeholder="Search variable names" class="search-box" ng-model="searchBox"/>
+        <h2>[[ dataset.name ]]</h2>
+        <input type="text" placeholder="Search variables" class="search-box" ng-model="searchBox"/>
         <h3>variables</h3>
         <div>
             <div ng-repeat="type in datatypes">
@@ -63,7 +63,6 @@
              </li>
          </ul>
      </div>
-
  </template>
 
  <template name="question-single">
@@ -99,6 +98,28 @@
             </div>
         </div>
      </div>
+ </template>
 
+<template name="charts">
+    <div class="row">
+        <br>
+        <div class="col-md-4 thumb" ng-repeat="col in dataset.columns">
+            <a class="thumbnail" ng-click="openExpanded(entry)" href="#">
+                <div class="var-name" > [[col.name ]] </div>
+                <hist chart-data="[[ col ]]"></hist>
+                         <!-- <span>{{title}}</span>
+                    <hist data="d3Data" label="name" on-click="d3OnClick(item)"></d3-bars> -->
+            </a>    
+            <!-- <div d3-bars bar-height="20" bar-padding="5"></div> -->
+            <!-- <bars data> {{ var.array }}</bars> -->
+        </div>
 
-      </template>
+        <!-- <div class="col-md-4 thumb" ng-repeat="entry in entries | filter:searchText">
+            <a class="thumbnail" ng-click="openExpanded(entry)" href="#">
+                <span class="product-name"> {{ entry.productName }} </span>
+                <div class="user-goal text-muted" > #{{ entry.userGoal }} </div>
+                <img class="img-responsive" ng-src= "{{ entry.image }}" alt="">
+            </a>
+             <ng-view></ng-view> -->
+    </div>
+</template>
