@@ -27,10 +27,10 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                     controller: 'VarsController',
                 },
                 "main": {
-                    template: UiRouter.template('charts'),
-                    controller: 'ChartsController',
-                    // template: UiRouter.template('questions-list'),
-                    // controller: 'QsController',
+                    // template: UiRouter.template('charts'),
+                    // controller: 'ChartsController',
+                    template: UiRouter.template('questions-list'),
+                    controller: 'QsController',
                 }
             }
         })
@@ -139,7 +139,12 @@ angular.module('data_qs').controller('QuestController', ['$scope', '$collection'
 
                     $scope.setAns = function(ans_value){
                         $scope.question.answerable = ans_value;
-                    }
+                    };
+                }
+
+                if (val.columns) {
+                    $scope.datatypes = _.uniq(_.pluck(val.columns,
+                        'datatype'), false);
                 }
             }
         });
@@ -149,6 +154,7 @@ angular.module('data_qs').controller('QuestController', ['$scope', '$collection'
 
     }
 ]);
+
 angular.module('data_qs').controller('ChartsController', ['$scope', '$collection', '$stateParams',
     function($scope, $collection, $stateParams){
         $collection(Datasets).bindOne($scope, 'dataset', {_id: $stateParams.datasetId});

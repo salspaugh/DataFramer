@@ -68,7 +68,17 @@
  <template name="question-single">
      <div class="question-single">
          <h1>[[ question.text ]]</h1>
-         <h2>select variables to add them to your question</h2>
+         <!-- <h2>select variables to add them to your question</h2> -->
+         <div class="col-md-4 thumb" ng-repeat="col in dataset.columns">
+             <a class="thumbnail" ng-click="openExpanded(entry)" href="#">
+                 <div class="var-name" > [[col.name ]] </div>
+                 <hist chart-data="[[ col ]]"></hist>
+                 <!-- <span>{{title}}</span>
+                 <hist data="d3Data" label="name" on-click="d3OnClick(item)"></d3-bars> -->
+             </a>
+             <!-- <div d3-bars bar-height="20" bar-padding="5"></div> -->
+             <!-- <bars data> {{ var.array }}</bars> -->
+         </div>
      </div>
 
      <div class="floating-column">
@@ -109,7 +119,7 @@
                 <hist chart-data="[[ col ]]"></hist>
                          <!-- <span>{{title}}</span>
                     <hist data="d3Data" label="name" on-click="d3OnClick(item)"></d3-bars> -->
-            </a>    
+            </a>
             <!-- <div d3-bars bar-height="20" bar-padding="5"></div> -->
             <!-- <bars data> {{ var.array }}</bars> -->
         </div>
