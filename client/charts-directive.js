@@ -42,7 +42,16 @@ angular.module('data_qs')
                 scope.render = function(data){
 
                     switch(data[0][0].datatype){
-                        case "string":
+                        default:
+
+                            var hist = d3.layout.histogram()
+                                .value(function(v){
+                                    return v.freq;
+                                })
+                                // .bins(10)
+                                ;
+                            // debugger;
+
                             var values = _.flatten(data)[0].values;
                             // console.log(values);
 
@@ -58,43 +67,65 @@ angular.module('data_qs')
                                 .sortBy(function (d) { return d.value; })
                                 .value();
 
-                            var maxFreq = d3.max(groups, function (d) { return d.freq});
+                            var bins = hist(groups);
 
-                            var svg = d3
-                                .select(element[0])
-                                .append('svg')
-                                .attr('width', width)
-                                .attr('height', height)
-                                .append('g');
+                            var graph = new Rickshaw.Graph({
+                                width: width - margin.left - margin.right,
+                                height: height - margin.top - margin.bottom,
+                                element: element[0],
+                                renderer: 'bar',
+                                series: [{
+                                    data: bins,
+                                    color: 'steelblue'
+                                }]
+                            });
 
-                            var padding = 3;
-                            var barHeight = height / groups.length - padding;
+                            var yAxis = new Rickshaw.Graph.Axis.Y({
+                                graph: graph
+                            });
 
-                            var yScale = d3.scale.linear()
-                                .domain([0, groups.length])
-                                .range([0, height]);
+                            graph.render();
 
-                            var xScale = d3.scale.linear()
-                                .domain([0, maxFreq])
-                                .range([0, width]);
 
-                            var bars = svg.selectAll('.bar')
-                                .data(groups)
-                                .enter().append('g');
 
-                            bars
-                                .append('rect')
-                                .attr('x', 0)
-                                .attr('y', function (d, i) { return yScale(i); })
-                                .attr("width", function (d) { return xScale(d.freq); })
-                                .attr("height", barHeight)
-                                .attr('fill','steel');
 
-                            bars.append('text')
-                                .text(function (d) { return d.value; })
-                                .attr('x', function (d) { return 10 + xScale(d.freq); })
-                                .attr('y', function (d, i) { return yScale(i); })
-                                .attr('dy', '1em');
+                            // var maxFreq = d3.max(groups, function (d) { return d.freq});
+                            //
+                            // var svg = d3
+                            //     .select(element[0])
+                            //     .append('svg')
+                            //     .attr('width', width)
+                            //     .attr('height', height)
+                            //     .append('g');
+                            //
+                            // var padding = 3;
+                            // var barHeight = height / groups.length - padding;
+                            //
+                            // var yScale = d3.scale.linear()
+                            //     .domain([0, groups.length])
+                            //     .range([0, height]);
+                            //
+                            // var xScale = d3.scale.linear()
+                            //     .domain([0, maxFreq])
+                            //     .range([0, width]);
+                            //
+                            // var bars = svg.selectAll('.bar')
+                            //     .data(groups)
+                            //     .enter().append('g');
+                            //
+                            // bars
+                            //     .append('rect')
+                            //     .attr('x', 0)
+                            //     .attr('y', function (d, i) { return yScale(i); })
+                            //     .attr("width", function (d) { return xScale(d.freq); })
+                            //     .attr("height", barHeight)
+                            //     .attr('fill','steel');
+                            //
+                            // bars.append('text')
+                            //     .text(function (d) { return d.value; })
+                            //     .attr('x', function (d) { return 10 + xScale(d.freq); })
+                            //     .attr('y', function (d, i) { return yScale(i); })
+                            //     .attr('dy', '1em');
                             break;
                     }
 
