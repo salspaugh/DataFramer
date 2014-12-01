@@ -46,6 +46,7 @@ angular.module('data_qs')
 
                     var values = _.flatten(data)[0].values;
 
+                    var col_width = element[0].offsetWidth;
 
                     switch(data[0][0].datatype){
 
@@ -65,9 +66,8 @@ angular.module('data_qs')
                                 .sortBy(function (d) { return d.x; })
                                 .value();
 
-                            // debugger;
                             var graph = new Rickshaw.Graph({
-                                width: width,
+                                width: col_width,
                                 height: height,
                                 element: element[0],
                                 renderer: 'line',
@@ -115,7 +115,7 @@ angular.module('data_qs')
                             .select(element[0])
                             .append('svg')
                             .attr('class', 'string-chart')
-                            .attr('width', width)
+                            .attr('width', col_width)
                             .attr('height', height)
                             .append('g');
 
@@ -128,7 +128,7 @@ angular.module('data_qs')
 
                           var xScale = d3.scale.linear()
                               .domain([0, maxFreq])
-                              .range([0, width * 0.4]);
+                              .range([0, col_width * 0.4]);
 
                           var bars = svg.selectAll('.bar')
                             .data(groups)
@@ -160,7 +160,7 @@ angular.module('data_qs')
                             var bins = hist(values);
 
                             var graph = new Rickshaw.Graph({
-                                width: width,
+                                width: col_width,
                                 height: height,
                                 element: element[0],
                                 renderer: 'bar',
