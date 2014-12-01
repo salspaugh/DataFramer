@@ -106,7 +106,7 @@ angular.module('data_qs')
                                       value: key
                                   };
                               })
-                              .sortBy(function (d) { return d.value; })
+                              .sortBy(function (d) { return -d.freq; })
                               .value();
 
                           var maxFreq = d3.max(groups, function (d) { return d.freq});
