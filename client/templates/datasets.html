@@ -14,7 +14,7 @@
         <input type="text" placeholder="Search variables" class="search-box" ng-model="searchBox"/>
         <h3>variables</h3>
         <div>
-            <div ng-repeat="type in datatypes">
+            <div ng-repeat="type in datatypes" class="datatype" ng-class="type">
                 <h4>[[ type ]]</h4>
                 <ul class="nav nav-stacked">
                     <li ng-repeat="col in dataset.columns | filter:type | filter:searchBox">

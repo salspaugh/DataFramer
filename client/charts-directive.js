@@ -88,9 +88,10 @@ angular.module('data_qs')
                               .domain([0, maxFreq])
                               .range([0, width * 0.4]);
 
-                          var bars = svg.selectAll('.bars')
+                          var bars = svg.selectAll('.bar')
                             .data(groups)
-                            .enter().append('g');
+                            .enter().append('g')
+                                .classed('bar', true);
 
                           bars
                               .append('rect')
@@ -98,7 +99,7 @@ angular.module('data_qs')
                               .attr('y', function (d, i) { return padding + yScale(i); })
                               .attr("width", function (d) { return xScale(d.freq); })
                               .attr("height", 7)
-                              .attr('fill','steelblue');
+                              ;
 
                           bars.append('text')
                               .text(function (d) { return d.value; })
@@ -107,7 +108,7 @@ angular.module('data_qs')
                               .attr('dy', '1em');
 
                             break;
-                            
+
                         default:
                             var graph = new Rickshaw.Graph({
                                 width: width,
