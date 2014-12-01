@@ -54,6 +54,58 @@ angular.module('data_qs')
                             break;
 
                         case "string":
+
+                          // calculate frequency for each word in the list
+                          var groups = _(values).chain()
+                              .groupBy(_.identity)
+                              .map(function (values, key) {
+                                  return {
+                                      freq: values.length,
+                                      value: key
+                                  };
+                              })
+                              .sortBy(function (d) { return d.value; })
+                              .value();
+
+                          var maxFreq = d3.max(groups, function (d) { return d.freq});
+
+                          var svg = d3
+                            .select(element[0])
+                            .append('svg')
+                            .attr('class', 'string-chart')
+                            .attr('width', width)
+                            .attr('height', height)
+                            .append('g');
+
+                          var padding = 3;
+                          var barHeight = height / groups.length - padding;
+
+                          var yScale = d3.scale.linear()
+                              .domain([0, groups.length])
+                              .range([0, groups.length * 18]);
+
+                          var xScale = d3.scale.linear()
+                              .domain([0, maxFreq])
+                              .range([0, width * 0.4]);
+
+                          var bars = svg.selectAll('.bars')
+                            .data(groups)
+                            .enter().append('g');
+
+                          bars
+                              .append('rect')
+                              .attr('x', 0)
+                              .attr('y', function (d, i) { return padding + yScale(i); })
+                              .attr("width", function (d) { return xScale(d.freq); })
+                              .attr("height", 7)
+                              .attr('fill','steelblue');
+
+                          bars.append('text')
+                              .text(function (d) { return d.value; })
+                              .attr('x', function (d) { return 10 + xScale(d.freq); })
+                              .attr('y', function (d, i) { return yScale(i) - padding; })
+                              .attr('dy', '1em');
+
                             break;
                             
                         default:
@@ -64,7 +116,7 @@ angular.module('data_qs')
                                 renderer: 'bar',
                                 series: [{
                                     data: bins,
-                                    color: 'steelblue',
+                                    color: '#70aa47',
                                     name: 'frequency'
                                 }]
                             });

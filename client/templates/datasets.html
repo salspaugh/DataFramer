@@ -69,10 +69,6 @@
              <div class="col-md-6" ng-repeat="col in dataset.columns">
                  <div class="var-name">[[col.name ]]</div>
                  <div hist chart-data="[[ col ]]"></div>
-                 <!-- <span>{{title}}</span>
-                 <hist data="d3Data" label="name" on-click="d3OnClick(item)"></d3-bars> -->
-                 <!-- <div d3-bars bar-height="20" bar-padding="5"></div> -->
-                 <!-- <bars data> {{ var.array }}</bars> -->
              </div>
          </div>
 
@@ -84,7 +80,7 @@
                 <div class="col-md-9 col-md-offset-3 answerable-form">
                     <form role="form">
                         <div class="form-group">
-                            can you answer your question with this dataset?
+                            Can you answer your question with this dataset?
                             <span class="ans false pull-right" ng-class="isSet(false)"
                                 ng-click="setAns(false)">
                                 <i class="fa fa-close"></i>
@@ -114,19 +110,7 @@
             <a class="thumbnail" ng-click="openExpanded(entry)" href="#">
                 <div class="var-name" > [[col.name ]] </div>
                 <hist chart-data="[[ col ]]"></hist>
-                         <!-- <span>{{title}}</span>
-                    <hist data="d3Data" label="name" on-click="d3OnClick(item)"></d3-bars> -->
             </a>
-            <!-- <div d3-bars bar-height="20" bar-padding="5"></div> -->
-            <!-- <bars data> {{ var.array }}</bars> -->
         </div>
-
-        <!-- <div class="col-md-4 thumb" ng-repeat="entry in entries | filter:searchText">
-            <a class="thumbnail" ng-click="openExpanded(entry)" href="#">
-                <span class="product-name"> {{ entry.productName }} </span>
-                <div class="user-goal text-muted" > #{{ entry.userGoal }} </div>
-                <img class="img-responsive" ng-src= "{{ entry.image }}" alt="">
-            </a>
-             <ng-view></ng-view> -->
     </div>
 </template>

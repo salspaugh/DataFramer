@@ -83,6 +83,12 @@ function processCsv(csvfile, name){
 
                 var deviation = Math.sqrt(variance);
                 col.stddev = roundToPrecision(deviation, 4);
+            
+            } else if (datatype[0] == 'string') {
+                _.each(col.values, function(v,i,a){
+                    a[i] = checkNull(v, true)? undefined : v;
+
+                });
 
             } else if (datatype[0] == 'date') {
                 _.each(col.values, function(v,i,a){
@@ -250,7 +256,7 @@ function detectDataType(items){
 
 function checkNull(value, exclude_empty){
     return _.isUndefined(value) || _.isNaN(value) || _.isNull(value) || value === 'None'
-    || value === 'null' || (value==='' && exclude_empty);
+    || value === 'null' || value === 'NA' || value === 'N/A'|| value === '#N/A' || (value==='' && exclude_empty);
 }
 
 
