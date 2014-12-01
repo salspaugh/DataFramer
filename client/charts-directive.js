@@ -1,7 +1,7 @@
 angular.module('data_qs')
     .directive('hist', ['d3Service', function(d3Service) {
         return {
-            restrict: 'E',
+            restrict: 'AE',
             replace: false,
             scope: {
                 data: '=chartData',
@@ -40,45 +40,38 @@ angular.module('data_qs')
 
                 // define render function
                 scope.render = function(data){
+                    var hist = d3.layout.histogram()
+                    .bins(10)
+                    ;
+
+                    var values = _.flatten(data)[0].values;
+
+                    var bins = hist(values);
 
                     switch(data[0][0].datatype){
+
+                        case "date":
+                            break;
+
+                        case "string":
+                            break;
+                            
                         default:
-
-                            var hist = d3.layout.histogram()
-                                .value(function(v){
-                                    return v.freq;
-                                })
-                                // .bins(10)
-                                ;
-                            // debugger;
-
-                            var values = _.flatten(data)[0].values;
-                            // console.log(values);
-
-                            // calculate frequency for each word in the list
-                            var groups = _(values).chain()
-                                .groupBy(_.identity)
-                                .map(function (values, key) {
-                                    return {
-                                        freq: values.length,
-                                        value: key
-                                    };
-                                })
-                                .sortBy(function (d) { return d.value; })
-                                .value();
-
-                            var bins = hist(groups);
-
                             var graph = new Rickshaw.Graph({
-                                width: width - margin.left - margin.right,
-                                height: height - margin.top - margin.bottom,
+                                width: width,
+                                height: height,
                                 element: element[0],
                                 renderer: 'bar',
                                 series: [{
                                     data: bins,
-                                    color: 'steelblue'
+                                    color: 'steelblue',
+                                    name: 'frequency'
                                 }]
                             });
+
+                            var xAxis = new Rickshaw.Graph.Axis.X( {
+                                graph: graph
+                            } );
 
                             var yAxis = new Rickshaw.Graph.Axis.Y({
                                 graph: graph
@@ -86,7 +79,22 @@ angular.module('data_qs')
 
                             graph.render();
 
+                            var hoverDetail = new customHover({
+                                graph: graph,
+                                xFormatter: function(x){return "bin"},
+                                yFormatter: function(y){
+                                    return parseInt(y);
+                                }
+                            });
 
+                            // var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+                            //     graph: graph,
+                            //     xFormatter: function(x){
+                            //         // debugger;
+                            //         return x;
+                            //     },
+                            //     yFormatter: function(y){ return y; }
+                            // } );
 
 
                             // var maxFreq = d3.max(groups, function (d) { return d.freq});

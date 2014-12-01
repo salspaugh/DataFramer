@@ -26,10 +26,6 @@
     </div>
 </template>
 
-<template name="vars-grid">
-    <h2>vars grid</h2>
-</template>
-
 <template name="questions-list">
      <div>
          <h2>My Questions</h2>
@@ -70,16 +66,14 @@
          <h1>[[ question.text ]]</h1>
          <!-- <h2>select variables to add them to your question</h2> -->
          <div class="row">
-             <div class="col-md-4 thumb" ng-repeat="col in dataset.columns">
-                 <a class="thumbnail" ng-click="openExpanded(entry)" href="#">
-                     <div class="var-name" > [[col.name ]] </div>
-                     <hist chart-data="[[ col ]]"></hist>
-                     <!-- <span>{{title}}</span>
-                     <hist data="d3Data" label="name" on-click="d3OnClick(item)"></d3-bars> -->
-                 </a>
+             <div class="col-md-6" ng-repeat="col in dataset.columns">
+                 <div class="var-name">[[col.name ]]</div>
+                 <div hist chart-data="[[ col ]]"></div>
+                 <!-- <span>{{title}}</span>
+                 <hist data="d3Data" label="name" on-click="d3OnClick(item)"></d3-bars> -->
                  <!-- <div d3-bars bar-height="20" bar-padding="5"></div> -->
                  <!-- <bars data> {{ var.array }}</bars> -->
-             </div> 
+             </div>
          </div>
 
      </div>

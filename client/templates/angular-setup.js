@@ -64,7 +64,7 @@ angular.module('data_qs').controller('DatasetsController', ['$scope', '$collecti
 angular.module('data_qs').controller('VarsController', ['$scope', '$collection', '$stateParams',
     function($scope, $collection, $stateParams){
         $collection(Datasets, $stateParams.datasetId,
-            {fields: {'columns.datatype': 1, 'columns.name': 1}})
+            {fields: {name: 1, 'columns.datatype': 1, 'columns.name': 1}})
             .bind($scope, '_d', false);
 
         $scope.$watch('_d', function(val){
