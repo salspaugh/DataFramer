@@ -46,11 +46,53 @@ angular.module('data_qs')
 
                     var values = _.flatten(data)[0].values;
 
-                    var bins = hist(values);
 
                     switch(data[0][0].datatype){
 
                         case "date":
+                            d3.selectAll(element)
+                                .classed("date-chart", true);
+
+                            // calculate frequency for each timestamp in the list
+                            var groups = _(values).chain()
+                                .groupBy(_.identity)
+                                .map(function (values, key) {
+                                    return {
+                                        y: values.length,
+                                        x: +key
+                                    };
+                                })
+                                .sortBy(function (d) { return d.x; })
+                                .value();
+
+                            // debugger;
+                            var graph = new Rickshaw.Graph({
+                                width: width,
+                                height: height,
+                                element: element[0],
+                                renderer: 'line',
+                                series: [{
+                                    data: groups,
+                                    name: 'frequency'
+                                }]
+                            });
+
+                            var xAxis = new Rickshaw.Graph.Axis.Time( {
+                                graph: graph
+                            } );
+
+                            var yAxis = new Rickshaw.Graph.Axis.Y({
+                                graph: graph
+                            });
+
+                            graph.render();
+
+                            var hoverDetail = new customHover({
+                                graph: graph,
+                                yFormatter: function(y){
+                                    return parseInt(y);
+                                }
+                            });
                             break;
 
                         case "string":
@@ -110,6 +152,13 @@ angular.module('data_qs')
                             break;
 
                         default:
+                            // ints and floats
+
+                            d3.selectAll(element)
+                                .classed("num-chart", true);
+
+                            var bins = hist(values);
+
                             var graph = new Rickshaw.Graph({
                                 width: width,
                                 height: height,
@@ -117,7 +166,6 @@ angular.module('data_qs')
                                 renderer: 'bar',
                                 series: [{
                                     data: bins,
-                                    color: '#70aa47',
                                     name: 'frequency'
                                 }]
                             });
