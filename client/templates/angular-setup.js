@@ -77,12 +77,10 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
 
         $scope.$watch('dataset', function(val){
             if (val) {
-                if (val.columns) {
-
+                if (val.questions && val.columns) {
                     $scope.datatypes = _.uniq(_.pluck(val.columns,
                         'datatype'), false);
-                }
-                if (val.questions && val.columns) {
+
                     $scope.question = _.findWhere(val.questions,
                         {'id': $state.params.questionId});
 
@@ -110,13 +108,17 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
                     };
 
                     $scope.colActive = function(col){
+                        if ($state.current.name != "dataset.question"){
+                            return false;
+                        }
+
                         var i = _.indexOf(val.columns, col);
-                        // debugger;
+
                         if ($scope.question){
                             if (_.contains($scope.question.col_refs, i)){
-                                return "active";
+                                return true;
                             } else {
-                                return "";
+                                return false;
                             }
                         }
                     }
@@ -169,6 +171,11 @@ angular.module('data_qs').controller('QsController', ['$scope', '$collection', '
                     return "fa-question";
             }
         }
+
+        $scope.changeType = function(col, type){
+            col.datatype = type;
+            // will trigger a re-render
+        }
     }]);
 
 angular.module('data_qs').controller('QuestController', ['$scope', '$collection', '$stateParams',
@@ -204,6 +211,16 @@ angular.module('data_qs').controller('QuestController', ['$scope', '$collection'
                             return v;
                         }
                     }));
+
+                    $scope.changeType = function(col, type){
+                        col.datatype = type;
+                        // will trigger a re-render
+                    }
+
+                    $scope.remove = function(col){
+                        var i = _.indexOf(val.columns, col);
+                        $scope.question.col_refs = _.without($scope.question.col_refs, i);
+                    }
                 }
             }
         });
