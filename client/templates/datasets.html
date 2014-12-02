@@ -1,16 +1,17 @@
 <template name="datasets-list">
 
-    <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle btn-xs"
-            data-toggle="dropdown" aria-expanded="false">
-            <i class="fa fa-bars"></i>
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-            <li><a ui-sref="home"><i class="fa fa-home"></i> Home</a></li>
-            <li><a ui-sref="home.upload"><i class="fa fa-upload"></i> Upload</a></li>
-        </ul>
-    </div>
+    <ul class="nav nav-pills topnav">
+        <li ng-class="{active: checkState('home')}">
+            <a ui-sref="home" data-toggle="tooltip" data-placement="bottom" title="Home">
+                <i class="fa fa-home"></i>
+            </a>
+        </li>
+        <li ng-class="{active: checkState('home.upload')}">
+            <a ui-sref="home.upload" data-toggle="tooltip" data-placement="bottom" title="Upload new">
+                <i class="fa fa-upload"></i>
+            </a>
+        </li>
+    </ul>
 
     <h4 class="name">my datasets</h4>
     <input type="text" placeholder="Search datasets" class="search-box" ng-model="searchBox"/>
@@ -23,20 +24,25 @@
 
 <template name="vars-list">
 
-    <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle btn-xs"
-            data-toggle="dropdown" aria-expanded="false">
-            <i class="fa fa-bars"></i>
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-            <li><a ui-sref="home"><i class="fa fa-home"></i> Home</a></li>
-            <li><a ui-sref="home.upload"><i class="fa fa-upload"></i> Upload</a></li>
-            <li class="divider" ng-show="qState()"></li>
-            <li ng-show="qState()"><a ui-sref="dataset({datasetId: dataset._id})"><i class="fa fa-question"></i>
-                <i class="fa fa-th-large"></i> Back to overview</a></li>
-        </ul>
-    </div>
+    <ul class="nav nav-pills topnav">
+        <li ng-class="{active: checkState('home')}">
+            <a ui-sref="home" data-toggle="tooltip" data-placement="bottom" title="Home">
+                <i class="fa fa-home"></i>
+            </a>
+        </li>
+        <li ng-class="{active: checkState('home.upload')}">
+            <a ui-sref="home.upload" data-toggle="tooltip" data-placement="bottom" title="Upload new">
+                <i class="fa fa-upload"></i>
+            </a>
+        </li>
+        <li ng-class="{active: checkState('dataset')}">
+            <a ui-sref="dataset({datasetId: dataset._id})"
+            data-toggle="tooltip" data-placement="bottom" title="Dataset overview">
+                <i class="fa fa-question"></i>
+                <i class="fa fa-th-large"></i>
+            </a>
+        </li>
+    </ul>
 
     <h4 class="name">[[ dataset.name ]]</h4>
     <input type="text" placeholder="Search variables" class="search-box" ng-model="searchBox"/>

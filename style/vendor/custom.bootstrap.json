@@ -34,7 +34,7 @@
   "component-animations": false,
   "dropdowns":            true,
   "modals":               false,
-  "tooltip":              false,
+  "tooltip":              true,
   "popovers":             false,
   "carousel":             false,
 

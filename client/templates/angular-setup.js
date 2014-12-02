@@ -57,8 +57,16 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
 }]);
 
 angular.module('data_qs').controller('DatasetsController', ['$scope', '$collection',
-  function($scope, $collection){
+  '$state',
+  function($scope, $collection, $state){
     $collection(Datasets, {}, {fields: {name: 1}}).bind($scope, 'datasets', true);
+
+    $scope.checkState = function(name){
+        return $state.current.name == name;
+    }
+
+    $('[data-toggle="tooltip"]').tooltip();
+
 }]);
 
 angular.module('data_qs').controller('VarsController', ['$scope', '$collection', '$stateParams',
@@ -116,9 +124,15 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
             }
         });
 
-        $scope.qState = function(){
-            return $state.current.name == "dataset.question";
-        }
+        $scope.checkState = function(name){
+            return $state.current.name == name;
+        };
+
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+
+
     }
 ]);
 
