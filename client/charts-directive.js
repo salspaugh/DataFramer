@@ -41,7 +41,6 @@ angular.module('data_qs')
                 // define render function
                 scope.render = function(data){
                     var hist = d3.layout.histogram()
-                    .bins(10)
                     ;
 
                     var values = _.flatten(data)[0].values;

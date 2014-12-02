@@ -28,7 +28,7 @@
 
 <template name="questions-list">
      <div>
-         <h2>My Questions</h2>
+         <h2>my questions</h2>
 
          <form onsubmit="this.reset(); return false;" name="qAdd" role="form">
              <div class="form-group">
@@ -58,6 +58,14 @@
                  </a>
              </li>
          </ul>
+
+         <h2>variables overview</h2>
+         <div class="row">
+             <div class="col-md-6" ng-repeat="col in dataset.columns">
+                 <h3 class="var-name">[[col.name ]]</h3>
+                 <div hist chart-data="[[ col ]]"></div>
+             </div>
+         </div>
      </div>
  </template>
 
@@ -65,12 +73,6 @@
      <div class="question-single">
          <h1>[[ question.text ]]</h1>
          <!-- <h2>select variables to add them to your question</h2> -->
-         <div class="row">
-             <div class="col-md-6" ng-repeat="col in dataset.columns">
-                 <h3 class="var-name">[[col.name ]]</h3>
-                 <div hist chart-data="[[ col ]]"></div>
-             </div>
-         </div>
 
      </div>
 
