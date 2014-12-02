@@ -115,6 +115,10 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
                 }
             }
         });
+
+        $scope.qState = function(){
+            return $state.current.name == "dataset.question";
+        }
     }
 ]);
 

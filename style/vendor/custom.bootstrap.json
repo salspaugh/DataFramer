@@ -11,7 +11,7 @@
   "buttons":              true,
 
   "glyphicons":           false,
-  "button-groups":        false,
+  "button-groups":        true,
   "input-groups":         true,
   "navs":                 true,
   "navbar":               false,
@@ -32,7 +32,7 @@
   "close":                false,
 
   "component-animations": false,
-  "dropdowns":            false,
+  "dropdowns":            true,
   "modals":               false,
   "tooltip":              false,
   "popovers":             false,
@@ -40,7 +40,7 @@
 
   "affix":                false,
   "alert":                false,
-  "button":               true,
+  "button":               false,
   "collapse":             false,
   "scrollspy":            false,
   "tab":                  false,
