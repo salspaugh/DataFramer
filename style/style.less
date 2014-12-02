@@ -104,15 +104,19 @@ a{
         padding-left: 10px;
         margin-top: 20px;
 
+        a:focus {
+            background-color: inherit;
+        }
+
         &.string {
             border-left-color: @string-color;
             // background-color: @string-color-light;
 
-            h4, a {
+            h5, a {
                 color: @string-color;
             }
 
-            a:hover, a:focus {
+            a:hover, a.active {
                 background-color: @string-color-light;
             }
         }
@@ -121,11 +125,11 @@ a{
             border-left-color: @num-color;
             // background-color: @num-color-light;
 
-            h4, a {
+            h5, a {
                 color: @num-color;
             }
 
-            a:hover, a:focus {
+            a:hover, a.active {
                 background-color: @num-color-light;
             }
         }
@@ -134,11 +138,11 @@ a{
             border-left-color: @date-color;
             // background-color: @date-color-light;
 
-            h4, a {
+            h5, a {
                 color: @date-color;
             }
 
-            a:hover, a:focus {
+            a:hover, a.active {
                 background-color: @date-color-light;
             }
         }
@@ -232,14 +236,14 @@ ul.questions-list {
 
 .question-single {
     // same as height of floating column
-    margin-bottom: 175px;
+    margin-bottom: 125px;
 }
 .floating-column {
     position:fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 175px;
+    height: 125px;
     .answerable-form {
         padding-top: 20px;
         font-size: 20px;

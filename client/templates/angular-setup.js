@@ -62,18 +62,51 @@ angular.module('data_qs').controller('DatasetsController', ['$scope', '$collecti
 }]);
 
 angular.module('data_qs').controller('VarsController', ['$scope', '$collection', '$stateParams',
-    function($scope, $collection, $stateParams){
-        $collection(Datasets, $stateParams.datasetId,
-            {fields: {name: 1, 'columns.datatype': 1, 'columns.name': 1}})
-            .bind($scope, '_d', false);
+    '$state',
+    function($scope, $collection, $stateParams, $state){
+        $collection(Datasets).bindOne($scope, 'dataset',
+            {_id: $stateParams.datasetId}, true);
 
-        $scope.$watch('_d', function(val){
+        $scope.$watch('dataset', function(val){
             if (val) {
-                if (val[0]){
-                    if (val[0].columns) {
-                        $scope.dataset = val[0];
-                        $scope.datatypes = _.uniq(_.pluck($scope.dataset.columns,
-                            'datatype'), false);
+                if (val.columns) {
+
+                    $scope.datatypes = _.uniq(_.pluck(val.columns,
+                        'datatype'), false);
+                }
+                if (val.questions && val.columns) {
+                    $scope.question = _.findWhere(val.questions,
+                        {'id': $state.params.questionId});
+
+                    $scope.varClick = function(col){
+                        if ($state.current.name == "dataset.question") {
+                            // add to question's colrefs
+
+                            var i = _.indexOf(val.columns, col),
+                                col_refs = $scope.question.col_refs
+                                ;
+
+                            if (_.contains(col_refs, i)) {
+                                // toggle off
+                                $scope.question.col_refs = _.without(col_refs, i);
+                            } else {
+                                // toggle on
+                                col_refs.push(i);
+                            }
+
+                        } else if ($state.current.name == "dataset") {
+                            // don't really do anything at the moment
+                        }
+                    };
+
+                    $scope.colActive = function(col){
+                        var i = _.indexOf(val.columns, col);
+                        // debugger;
+                        if (_.contains($scope.question.col_refs, i)){
+                            return "active";
+                        } else {
+                            return "";
+                        }
                     }
                 }
             }
@@ -126,7 +159,7 @@ angular.module('data_qs').controller('QuestController', ['$scope', '$collection'
         // https://github.com/Urigo/angular-meteor/issues/60
         $scope.$watch('dataset', function(val){
             if (val) {
-                if (val.questions) {
+                if (val.questions && val.columns) {
                     $scope.question = _.findWhere(val.questions,
                         {'id': $stateParams.questionId});
 
@@ -140,11 +173,15 @@ angular.module('data_qs').controller('QuestController', ['$scope', '$collection'
                     $scope.setAns = function(ans_value){
                         $scope.question.answerable = ans_value;
                     };
-                }
 
-                if (val.columns) {
                     $scope.datatypes = _.uniq(_.pluck(val.columns,
                         'datatype'), false);
+
+                    $scope.columns = _.compact(_.map(val.columns, function(v,i){
+                        if (_.contains($scope.question.col_refs, i)){
+                            return v;
+                        }
+                    }));
                 }
             }
         });
