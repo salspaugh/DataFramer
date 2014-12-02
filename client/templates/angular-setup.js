@@ -82,16 +82,18 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
                         if ($state.current.name == "dataset.question") {
                             // add to question's colrefs
 
-                            var i = _.indexOf(val.columns, col),
+                            if ($scope.question){
+                                var i = _.indexOf(val.columns, col),
                                 col_refs = $scope.question.col_refs
                                 ;
 
-                            if (_.contains(col_refs, i)) {
-                                // toggle off
-                                $scope.question.col_refs = _.without(col_refs, i);
-                            } else {
-                                // toggle on
-                                col_refs.push(i);
+                                if (_.contains(col_refs, i)) {
+                                    // toggle off
+                                    $scope.question.col_refs = _.without(col_refs, i);
+                                } else {
+                                    // toggle on
+                                    col_refs.push(i);
+                                }
                             }
 
                         } else if ($state.current.name == "dataset") {
@@ -102,10 +104,12 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
                     $scope.colActive = function(col){
                         var i = _.indexOf(val.columns, col);
                         // debugger;
-                        if (_.contains($scope.question.col_refs, i)){
-                            return "active";
-                        } else {
-                            return "";
+                        if ($scope.question){
+                            if (_.contains($scope.question.col_refs, i)){
+                                return "active";
+                            } else {
+                                return "";
+                            }
                         }
                     }
                 }
