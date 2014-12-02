@@ -89,10 +89,14 @@ a{
     overflow-y: auto;
     z-index: 1000;
     @media (min-width: @screen-md-min){
-        width: (@container-md / 12 * 3);
+        width: (@container-md / 12 * 2);
     }
     @media (min-width: @screen-lg-min){
-        width: (@container-lg / 12 * 3);
+        width: (@container-lg / 12 * 2);
+    }
+
+    .name {
+        word-wrap: break-word;
     }
 
     .datatype {
