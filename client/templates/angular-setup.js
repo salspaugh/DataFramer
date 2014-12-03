@@ -37,6 +37,10 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
         .state('dataset.question', {
             url: '/question/:questionId',
             views: {
+                "sidebar@": {
+                    template: UiRouter.template('vars-list'),
+                    controller: 'VarsController',
+                },
                 "main@": {
                     controller: 'QuestController',
                     template: UiRouter.template('question-single'),
@@ -88,19 +92,19 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
                         if ($state.current.name == "dataset.question") {
                             // add to question's colrefs
 
-                            if ($scope.question){
-                                var i = _.indexOf(val.columns, col),
-                                col_refs = $scope.question.col_refs
-                                ;
 
-                                if (_.contains(col_refs, i)) {
-                                    // toggle off
-                                    $scope.question.col_refs = _.without(col_refs, i);
-                                } else {
-                                    // toggle on
-                                    col_refs.push(i);
-                                }
+                            var i = _.indexOf(val.columns, col),
+                            col_refs = $scope.question.col_refs
+                            ;
+
+                            if (_.contains(col_refs, i)) {
+                                // toggle off
+                                $scope.question.col_refs = _.without(col_refs, i);
+                            } else {
+                                // toggle on
+                                col_refs.push(i);
                             }
+
 
                         } else if ($state.current.name == "dataset") {
                             // scroll to that variable in the overview
@@ -111,24 +115,25 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
                         }
                     };
 
-                    $scope.colActive = function(col){
-                        if ($state.current.name != "dataset.question"){
-                            return false;
-                        }
-
-                        var i = _.indexOf(val.columns, col);
-
-                        if ($scope.question){
-                            if (_.contains($scope.question.col_refs, i)){
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }
-                    }
                 }
             }
         });
+
+        $scope.colActive = function(col){
+            if ($state.current.name != "dataset.question"){
+                return false;
+            }
+
+            var i = _.indexOf($scope.dataset.columns, col);
+
+            if ($scope.question){
+                if (_.contains($scope.question.col_refs, i)){
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
 
         $scope.checkState = function(name){
             return $state.current.name == name;
