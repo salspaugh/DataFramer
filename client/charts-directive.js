@@ -103,7 +103,7 @@ angular.module('data_qs')
     function d3_fisheye_scale_ordinal(scale, d, a) {
 
         function scale_factor(x) {
-            var 
+            var
                 left = x < a,
                 range = scale.rangeExtent(),
                 min = range[0],
@@ -144,7 +144,7 @@ angular.module('data_qs')
             return Math.abs(x2 - x1);
         };
 
-       
+
         fisheye.rangeRoundBands = function (x, padding, outerPadding) {
             var roundBands = arguments.length === 3 ? scale.rangeRoundBands(x, padding, outerPadding) : arguments.length === 2 ? scale.rangeRoundBands(x, padding) : scale.rangeRoundBands(x);
             fisheye.padding = padding * scale.rangeBand();
@@ -154,7 +154,7 @@ angular.module('data_qs')
 
         return d3.rebind(fisheye, scale, "domain",  "rangeExtent", "range");
     };
-        
+
 })();
 
                 var margin = {top: 20, right: 20, bottom: 20, left: 20},
@@ -285,7 +285,7 @@ angular.module('data_qs')
                           //                         .domain([8,50])
                           //                         .range([0,1])
                           //                         .focus(1)
-                          
+
                           if (groups.length < 15) {
 
                             var padding = 3;
@@ -300,76 +300,86 @@ angular.module('data_qs')
                               .domain([0, maxFreq])
                               .range([0, col_width * 0.4]);
 
-                          var bars = svg.selectAll('.bar')
-                            .data(groups)
-                            .enter().append('g')
-                                .classed('bar', true);
+                              var bars = svg.selectAll('.bar')
+                                .data(groups)
+                                .enter().append('g')
+                                    .classed('bar', true);
 
-                          bars
-                              .append('rect')
-                              .attr('x', 0)
-                              .attr('y', function (d, i) { return padding + yScale(i); })
-                              .attr("width", function (d) { return xScale(d.freq); })
-                              .attr("height", 7)
-                              ;
+                              bars
+                                  .append('rect')
+                                  .attr('x', 0)
+                                  .attr('y', function (d, i) { return padding + yScale(i); })
+                                  .attr("width", function (d) { return xScale(d.freq); })
+                                  .attr("height", 7)
+                                  ;
 
-                          bars.append('text')
-                              .text(function (d) { return d.value; })
-                              .attr('x', function (d) { return 10 + xScale(d.freq); })
-                              .attr('y', function (d, i) { return yScale(i) - padding; })
-                              .attr('dy', '1em');
-                          } else {  
+                              bars.append('text')
+                                  .text(function (d) { return d.value; })
+                                  .attr('x', function (d) { return 10 + xScale(d.freq); })
+                                  .attr('y', function (d, i) { return yScale(i) - padding; })
+                                  .attr('dy', '1em');
+                          } else {
 
-                          var padding = 3;
-                          var barHeight = height / groups.length;
-                          
-                          var yScale = d3.scale.linear()
-                              .domain([0, groups.length])
-                              .range([30, groups.length]);
+                              var padding = 1;
+                              var barHeight = Math.ceil(height / groups.length) - padding;
 
-                          var xScale = d3.scale.linear()
-                              .domain([0, maxFreq])
-                              .range([0, col_width * 0.4]);
+                              var yScale = d3.scale.linear()
+                                  .domain([0, groups.length])
+                                  .range([0, height - padding]);
 
-                          var yFisheye = d3.fisheye.ordinal()
-                                    .rangeRoundBands([0, width - padding * 2])
-                                    .distortion(0.9);
+                              var xScale = d3.scale.linear()
+                                  .domain([0, maxFreq])
+                                  .range([0, col_width * 0.4]);
 
-                          // var yFisheye = d3.fisheye.scale(d3.scale.identity).domain([0, barHeight]).focus(90);
-                          // var ySteps = d3.range(1, 8, 1); //start, stop, step
+                              var yFisheye = d3.fisheye.ordinal()
+                                        .rangeRoundBands([0, height - padding * 2])
+                                        .distortion(groups.length / 10);
 
-                          var bars = svg.selectAll('.bar')
-                            .data(groups)
-                            .enter().append('g')
-                                .classed('bar', true);
+                              yFisheye.domain(_.range(groups.length));
+                              // var yFisheye = d3.fisheye.scale(d3.scale.identity).domain([0, barHeight]).focus(90);
+                              // var ySteps = d3.range(1, 8, 1); //start, stop, step
 
-                          bars
-                              .append('rect')
-                              .attr('x', 0)
-                              .attr('y', function (d, i) { return padding + yScale(i); })
-                              .attr('width', function (d) { return xScale(d.freq); })
-                              .attr('height', function (d, i) {console.log(i); });//(yFisheye.rangeBand(d.y); });
-                              
+                              var bars = svg.selectAll('.bar')
+                                .data(groups)
+                                .enter().append('g')
+                                    .classed('bar', true);
 
-                          // bars.append('text')
-                          //     .text(function (d) { return d.value; })
-                          //     .attr('x', function (d) { return 10 + xScale(d.freq); })
-                          //     .attr('y', function (d, i) { return yScale(i) - padding; })
-                          //     .attr('dy', '1em');
+                              bars
+                                  .append('rect')
+                                  .attr('x', 0)
+                                  .attr('y', function (d, i) { return i * (padding + barHeight); })
+                                  .attr('width', function (d) { return xScale(d.freq); })
+                                  .attr('height', barHeight)
+                                  ;
+
+                              // bars.append('text')
+                              //     .text(function (d) { return d.value; })
+                              //     .attr('x', function (d) { return 10 + xScale(d.freq); })
+                              //     .attr('y', function (d, i) { return yScale(i) - padding; })
+                              //     .attr('dy', '1em');
 
 
-                          redraw();
+                            //   redraw();
 
-                          svg.on("mousemove", function() {
-                            var mouse = d3.mouse(this);
-                            yFisheye.focus(mouse[0]);
-                            redraw();
-                          });
+                              svg.on("mousemove", function() {
+                                    var mouse = d3.mouse(this);
+                                    yFisheye.focus(mouse[1]);
+                                    redraw();
 
-                          function redraw() {
-                            bars.attr("height", y);
-                          }
-                        }    
+                              });
+
+                              function redraw() {
+                                    // debugger;
+                                    svg.selectAll('rect')
+                                        .attr("y", function(d,i){
+                                            return yFisheye(i) + padding;
+                                        })
+                                        .attr('height', function(d,i){
+                                            return yFisheye.rangeBand(i);
+                                        })
+                                        ;
+                              }
+                        }
 
                           // redraw();
 
