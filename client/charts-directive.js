@@ -187,6 +187,10 @@ angular.module('data_qs')
 
                 // define render function
                 scope.render = function(data){
+
+                    // clear existing chart, if any
+                    d3.select(element[0]).html("");
+
                     var hist = d3.layout.histogram()
                     ;
 
