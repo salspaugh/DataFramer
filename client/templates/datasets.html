@@ -94,7 +94,7 @@
 
          <h2>variables overview</h2>
          <div class="row">
-             <div class="col-md-6" ng-repeat="col in dataset.columns">
+             <div class="col-md-6" ng-repeat="col in dataset.columns" ng-attr-id="col-[[$index]]">
 
                  <h3 class="var-name">[[col.name ]]
                      <span class="dropdown pull-right">
@@ -127,7 +127,8 @@
          <h2 ng-show="!columns.length">select variables to add them to your question</h2>
 
          <div class="row">
-             <div class="col-md-6" ng-repeat="col in columns">
+             <div class="col-md-6" ng-repeat="col in columns"
+             ng-attr-id="col-[[ question.col_refs[$index] ]]">
                  <h3 class="var-name">[[col.name ]]
 
                      <a class="pull-right" ng-click="remove(col)">

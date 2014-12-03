@@ -70,8 +70,8 @@ angular.module('data_qs').controller('DatasetsController', ['$scope', '$collecti
 }]);
 
 angular.module('data_qs').controller('VarsController', ['$scope', '$collection', '$stateParams',
-    '$state',
-    function($scope, $collection, $stateParams, $state){
+    '$state', '$window',
+    function($scope, $collection, $stateParams, $state, $window){
         $collection(Datasets).bindOne($scope, 'dataset',
             {_id: $stateParams.datasetId}, true);
 
@@ -103,7 +103,11 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
                             }
 
                         } else if ($state.current.name == "dataset") {
-                            // don't really do anything at the moment
+                            // scroll to that variable in the overview
+                            var i = _.indexOf(val.columns, col);
+                            $window.scroll(0,$('#col-'+i).offset().top);
+
+
                         }
                     };
 
