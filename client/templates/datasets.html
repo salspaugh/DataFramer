@@ -93,6 +93,7 @@
          </ul>
 
          <h2>variables overview</h2>
+         <h4>number of records: [[ dataset.rowCount ]] | number of variables: [[ dataset.columns.length ]]</h4>
          <div class="row">
              <div class="col-md-6 chart-container" ng-repeat="col in dataset.columns" ng-attr-id="col-[[$index]]">
                  {{> df_chart }}
@@ -107,7 +108,7 @@
 
          <h2 ng-show="!columns.length">select variables to add them to your question</h2>
 
-         <div class="row">
+         <div class="row charts-container">
              <div class="col-md-6 chart-container" ng-repeat="col in columns"
              ng-attr-id="col-[[ question.col_refs[$index] ]]">
                  {{> df_chart }}
@@ -172,5 +173,13 @@
         </a>
 
     </h3>
+    <h5>nulls: [[ col.nulls ]]</h5>
     <div hist chart-data="[[ col ]]" control="histControl"></div>
+    <form role="form">
+
+        <div class="form-group">
+            <textarea class="form-control" rows="2" ng-model="col.notes" placeholder="Notes"></textarea>
+        </div>
+
+</form>
 </template>

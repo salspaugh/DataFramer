@@ -102,6 +102,11 @@ angular.module('data_qs')
                               .sortBy(function (d) { return -d.freq; })
                               .value();
 
+                          //   remove nulls
+                          groups = _.filter(groups, function(obj){
+                              return obj.value != "null";
+                          });
+
                           var maxFreq = d3.max(groups, function (d) { return d.freq});
 
                           var svg = d3
