@@ -304,7 +304,9 @@ angular.module('data_qs')
 
                             var hoverDetail = new customHover({
                                 graph: graph,
-                                xFormatter: function(x){return "bin"},
+                                xFormatter: function(x){
+                                    return "[" + Math.ceil(x) + " : " + Math.floor(x+bins[0].dx) + "]";
+                                },
                                 yFormatter: function(y){
                                     return parseInt(y);
                                 }
