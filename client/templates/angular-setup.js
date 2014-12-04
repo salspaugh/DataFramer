@@ -148,7 +148,8 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
 ]);
 
 angular.module('data_qs').controller('QsController', ['$scope', '$collection', '$stateParams',
-    function($scope, $collection, $stateParams){
+    '$state',
+    function($scope, $collection, $stateParams, $state){
         $collection(Datasets).bindOne($scope, 'dataset', $stateParams.datasetId, true);
         $scope.addQuestion = function(text){
             var new_question = {
@@ -185,10 +186,16 @@ angular.module('data_qs').controller('QsController', ['$scope', '$collection', '
             col.datatype = type;
             // will trigger a re-render
         }
+
+        $scope.checkState = function(name){
+            return $state.current.name == name;
+        };
+
     }]);
 
 angular.module('data_qs').controller('QuestController', ['$scope', '$collection', '$stateParams',
-    function($scope, $collection, $stateParams){
+    '$state',
+    function($scope, $collection, $stateParams, $state){
         $collection(Datasets).bindOne($scope, 'dataset',
             {_id: $stateParams.datasetId}, true);
 
@@ -234,9 +241,9 @@ angular.module('data_qs').controller('QuestController', ['$scope', '$collection'
             }
         });
 
-
-
-
+        $scope.checkState = function(name){
+            return $state.current.name == name;
+        };
     }
 ]);
 

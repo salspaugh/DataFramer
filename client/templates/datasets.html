@@ -94,27 +94,8 @@
 
          <h2>variables overview</h2>
          <div class="row">
-             <div class="col-md-6" ng-repeat="col in dataset.columns" ng-attr-id="col-[[$index]]">
-
-                 <h3 class="var-name">[[col.name ]]
-                     <span class="dropdown pull-right">
-                         <a data-toggle="dropdown">
-                             <i class="fa fa-pencil-square"></i><span class="caret"></span>
-                         </a>
-
-                         <ul class="dropdown-menu" role="menu">
-                             <li role="presentation"
-                             ng-repeat="type in ['string', 'integer', 'float', 'date']">
-                                 <a role="menuitem" tabindex="-1" href="#"
-                                     ng-click="changeType(col, type)">
-                                     change datatype to [[ type ]]
-                                     <span ng-show="type == 'string'"> (categorical)</span>
-                                 </a>
-                             </li>
-                         </ul>
-             </span>
-                 </h3>
-                 <div hist chart-data="[[ col ]]"></div>
+             <div class="col-md-6 chart-container" ng-repeat="col in dataset.columns" ng-attr-id="col-[[$index]]">
+                 {{> df_chart }}
              </div>
          </div>
      </div>
@@ -127,33 +108,9 @@
          <h2 ng-show="!columns.length">select variables to add them to your question</h2>
 
          <div class="row">
-             <div class="col-md-6" ng-repeat="col in columns"
+             <div class="col-md-6 chart-container" ng-repeat="col in columns"
              ng-attr-id="col-[[ question.col_refs[$index] ]]">
-                 <h3 class="var-name">[[col.name ]]
-
-                     <a class="pull-right" ng-click="remove(col)">
-                         <i class="fa fa-times-circle"></i>
-                     </a>
-
-                     <span class="dropdown pull-right">
-                         <a data-toggle="dropdown">
-                             <i class="fa fa-pencil-square"></i><span class="caret"></span>
-                         </a>
-
-                         <ul class="dropdown-menu" role="menu">
-                             <li role="presentation"
-                                ng-repeat="type in ['string', 'integer', 'float', 'date']">
-                                 <a role="menuitem" tabindex="-1" href="#"
-                                    ng-click="changeType(col, type)">
-                                     change datatype to [[ type ]]
-                                     <span ng-show="type == 'string'"> (categorical)</span>
-                                 </a>
-                             </li>
-                         </ul>
-                     </span>
-
-                 </h3>
-                 <div hist chart-data="[[ col ]]"></div>
+                 {{> df_chart }}
              </div>
          </div>
      </div>
@@ -186,3 +143,34 @@
         </div>
      </div>
  </template>
+
+<template name="df_chart">
+    <h3 class="var-name">
+        [[col.name ]]
+
+        <a class="pull-right control" ng-click="remove(col)" ng-show="checkState('dataset.question')">
+            <i class="fa fa-times-circle"></i>
+        </a>
+
+        <span class="dropdown pull-right control">
+            <a data-toggle="dropdown">
+                <i class="fa fa-pencil-square"></i><span class="caret"></span>
+            </a>
+
+            <ul class="dropdown-menu" role="menu">
+                <li role="presentation" ng-repeat="type in ['string', 'integer', 'float', 'date']">
+                    <a role="menuitem" tabindex="-1" href="#" ng-click="changeType(col, type)">
+                        change datatype to [[ type ]]
+                        <span ng-show="type == 'string'"> (categorical)</span>
+                    </a>
+                </li>
+            </ul>
+        </span>
+
+        <a class="pull-right control" ng-click="histControl.resetBars()">
+            <i class="fa fa-refresh"></i>
+        </a>
+
+    </h3>
+    <div hist chart-data="[[ col ]]" control="histControl"></div>
+</template>
