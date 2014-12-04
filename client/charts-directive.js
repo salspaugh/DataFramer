@@ -14,7 +14,7 @@ angular.module('data_qs')
 
                 var margin = {top: 20, right: 20, bottom: 20, left: 20},
                     width = col_width,
-                    height = 250,
+                    height = 275,
                     padding = 50;
 
                 // on window resize, re-render d3 canvas
@@ -90,6 +90,8 @@ angular.module('data_qs')
 
                         case "string":
 
+                          var axis_height = 25;
+
                           // calculate frequency for each word in the list
                           var groups = _(values).chain()
                               .groupBy(_.identity)
@@ -115,6 +117,7 @@ angular.module('data_qs')
                             .attr('class', 'string-chart')
                             .attr('width', col_width)
                             .attr('height', height)
+                            .attr('style', "overflow: visible;")
                             ;
 
                           if (groups.length < 15) {
@@ -123,13 +126,13 @@ angular.module('data_qs')
                             var barHeight = height / groups.length - padding;
                             ySteps = d3.range(10, height, 16);
 
-                            var yScale = d3.scale.linear()
-                              .domain([0, groups.length])
-                              .range([0, groups.length * 18]);
+                            var yScale = d3.scale.ordinal()
+                              .domain(d3.range(groups.length))
+                              .rangeBands([padding, height - axis_height], 0.3);
 
                               var xScale = d3.scale.linear()
                               .domain([0, maxFreq])
-                              .range([0, col_width * 0.4]);
+                              .range([0, col_width]);
 
                               var bars = svg.selectAll('.bar')
                                 .data(groups)
@@ -139,24 +142,27 @@ angular.module('data_qs')
                               bars
                                   .append('rect')
                                   .attr('x', 0)
-                                  .attr('y', function (d, i) { return padding + yScale(i); })
+                                  .attr('y', function (d, i) { return yScale(i); })
                                   .attr("width", function (d) { return xScale(d.freq); })
-                                  .attr("height", 7)
+                                  .attr("height", function(){
+                                      return yScale.rangeBand();
+                                  })
                                   ;
 
                               bars.append('text')
                                   .text(function (d) { return d.value; })
-                                  .attr('x', function (d) { return 10 + xScale(d.freq); })
-                                  .attr('y', function (d, i) { return yScale(i) - padding; })
+                                  .attr('x', padding)
+                                  .attr('y', function (d, i) { return yScale(i)})
                                   .attr('dy', '1em');
+
+
                           } else {
 
-                              var padding = 1;
-                              var barHeight = Math.ceil(height / groups.length);
+                              var padding = 10;
 
                               var yScale = d3.scale.ordinal()
                                   .domain(d3.range(groups.length))
-                                  .rangeBands([0, height], 0.1);
+                                  .rangeBands([padding, height - axis_height], 0.1);
 
 
                               var xScale = d3.scale.linear()
@@ -164,7 +170,7 @@ angular.module('data_qs')
                                   .range([0, col_width]);
 
                               var yFisheye = d3.fisheye.ordinal()
-                                    .rangeBands([0, height], 0.1)
+                                    .rangeBands([padding, height - axis_height], 0.1)
                                     .distortion(groups.length / 10);
 
                               yFisheye.domain(_.range(groups.length));
@@ -184,6 +190,7 @@ angular.module('data_qs')
 
                               bars.append('text')
                                   .text(function (d) { return d.value; })
+                                  .classed("label", true)
                                   .attr('x', padding)
                                   .attr('y', function (d, i) { return yScale(i); })
                                   .attr('dy', '1em')
@@ -194,14 +201,21 @@ angular.module('data_qs')
                                   .classed("hidden", true)
                                   ;
 
+                              // add fisheye functionality
                               svg.on('mouseover', function(){
-                                  svg.selectAll('text')
+                                  svg.selectAll('text.label')
                                     .classed('hidden', false)
                               });
 
                               svg.on("mousemove", function() {
                                     var mouse = d3.mouse(this);
-                                    yFisheye.focus(mouse[1]);
+                                    var y_pos = mouse[1];
+                                    if (y_pos > height - axis_height){
+                                        y_pos = height - axis_height;
+                                    } else if (y_pos < padding){
+                                        y_pos = padding;
+                                    }
+                                    yFisheye.focus(y_pos);
                                     redraw();
 
                               });
@@ -216,7 +230,7 @@ angular.module('data_qs')
                                             return yFisheye.rangeBand(i);
                                         })
                                         ;
-                                    svg.selectAll('text')
+                                    svg.selectAll('text.label')
                                     .attr("y", function(d,i){
                                         return yFisheye(i);
                                     })
@@ -237,7 +251,7 @@ angular.module('data_qs')
                                           return yScale.rangeBand();
                                       })
                                       ;
-                                  svg.selectAll('text')
+                                  svg.selectAll('text.label')
                                       .attr("y", function(d,i){
                                           return yScale(i);
                                       })
@@ -248,6 +262,15 @@ angular.module('data_qs')
                                       ;
                               }
                         }
+                            // add X-axis
+                            var xAxis = d3.svg.axis()
+                            .scale(xScale);
+
+                            svg.append('g')
+                            .classed('axis', true)
+                            .attr('transform', 'translate(0,' + (height - axis_height + 5) + ')')
+                            .call(xAxis);
+
                             break;
 
                         default:
