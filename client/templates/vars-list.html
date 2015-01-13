@@ -21,12 +21,14 @@
 </ul>
 
 <h4 class="name">[[ dataset.name ]]</h4>
-<input type="text" placeholder="Search variables" class="search-box" ng-model="searchBox"/>
+<input type="text" placeholder="Search variables" class="search-box"
+    ng-model="columns.search"
+    ng-model-options="{debounce: 750}"/>
 <div>
     <div ng-repeat="type in datatypes" class="datatype" ng-class="type">
         <h5>[[ type ]] <span ng-show="type == 'string'">(categorical)</span></h5>
         <ul class="nav nav-stacked">
-            <li ng-repeat="col in columns | filter:{datatype: type} | filter:searchBox">
+            <li ng-repeat="col in columns | filter:{datatype: type} | filter:columns.search">
                 <a href="#" ng-click="varClick(col)" ng-class="{active: colActive(col)}">[[ col.name ]]</a>
             </li>
         </ul>

@@ -69,8 +69,8 @@ angular.module('data_qs').controller('DatasetsController', ['$scope',
 
 }]);
 
-angular.module('data_qs').controller('VarsController', ['$scope', '$collection', '$stateParams',
-    '$state', '$window', '$subscribe',
+angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
+    '$stateParams', '$state', '$window', '$subscribe',
     function($scope, $collection, $stateParams, $state, $window, $subscribe){
 
         $subscribe.subscribe('columns', $stateParams.datasetId)
