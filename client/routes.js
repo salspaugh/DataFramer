@@ -1,9 +1,3 @@
-angular.module('data_qs',['angular-meteor', 'ui.router']);
-
-Meteor.startup(function () {
-  angular.bootstrap(document, ['data_qs']);
-});
-
 angular.module('data_qs').config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
 function($urlRouterProvider, $stateProvider, $locationProvider){
 
@@ -60,10 +54,12 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
 
 }]);
 
-angular.module('data_qs').controller('DatasetsController', ['$scope', '$collection',
-  '$state',
-  function($scope, $collection, $state){
-    $collection(Datasets, {}, {fields: {name: 1}}).bind($scope, 'datasets', true);
+angular.module('data_qs').controller('DatasetsController', ['$scope',
+  '$state', '$collection',
+  function($scope, $state, $collection){
+
+    $collection(Datasets, {}, {fields: {name: 1}})
+        .bind($scope, 'datasets', false, 'datasets');
 
     $scope.checkState = function(name){
         return $state.current.name == name;
@@ -74,66 +70,70 @@ angular.module('data_qs').controller('DatasetsController', ['$scope', '$collecti
 }]);
 
 angular.module('data_qs').controller('VarsController', ['$scope', '$collection', '$stateParams',
-    '$state', '$window',
-    function($scope, $collection, $stateParams, $state, $window){
-        $collection(Datasets).bindOne($scope, 'dataset',
-            {_id: $stateParams.datasetId}, true);
+    '$state', '$window', '$subscribe',
+    function($scope, $collection, $stateParams, $state, $window, $subscribe){
 
-        $scope.$watch('dataset', function(val){
-            if (val) {
-                if (val.questions && val.columns) {
-                    $scope.datatypes = _.uniq(_.pluck(val.columns,
-                        'datatype'), false);
+        $subscribe.subscribe('columns', $stateParams.datasetId)
+        .then(function(sub){
+            $collection(Columns, {dataset_id: $stateParams.datasetId},
+                {fields: {name: 1, set: 1, datatype: 1}}
+            )
+            .bind($scope, 'columns');
 
-                    $scope.question = _.findWhere(val.questions,
-                        {'id': $state.params.questionId});
+            $scope.datatypes = _.uniq(_.pluck($scope.columns,
+                'datatype'), false);
 
-                    $scope.varClick = function(col){
-                        if ($state.current.name == "dataset.question") {
-                            // add to question's colrefs
+            $scope.colActive = function(col){
+                if ($state.current.name != "dataset.question"){
+                    return false;
+                }
 
+                var i = _.indexOf($scope.columns, col);
 
-                            var i = _.indexOf(val.columns, col),
-                            col_refs = $scope.question.col_refs
-                            ;
-
-                            if (_.contains(col_refs, i)) {
-                                // toggle off
-                                $scope.question.col_refs = _.without(col_refs, i);
-                            } else {
-                                // toggle on
-                                col_refs.push(i);
-                            }
-
-
-                        } else if ($state.current.name == "dataset") {
-                            // scroll to that variable in the overview
-                            var i = _.indexOf(val.columns, col);
-                            $window.scroll(0,$('#col-'+i).offset().top);
-
-
-                        }
-                    };
-
+                if ($scope.question){
+                    if (_.contains($scope.question.col_refs, i)){
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
             }
         });
 
-        $scope.colActive = function(col){
-            if ($state.current.name != "dataset.question"){
-                return false;
-            }
+        $subscribe.subscribe('datasets', $stateParams.datasetId)
+        .then(function(sub){
+            $collection(Datasets).bindOne($scope, 'dataset',
+                {_id: $stateParams.datasetId}, true);
 
-            var i = _.indexOf($scope.dataset.columns, col);
+            $scope.question = _.findWhere($scope.dataset.questions,
+                {'id': $state.params.questionId});
 
-            if ($scope.question){
-                if (_.contains($scope.question.col_refs, i)){
-                    return true;
-                } else {
-                    return false;
+            $scope.varClick = function(col){
+                if ($state.current.name == "dataset.question") {
+                    // add to question's colrefs
+
+                    var i = _.indexOf(val.columns, col),
+                    col_refs = $scope.question.col_refs
+                    ;
+
+                    if (_.contains(col_refs, i)) {
+                        // toggle off
+                        $scope.question.col_refs = _.without(col_refs, i);
+                    } else {
+                        // toggle on
+                        col_refs.push(i);
+                    }
+
+                } else if ($state.current.name == "dataset") {
+                    // scroll to that variable in the overview
+                    var i = _.indexOf($scope.columns, col);
+                    $window.scroll(0,$('#col-'+i).offset().top);
+
+
                 }
-            }
-        }
+            };
+        });
+
 
         $scope.checkState = function(name){
             return $state.current.name == name;
@@ -143,55 +143,70 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
         $('[data-toggle="tooltip"]').tooltip();
 
 
-
     }
 ]);
 
 angular.module('data_qs').controller('QsController', ['$scope', '$collection', '$stateParams',
-    '$state',
-    function($scope, $collection, $stateParams, $state){
-        $collection(Datasets).bindOne($scope, 'dataset', $stateParams.datasetId, true);
-        $scope.addQuestion = function(text){
-            var new_question = {
-                "id": new Mongo.ObjectID().valueOf(),
-                "text": text.$modelValue,
-                "notes": null,
-                "answerable": null,
-                "col_refs": [],
-            }
-            $scope.dataset.questions.push(new_question);
-        }
-        $scope.answerable = function(q_id){
-            switch (_.findWhere($scope.dataset.questions, {id: q_id}).answerable) {
-                case true:
-                    return "ans true";
-                case false:
-                    return "ans false";
-                default:
-                    return "ans unknown";
-            }
-        }
-        $scope.answerableIcon = function(q_id){
-            switch (_.findWhere($scope.dataset.questions, {id: q_id}).answerable) {
-                case true:
-                    return "fa-check";
-                case false:
-                    return "fa-close";
-                default:
-                    return "fa-question";
-            }
-        }
+    '$state', '$subscribe',
+    function($scope, $collection, $stateParams, $state, $subscribe){
+        $subscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
+            $collection(Datasets)
+                .bindOne($scope, 'dataset', $stateParams.datasetId, true);
 
-        $scope.changeType = function(col, type){
-            col.datatype = type;
-            // will trigger a re-render
-        }
+            $scope.addQuestion = function(text){
+                var new_question = {
+                    "id": new Mongo.ObjectID().valueOf(),
+                    "text": text.$modelValue,
+                    "notes": null,
+                    "answerable": null,
+                    "col_refs": [],
+                };
 
-        $scope.checkState = function(name){
-            return $state.current.name == name;
-        };
+                $scope.dataset.questions.push(new_question);
+            };
+
+            $scope.answerable = function(q_id){
+                switch (_.findWhere($scope.dataset.questions, {id: q_id}).answerable) {
+                    case true:
+                        return "ans true";
+                    case false:
+                        return "ans false";
+                    default:
+                        return "ans unknown";
+                }
+            };
+
+            $scope.answerableIcon = function(q_id){
+                switch (_.findWhere($scope.dataset.questions, {id: q_id}).answerable) {
+                    case true:
+                        return "fa-check";
+                    case false:
+                        return "fa-close";
+                    default:
+                        return "fa-question";
+                }
+            };
+
+            $scope.changeType = function(col, type){
+                col.datatype = type;
+                // will trigger a re-render
+            };
+
+            $scope.checkState = function(name){
+                return $state.current.name == name;
+            };
+        });
+
+        $subscribe.subscribe('columns', $stateParams.datasetId)
+        .then(function(sub){
+            $collection(Columns).bind($scope, 'columns');
+        });
 
     }]);
+
+
+
+
 
 angular.module('data_qs').controller('QuestController', ['$scope', '$collection', '$stateParams',
     '$state',
@@ -247,12 +262,8 @@ angular.module('data_qs').controller('QuestController', ['$scope', '$collection'
     }
 ]);
 
-angular.module('data_qs').controller('ChartsController', ['$scope', '$collection', '$stateParams',
-    function($scope, $collection, $stateParams){
-        $collection(Datasets).bindOne($scope, 'dataset', {_id: $stateParams.datasetId});
-        $scope.datatypes = _.uniq(_.pluck($scope.dataset.columns, 'datatype'),
-            false)
-}]);
+
+
 
 angular.module('data_qs').controller('UploadController', ['$scope',
     function($scope){
