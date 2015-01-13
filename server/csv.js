@@ -2,7 +2,6 @@ Meteor.methods({
     'processCsv': processCsv,
 });
 
-
 function processCsv(csvfile, name){
     // var csvfile = CSVs.findOne({'_id': csvfile_id});
 
@@ -25,13 +24,18 @@ function processCsv(csvfile, name){
             // }
         };
 
+        // add to database or replace existing with same name
+        var d_id = Datasets.insert(dataset);
+        console.log('added dataset', name);
+
         // convert rows to columns
         var cols = _.zip.apply(_, data);
         // convert arrays to objects, separate name from values
         _.each(cols, function(v,i,a){
             a[i] = {
                 name: v[0],
-                values: _.rest(v)
+                values: _.rest(v),
+                'dataset_id': d_id
             };
         });
 
@@ -83,7 +87,7 @@ function processCsv(csvfile, name){
 
                 var deviation = Math.sqrt(variance);
                 col.stddev = roundToPrecision(deviation, 4);
-            
+
             } else if (datatype[0] == 'string') {
                 _.each(col.values, function(v,i,a){
                     a[i] = checkNull(v, true)? undefined : v;
@@ -169,13 +173,10 @@ function processCsv(csvfile, name){
 
             col.notes = null;
 
+            Columns.insert(col);
         });
 
-        dataset["columns"] =  cols;
 
-        // add to database or replace existing with same name
-        Datasets.insert(dataset);
-        console.log('added dataset', name);
     }));
 }
 
