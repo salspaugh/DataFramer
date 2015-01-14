@@ -1,0 +1,8 @@
+{
+    "name": "data_qs",
+    "version": "0.0.1",
+    "dependencies": {
+        "angular-ui-router": "0.2.13"
+    },
+    "private": true
+}

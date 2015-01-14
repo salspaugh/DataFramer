@@ -1,6 +1,6 @@
 angular.module('data_qs').config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
 function($urlRouterProvider, $stateProvider, $locationProvider){
-
+    // debugger;
     $locationProvider.html5Mode(true);
 
     $stateProvider
@@ -8,7 +8,7 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
             url: '/',
             views: {
                 "sidebar": {
-                    template: UiRouter.template('datasets-list'),
+                    templateUrl: 'client/templates/datasets-list.tpl',
                     controller: 'DatasetsController',
                 }
             },
@@ -17,13 +17,11 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
             url: '/dataset/:datasetId',
             views: {
                 "sidebar": {
-                    template: UiRouter.template('vars-list'),
+                    templateUrl: 'client/templates/vars-list.tpl',
                     controller: 'VarsController',
                 },
                 "main": {
-                    // template: UiRouter.template('charts'),
-                    // controller: 'ChartsController',
-                    template: UiRouter.template('questions-list'),
+                    templateUrl: 'client/templates/questions-list.tpl',
                     controller: 'QsController',
                 }
             }
@@ -32,12 +30,12 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
             url: '/question/:questionId',
             views: {
                 "sidebar@": {
-                    template: UiRouter.template('vars-list'),
+                    templateUrl: 'client/templates/vars-list.tpl',
                     controller: 'VarsController',
                 },
                 "main@": {
                     controller: 'QuestController',
-                    template: UiRouter.template('question-single'),
+                    templateUrl: 'client/templates/question-single.tpl'
                 }
             }
         })
@@ -45,7 +43,7 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
             url: 'upload',
             views: {
                 "main@": {
-                    template: UiRouter.template('upload'),
+                    templateUrl: 'client/templates/upload.tpl',
                     controller: 'UploadController'
                 }
             }
@@ -55,11 +53,11 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
 }]);
 
 angular.module('data_qs').controller('DatasetsController', ['$scope',
-  '$state', '$collection', '$subscribe',
-  function($scope, $state, $collection, $subscribe){
+  '$state', '$collection', '$meteorSubscribe',
+  function($scope, $state, $collection, $meteorSubscribe){
     $scope.subReady = false;
 
-    $subscribe.subscribe('datasets').then(function(sub){
+    $meteorSubscribe.subscribe('datasets').then(function(sub){
         $collection(Datasets, {}, {fields: {name: 1}})
             .bind($scope, 'datasets', false, 'datasets');
         $scope.subReady = true;
@@ -74,11 +72,11 @@ angular.module('data_qs').controller('DatasetsController', ['$scope',
 }]);
 
 angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
-    '$stateParams', '$state', '$window', '$subscribe',
-    function($scope, $collection, $stateParams, $state, $window, $subscribe){
+    '$stateParams', '$state', '$window', '$meteorSubscribe',
+    function($scope, $collection, $stateParams, $state, $window, $meteorSubscribe){
         $scope.subReady = false;
 
-        $subscribe.subscribe('columns', $stateParams.datasetId)
+        $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
         .then(function(sub){
             $collection(Columns, {dataset_id: $stateParams.datasetId},
                 {fields: {name: 1, set: 1, datatype: 1}}
@@ -106,7 +104,7 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
             }
         });
 
-        $subscribe.subscribe('datasets', $stateParams.datasetId)
+        $meteorSubscribe.subscribe('datasets', $stateParams.datasetId)
         .then(function(sub){
             $collection(Datasets).bindOne($scope, 'dataset',
                 {_id: $stateParams.datasetId}, true);
@@ -153,11 +151,11 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
 ]);
 
 angular.module('data_qs').controller('QsController', ['$scope', '$collection', '$stateParams',
-    '$state', '$subscribe',
-    function($scope, $collection, $stateParams, $state, $subscribe){
+    '$state', '$meteorSubscribe',
+    function($scope, $collection, $stateParams, $state, $meteorSubscribe){
         $scope.qsReady = false;
 
-        $subscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
+        $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
             $collection(Datasets)
                 .bindOne($scope, 'dataset', $stateParams.datasetId, true);
 
@@ -207,7 +205,7 @@ angular.module('data_qs').controller('QsController', ['$scope', '$collection', '
             };
         });
 
-        $subscribe.subscribe('columns', $stateParams.datasetId)
+        $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
         .then(function(sub){
             $collection(Columns).bind($scope, 'columns');
         });
@@ -218,11 +216,43 @@ angular.module('data_qs').controller('QsController', ['$scope', '$collection', '
 
 
 
-angular.module('data_qs').controller('QuestController', ['$scope', '$collection', '$stateParams',
-    '$state',
-    function($scope, $collection, $stateParams, $state){
-        $collection(Datasets).bindOne($scope, 'dataset',
-            {_id: $stateParams.datasetId}, true);
+angular.module('data_qs').controller('QuestController', ['$scope',
+    '$collection', '$stateParams', '$meteorSubscribe', '$state',
+    function($scope, $collection, $stateParams, $meteorSubscribe, $state){
+        $meteorSubscribe.subscribe('dataset', $stateParams.datasetId)
+            .then(function(sub){
+                $collection(Datasets).bindOne($scope, 'dataset',
+                    {_id: $stateParams.datasetId}, true);
+
+                $scope.question = _.findWhere($scope.dataset.questions,
+                    {'id': $stateParams.questionId});
+
+                $scope.isSet = function(ans_value){
+                    // if answerable state isn't set, fade the button
+                    if ($scope.question.answerable != ans_value) {
+                        return "fade";
+                    }
+                };
+
+                $scope.setAns = function(ans_value){
+                    $scope.question.answerable = ans_value;
+                };
+
+            });
+
+        $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
+            .then(function(sub){
+                debugger;
+                var q = $scope.getReactively('question');
+                if (q.col_refs != undefined) {
+                    $collection(Columns, {_id: {$in: q.col_refs}})
+                    .bind($scope, 'columns');
+
+                    $scope.datatypes = _.uniq(_.pluck($scope.columns,
+                        'datatype'), false);
+                }
+
+            });
 
         // sometimes the binding executes before meteor is fully initialized;
         // the bindOne parameters are not all reactive. this should fix that
@@ -230,28 +260,12 @@ angular.module('data_qs').controller('QuestController', ['$scope', '$collection'
         $scope.$watch('dataset', function(val){
             if (val) {
                 if (val.questions && val.columns) {
-                    $scope.question = _.findWhere(val.questions,
-                        {'id': $stateParams.questionId});
 
-                    $scope.isSet = function(ans_value){
-                        // if answerable state isn't set, fade the button
-                        if ($scope.question.answerable != ans_value) {
-                            return "fade";
-                        }
-                    };
 
-                    $scope.setAns = function(ans_value){
-                        $scope.question.answerable = ans_value;
-                    };
 
-                    $scope.datatypes = _.uniq(_.pluck(val.columns,
-                        'datatype'), false);
 
-                    $scope.columns = _.compact(_.map(val.columns, function(v,i){
-                        if (_.contains($scope.question.col_refs, i)){
-                            return v;
-                        }
-                    }));
+
+
 
                     $scope.changeType = function(col, type){
                         col.datatype = type;

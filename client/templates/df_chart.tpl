@@ -1,6 +1,5 @@
-<template name="df_chart">
-    <h3 class="var-name">
-        [[col.name ]]
+<h3 class="var-name">
+        {{col.name }}
 
         <a class="pull-right control" ng-click="remove(col)" ng-show="checkState('dataset.question')">
             <i class="fa fa-times-circle"></i>
@@ -14,7 +13,7 @@
             <ul class="dropdown-menu" role="menu">
                 <li role="presentation" ng-repeat="type in ['string', 'integer', 'float', 'date']">
                     <a role="menuitem" tabindex="-1" href="#" ng-click="changeType(col, type)">
-                        change datatype to [[ type ]]
+                        change datatype to {{ type }}
                         <span ng-show="type == 'string'"> (categorical)</span>
                     </a>
                 </li>
@@ -26,8 +25,8 @@
         </a>
 
     </h3>
-    <h5>nulls: [[ col.nulls ]]</h5>
-    <div hist chart-data="[[ col ]]" control="histControl"></div>
+    <h5>nulls: {{ col.nulls }}</h5>
+    <div hist chart-data="[[col]]" control="histControl"></div>
     <form role="form">
 
         <div class="form-group">
@@ -35,4 +34,3 @@
         </div>
 
 </form>
-</template>

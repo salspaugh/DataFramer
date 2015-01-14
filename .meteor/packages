@@ -10,8 +10,8 @@ mrt:jquery-csv
 nemo64:bootstrap
 less
 urigo:angular
-urigo:angular-ui-router
 fortawesome:fontawesome
 d3
 fcallem:rickshaw
 insecure
+mquandalle:bower

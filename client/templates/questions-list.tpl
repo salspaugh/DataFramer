@@ -1,4 +1,3 @@
-<template name="questions-list">
     <div class="loadmask" ng-hide="qsReady">
         <i class="fa fa-spinner fa-spin fa-5x"></i>
     </div>
@@ -28,18 +27,17 @@
                     <i class="fa ng-class:answerableIcon(question.id);"></i>
                 </span>
                 <a ui-sref="dataset.question({questionId: question.id})">
-                    [[ question.text ]]<br/>
-                    <small class="text-muted">[[ question.notes ]]</small>
+                    {{ question.text }}<br/>
+                    <small class="text-muted">{{ question.notes }}</small>
                 </a>
             </li>
         </ul>
 
         <h2>variables overview</h2>
-        <h4>number of records: [[ dataset.rowCount ]] | number of variables: [[ columns.length ]]</h4>
+        <h4>number of records: {{ dataset.rowCount }} | number of variables: {{ columns.length }}</h4>
     </div>
     <div class="row">
-        <div class="col-md-6 chart-container" ng-repeat="col in columns" ng-attr-id="col-[[$index]]">
-            {{> df_chart }}
+        <div class="col-md-6 chart-container" ng-repeat="col in columns" ng-attr-id="col-{{$index}}">
+            <ng-include src="'client/templates/df_chart.tpl'"></ng-include>
         </div>
     </div>
-</template>

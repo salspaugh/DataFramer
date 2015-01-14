@@ -1,5 +1,3 @@
-<template name="vars-list">
-
     <ul class="nav nav-pills topnav">
         <li ng-class="{active: checkState('home')}">
             <a ui-sref="home" data-toggle="tooltip" data-placement="bottom" title="Home">
@@ -20,7 +18,7 @@
     </li>
 </ul>
 
-<h4 class="name">[[ dataset.name ]]</h4>
+<h4 class="name">{{dataset.name}}</h4>
 <div class="loadmask" ng-hide="subReady">
     <i class="fa fa-spinner fa-spin fa-3x"></i>
 </div>
@@ -30,14 +28,12 @@
     ng-model-options="{debounce: 750}"/>
     <div>
         <div ng-repeat="type in datatypes" class="datatype" ng-class="type">
-            <h5>[[ type ]] <span ng-show="type == 'string'">(categorical)</span></h5>
+            <h5>{{ type }} <span ng-show="type == 'string'">(categorical)</span></h5>
             <ul class="nav nav-stacked">
                 <li ng-repeat="col in columns | filter:{datatype: type} | filter:columns.search">
-                    <a href="#" ng-click="varClick(col)" ng-class="{active: colActive(col)}">[[ col.name ]]</a>
+                    <a href="#" ng-click="varClick(col)" ng-class="{active: colActive(col)}">{{ col.name }}</a>
                 </li>
             </ul>
         </div>
     </div>
 </div>
-
-</template>
