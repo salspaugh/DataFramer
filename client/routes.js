@@ -53,13 +53,14 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
 }]);
 
 angular.module('data_qs').controller('DatasetsController', ['$scope',
-  '$state', '$collection', '$meteorSubscribe',
-  function($scope, $state, $collection, $meteorSubscribe){
+  '$state', '$meteorCollection', '$meteorSubscribe',
+  function($scope, $state, $meteorCollection, $meteorSubscribe){
     $scope.subReady = false;
 
     $meteorSubscribe.subscribe('datasets').then(function(sub){
-        $collection(Datasets, {}, {fields: {name: 1}})
-            .bind($scope, 'datasets', false, 'datasets');
+        $scope.datasets = $meteorCollection(function(){
+            return Datasets.find({}, {fields: {name: 1}});
+        })
         $scope.subReady = true;
     });
 
@@ -71,17 +72,17 @@ angular.module('data_qs').controller('DatasetsController', ['$scope',
 
 }]);
 
-angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
-    '$stateParams', '$state', '$window', '$meteorSubscribe',
-    function($scope, $collection, $stateParams, $state, $window, $meteorSubscribe){
+angular.module('data_qs').controller('VarsController', ['$scope', '$meteorCollection',
+    '$stateParams', '$state', '$window', '$meteorSubscribe', '$meteorObject',
+    function($scope, $meteorCollection, $stateParams, $state, $window, $meteorSubscribe, $meteorObject){
         $scope.subReady = false;
 
         $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
         .then(function(sub){
-            $collection(Columns, {dataset_id: $stateParams.datasetId},
-                {fields: {name: 1, set: 1, datatype: 1}}
-            )
-            .bind($scope, 'columns');
+            $scope.columns = $meteorCollection(function(){
+                return Columns.find({dataset_id: $stateParams.datasetId},
+                    {fields: {name: 1, set: 1, datatype: 1}})
+            })
             $scope.subReady = true;
 
             $scope.datatypes = _.uniq(_.pluck($scope.columns,
@@ -106,8 +107,7 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
 
         $meteorSubscribe.subscribe('datasets', $stateParams.datasetId)
         .then(function(sub){
-            $collection(Datasets).bindOne($scope, 'dataset',
-                {_id: $stateParams.datasetId}, true);
+            $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
 
             $scope.question = _.findWhere($scope.dataset.questions,
                 {'id': $state.params.questionId});
@@ -132,8 +132,6 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
                     // scroll to that variable in the overview
                     var i = _.indexOf($scope.columns, col);
                     $window.scroll(0,$('#col-'+i).offset().top);
-
-
                 }
             };
         });
@@ -150,15 +148,13 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
     }
 ]);
 
-angular.module('data_qs').controller('QsController', ['$scope', '$collection', '$stateParams',
-    '$state', '$meteorSubscribe',
-    function($scope, $collection, $stateParams, $state, $meteorSubscribe){
+angular.module('data_qs').controller('QsController', ['$scope', '$stateParams',
+    '$state', '$meteorSubscribe', '$meteorCollection', '$meteorObject',
+    function($scope, $stateParams, $state, $meteorSubscribe, $meteorCollection, $meteorObject){
         $scope.qsReady = false;
 
         $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
-            $collection(Datasets)
-                .bindOne($scope, 'dataset', $stateParams.datasetId, true);
-
+            $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
             $scope.qsReady = true;
 
             $scope.addQuestion = function(text){
@@ -207,7 +203,9 @@ angular.module('data_qs').controller('QsController', ['$scope', '$collection', '
 
         $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
         .then(function(sub){
-            $collection(Columns).bind($scope, 'columns');
+            $scope.columns = $meteorCollection(function(){
+                return Columns.find({dataset_id: $stateParams.datasetId})
+            });
         });
 
     }]);
@@ -217,12 +215,11 @@ angular.module('data_qs').controller('QsController', ['$scope', '$collection', '
 
 
 angular.module('data_qs').controller('QuestController', ['$scope',
-    '$collection', '$stateParams', '$meteorSubscribe', '$state',
-    function($scope, $collection, $stateParams, $meteorSubscribe, $state){
+    '$meteorCollection', '$stateParams', '$meteorSubscribe', '$state', '$meteorObject',
+    function($scope, $meteorCollection, $stateParams, $meteorSubscribe, $state, $meteorObject){
         $meteorSubscribe.subscribe('dataset', $stateParams.datasetId)
             .then(function(sub){
-                $collection(Datasets).bindOne($scope, 'dataset',
-                    {_id: $stateParams.datasetId}, true);
+                $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
 
                 $scope.question = _.findWhere($scope.dataset.questions,
                     {'id': $stateParams.questionId});
@@ -242,15 +239,16 @@ angular.module('data_qs').controller('QuestController', ['$scope',
 
         $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
             .then(function(sub){
-                debugger;
-                var q = $scope.getReactively('question');
-                if (q.col_refs != undefined) {
-                    $collection(Columns, {_id: {$in: q.col_refs}})
-                    .bind($scope, 'columns');
 
-                    $scope.datatypes = _.uniq(_.pluck($scope.columns,
-                        'datatype'), false);
-                }
+                // TODO: this
+                // var q = $scope.getReactively('question');
+                // if (q.col_refs != undefined) {
+                //     $collection(Columns, {_id: {$in: q.col_refs}})
+                //     .bind($scope, 'columns');
+                //
+                //     $scope.datatypes = _.uniq(_.pluck($scope.columns,
+                //         'datatype'), false);
+                // }
 
             });
 
