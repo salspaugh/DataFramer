@@ -1,5 +1,8 @@
 <template name="questions-list">
-    <div>
+    <div class="loadmask" ng-hide="qsReady">
+        <i class="fa fa-spinner fa-spin fa-5x"></i>
+    </div>
+    <div ng-show="qsReady">
         <h2>my questions</h2>
 
         <form onsubmit="this.reset(); return false;" name="qAdd" role="form">
@@ -33,10 +36,10 @@
 
         <h2>variables overview</h2>
         <h4>number of records: [[ dataset.rowCount ]] | number of variables: [[ columns.length ]]</h4>
-        <div class="row">
-            <div class="col-md-6 chart-container" ng-repeat="col in columns" ng-attr-id="col-[[$index]]">
-                {{> df_chart }}
-            </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 chart-container" ng-repeat="col in columns" ng-attr-id="col-[[$index]]">
+            {{> df_chart }}
         </div>
     </div>
 </template>

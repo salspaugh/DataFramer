@@ -55,11 +55,15 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
 }]);
 
 angular.module('data_qs').controller('DatasetsController', ['$scope',
-  '$state', '$collection',
-  function($scope, $state, $collection){
+  '$state', '$collection', '$subscribe',
+  function($scope, $state, $collection, $subscribe){
+    $scope.subReady = false;
 
-    $collection(Datasets, {}, {fields: {name: 1}})
-        .bind($scope, 'datasets', false, 'datasets');
+    $subscribe.subscribe('datasets').then(function(sub){
+        $collection(Datasets, {}, {fields: {name: 1}})
+            .bind($scope, 'datasets', false, 'datasets');
+        $scope.subReady = true;
+    });
 
     $scope.checkState = function(name){
         return $state.current.name == name;
@@ -72,6 +76,7 @@ angular.module('data_qs').controller('DatasetsController', ['$scope',
 angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
     '$stateParams', '$state', '$window', '$subscribe',
     function($scope, $collection, $stateParams, $state, $window, $subscribe){
+        $scope.subReady = false;
 
         $subscribe.subscribe('columns', $stateParams.datasetId)
         .then(function(sub){
@@ -79,6 +84,7 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
                 {fields: {name: 1, set: 1, datatype: 1}}
             )
             .bind($scope, 'columns');
+            $scope.subReady = true;
 
             $scope.datatypes = _.uniq(_.pluck($scope.columns,
                 'datatype'), false);
@@ -149,9 +155,13 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$collection',
 angular.module('data_qs').controller('QsController', ['$scope', '$collection', '$stateParams',
     '$state', '$subscribe',
     function($scope, $collection, $stateParams, $state, $subscribe){
+        $scope.qsReady = false;
+
         $subscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
             $collection(Datasets)
                 .bindOne($scope, 'dataset', $stateParams.datasetId, true);
+
+            $scope.qsReady = true;
 
             $scope.addQuestion = function(text){
                 var new_question = {

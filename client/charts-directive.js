@@ -29,8 +29,6 @@ angular.module('data_qs')
                 }, true);
 
                 // define render function
-
-                // define render function
                 scope.render = function(data){
 
                     // clear existing chart, if any
