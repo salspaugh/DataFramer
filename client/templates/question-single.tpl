@@ -1,10 +1,10 @@
 <div class="question-single">
-    <h1>{{ question.text }}</h1>
+        <h1>{{ question.text }}</h1>
 
-    <h2 ng-show="!columns.length">select variables to add them to your question</h2>
+        <h2 ng-show="!columns.length">select variables to add them to your question</h2>
 
-    <div class="row charts-container">
-        <div class="col-md-6 chart-container" ng-repeat="col in columns"
+        <div class="row charts-container">
+            <div class="col-md-6 chart-container" ng-repeat="col in columns"
             ng-attr-id="col-{{ question.col_refs[$index] }}">
             <ng-include src="'client/templates/df_chart.tpl'"></ng-include>
         </div>
@@ -19,22 +19,22 @@
                     <div class="form-group">
                         Can you answer your question with this dataset?
                         <span class="ans false pull-right" ng-class="isSet(false)"
-                            ng-click="setAns(false)">
-                            <i class="fa fa-close"></i>
-                        </span>
-                        <span class="ans true pull-right" ng-class="isSet(true)"
-                            ng-click="setAns(true)">
-                            <i class="fa fa-check"></i>
-                        </span>
-                    </div>
-                    <div class="form-group">
-                        <textarea class="form-control" rows="2"
-                        ng-model="question.notes"
-                        placeholder="Notes"></textarea>
-                    </div>
-
-                </form>
+                        ng-click="setAns(false)">
+                        <i class="fa fa-close"></i>
+                    </span>
+                    <span class="ans true pull-right" ng-class="isSet(true)"
+                    ng-click="setAns(true)">
+                    <i class="fa fa-check"></i>
+                </span>
             </div>
-        </div>
+            <div class="form-group">
+                <textarea class="form-control" rows="2"
+                ng-model="question.notes"
+                placeholder="Notes"></textarea>
+            </div>
+
+        </form>
     </div>
+</div>
+</div>
 </div>

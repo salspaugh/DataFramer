@@ -21,8 +21,8 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                     controller: 'VarsController',
                 },
                 "main": {
-                    templateUrl: 'client/templates/questions-list.tpl',
-                    controller: 'QsController',
+                    templateUrl: 'client/templates/dataset-overview.tpl',
+                    controller: 'DatasetController',
                 }
             }
         })
@@ -93,10 +93,8 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$meteorCollec
                     return false;
                 }
 
-                var i = _.indexOf($scope.columns, col);
-
                 if ($scope.question){
-                    if (_.contains($scope.question.col_refs, i)){
+                    if (_.contains($scope.question.col_refs, col._id)){
                         return true;
                     } else {
                         return false;
@@ -110,32 +108,43 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$meteorCollec
             $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
 
             $scope.question = _.findWhere($scope.dataset.questions,
-                {'id': $state.params.questionId});
+            {'_id': $state.params.questionId});
 
-            $scope.varClick = function(col){
-                if ($state.current.name == "dataset.question") {
-                    // add to question's colrefs
-
-                    var i = _.indexOf(val.columns, col),
-                    col_refs = $scope.question.col_refs
-                    ;
-
-                    if (_.contains(col_refs, i)) {
-                        // toggle off
-                        $scope.question.col_refs = _.without(col_refs, i);
-                    } else {
-                        // toggle on
-                        col_refs.push(i);
-                    }
-
-                } else if ($state.current.name == "dataset") {
-                    // scroll to that variable in the overview
-                    var i = _.indexOf($scope.columns, col);
-                    $window.scroll(0,$('#col-'+i).offset().top);
-                }
-            };
         });
 
+        $meteorSubscribe.subscribe('questions', $stateParams.datasetId, $stateParams.questionId)
+        .then(function(sub){
+            if ($stateParams.questionId) {
+                $scope.questions = $meteorCollection(Questions, {_id:$stateParams.questionId});
+                $scope.question = $meteorObject(Questions, $stateParams.questionId);
+            } else {
+                $scope.questions = $meteorCollection(Questions, {dataset_id:$stateParams.datasetId});
+            }
+
+
+        });
+
+        $scope.varClick = function(col){
+            if ($state.current.name == "dataset.question") {
+                // add to question's colrefs
+                var _id = col._id;
+                if (_.contains($scope.question.col_refs, _id)) {
+                    // toggle off
+                    $scope.question.col_refs = _.without($scope.question.col_refs, _id);
+                } else {
+                    // toggle on
+                    $scope.question.col_refs.push(_id);
+                }
+                // update the collection
+                $scope.question.save();
+                $scope.$emit('columnToggle');
+
+            } else if ($state.current.name == "dataset") {
+                // scroll to that variable in the overview
+                var i = _.indexOf($scope.columns, col);
+                $window.scroll(0,$('#col-'+i).offset().top);
+            }
+        };
 
         $scope.checkState = function(name){
             return $state.current.name == name;
@@ -148,29 +157,32 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$meteorCollec
     }
 ]);
 
-angular.module('data_qs').controller('QsController', ['$scope', '$stateParams',
+angular.module('data_qs').controller('DatasetController', ['$scope', '$stateParams',
     '$state', '$meteorSubscribe', '$meteorCollection', '$meteorObject',
     function($scope, $stateParams, $state, $meteorSubscribe, $meteorCollection, $meteorObject){
-        $scope.qsReady = false;
+        $scope.chartsReady = false;
 
         $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
             $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
-            $scope.qsReady = true;
+        });
 
+        $meteorSubscribe.subscribe('questions', $stateParams.datasetId)
+        .then(function(sub){
+            $scope.questions = $meteorCollection(Questions, $stateParams.datasetId)
             $scope.addQuestion = function(text){
                 var new_question = {
-                    "id": new Mongo.ObjectID().valueOf(),
+                    "dataset_id": $stateParams.datasetId,
                     "text": text.$modelValue,
                     "notes": null,
                     "answerable": null,
                     "col_refs": [],
                 };
 
-                $scope.dataset.questions.push(new_question);
+                $scope.questions.push(new_question);
             };
 
             $scope.answerable = function(q_id){
-                switch (_.findWhere($scope.dataset.questions, {id: q_id}).answerable) {
+                switch (_.findWhere($scope.questions, {_id: q_id}).answerable) {
                     case true:
                         return "ans true";
                     case false:
@@ -181,23 +193,17 @@ angular.module('data_qs').controller('QsController', ['$scope', '$stateParams',
             };
 
             $scope.answerableIcon = function(q_id){
-                switch (_.findWhere($scope.dataset.questions, {id: q_id}).answerable) {
+                switch (_.findWhere($scope.questions, {_id: q_id}).answerable) {
                     case true:
                         return "fa-check";
+                        break;
                     case false:
                         return "fa-close";
+                        break;
                     default:
                         return "fa-question";
+                        break;
                 }
-            };
-
-            $scope.changeType = function(col, type){
-                col.datatype = type;
-                // will trigger a re-render
-            };
-
-            $scope.checkState = function(name){
-                return $state.current.name == name;
             };
         });
 
@@ -206,81 +212,75 @@ angular.module('data_qs').controller('QsController', ['$scope', '$stateParams',
             $scope.columns = $meteorCollection(function(){
                 return Columns.find({dataset_id: $stateParams.datasetId})
             });
-        });
-
-    }]);
-
-
-
-
-
-angular.module('data_qs').controller('QuestController', ['$scope',
-    '$meteorCollection', '$stateParams', '$meteorSubscribe', '$state', '$meteorObject',
-    function($scope, $meteorCollection, $stateParams, $meteorSubscribe, $state, $meteorObject){
-        $meteorSubscribe.subscribe('dataset', $stateParams.datasetId)
-            .then(function(sub){
-                $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
-
-                $scope.question = _.findWhere($scope.dataset.questions,
-                    {'id': $stateParams.questionId});
-
-                $scope.isSet = function(ans_value){
-                    // if answerable state isn't set, fade the button
-                    if ($scope.question.answerable != ans_value) {
-                        return "fade";
-                    }
-                };
-
-                $scope.setAns = function(ans_value){
-                    $scope.question.answerable = ans_value;
-                };
-
-            });
-
-        $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
-            .then(function(sub){
-
-                // TODO: this
-                // var q = $scope.getReactively('question');
-                // if (q.col_refs != undefined) {
-                //     $collection(Columns, {_id: {$in: q.col_refs}})
-                //     .bind($scope, 'columns');
-                //
-                //     $scope.datatypes = _.uniq(_.pluck($scope.columns,
-                //         'datatype'), false);
-                // }
-
-            });
-
-        // sometimes the binding executes before meteor is fully initialized;
-        // the bindOne parameters are not all reactive. this should fix that
-        // https://github.com/Urigo/angular-meteor/issues/60
-        $scope.$watch('dataset', function(val){
-            if (val) {
-                if (val.questions && val.columns) {
-
-
-
-
-
-
-
-                    $scope.changeType = function(col, type){
-                        col.datatype = type;
-                        // will trigger a re-render
-                    }
-
-                    $scope.remove = function(col){
-                        var i = _.indexOf(val.columns, col);
-                        $scope.question.col_refs = _.without($scope.question.col_refs, i);
-                    }
-                }
-            }
+            // TODO: event after they're all rendered?
+            $scope.chartsReady = true;
         });
 
         $scope.checkState = function(name){
             return $state.current.name == name;
         };
+
+        $scope.changeType = function(col, type){
+            col.datatype = type;
+            // will trigger a re-render
+        };
+
+    }]);
+
+angular.module('data_qs').controller('QuestController', ['$scope',
+    '$meteorCollection', '$stateParams', '$meteorSubscribe', '$state', '$meteorObject', '$rootScope', '$meteorUtils',
+    function($scope, $meteorCollection, $stateParams, $meteorSubscribe, $state, $meteorObject, $rootScope, $meteorUtils){
+
+        $meteorSubscribe.subscribe('questions', $stateParams.datasetId, $stateParams.questionId)
+        .then(function(sub){
+            $scope.questions = $meteorCollection(Questions, {_id:$stateParams.questionId});
+            $scope.question = $meteorObject(Questions, $stateParams.questionId);
+
+            $scope.isSet = function(ans_value){
+                // if answerable state isn't set, fade the button
+                if ($scope.question.answerable != ans_value) {
+                    return "fade";
+                }
+            };
+
+            $scope.setAns = function(ans_value){
+                $scope.question.answerable = ans_value;
+                // TODO: this probably doesn't work
+            };
+
+            $scope.remove = function(col){
+                var i = _.indexOf(val.columns, col);
+                $scope.question.col_refs = _.without($scope.question.col_refs, i);
+            }
+
+        });
+
+
+        $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
+        .then(function(sub){
+            $scope.columns = $meteorCollection(function(){
+                return Columns.find({_id: {$in: $scope.question.col_refs}});
+            });
+            $scope.datatypes = _.uniq(_.pluck($scope.columns,
+                'datatype'), false);
+        });
+
+        $rootScope.$on('columnToggle', function(){
+            $scope.question.reset();
+            $scope.columns = $meteorCollection(function(){
+                return Columns.find({_id: {$in: $scope.question.col_refs}});
+            });
+
+        })
+
+        $scope.checkState = function(name){
+            return $state.current.name == name;
+        };
+
+        $scope.changeType = function(col, type){
+            col.datatype = type;
+            // will trigger a re-render
+        }
     }
 ]);
 

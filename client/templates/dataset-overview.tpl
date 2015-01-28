@@ -1,7 +1,7 @@
-    <div class="loadmask" ng-hide="qsReady">
+    <div class="loadmask" ng-hide="chartsReady">
         <i class="fa fa-spinner fa-spin fa-5x"></i>
     </div>
-    <div ng-show="qsReady">
+    <div ng-show="chartsReady">
         <h2>my questions</h2>
 
         <form onsubmit="this.reset(); return false;" name="qAdd" role="form">
@@ -22,11 +22,11 @@
         </form>
 
         <ul class="questions-list">
-            <li ng-repeat="question in dataset.questions track by question.id">
-                <span ng-class="answerable(question.id)">
-                    <i class="fa ng-class:answerableIcon(question.id);"></i>
+            <li ng-repeat="question in questions">
+                <span ng-class="answerable(question._id)">
+                    <i class="fa ng-class:answerableIcon(question._id);"></i>
                 </span>
-                <a ui-sref="dataset.question({questionId: question.id})">
+                <a ui-sref="dataset.question({questionId: question._id})">
                     {{ question.text }}<br/>
                     <small class="text-muted">{{ question.notes }}</small>
                 </a>
