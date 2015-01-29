@@ -37,7 +37,7 @@
         <h4>number of records: {{ dataset.rowCount }} | number of variables: {{ columns.length }}</h4>
     </div>
     <div class="row">
-        <div class="col-md-6 chart-container" ng-repeat="col in columns" ng-attr-id="col-{{$index}}">
+        <div class="col-md-6 chart-container" ng-repeat="col in columns" id="{{col._id}}">
             <ng-include src="'client/templates/df_chart.tpl'"></ng-include>
         </div>
     </div>

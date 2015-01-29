@@ -141,8 +141,7 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$meteorCollec
 
             } else if ($state.current.name == "dataset") {
                 // scroll to that variable in the overview
-                var i = _.indexOf($scope.columns, col);
-                $window.scroll(0,$('#col-'+i).offset().top);
+                $window.scroll(0,$('#'+col._id).offset().top);
             }
         };
 
