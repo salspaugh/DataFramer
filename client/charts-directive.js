@@ -20,7 +20,7 @@ angular.module('data_qs')
                 };
 
                 // define render function
-                scope.render = function(data){
+                scope.renderChart = function(data){
 
                     // clear existing chart, if any
                     d3.select(element[0]).html("");
@@ -78,6 +78,8 @@ angular.module('data_qs')
                             break;
 
                         case "string":
+                        d3.selectAll(element)
+                            .classed("date-chart rickshaw_graph", false);
 
                           var axis_height = 25;
 
@@ -264,7 +266,8 @@ angular.module('data_qs')
                             // ints and floats
 
                             d3.selectAll(element)
-                                .classed("num-chart", true);
+                                .classed("num-chart", true)
+                                .classed("date-chart", false);
 
                             var bins = hist(values);
 
@@ -304,7 +307,7 @@ angular.module('data_qs')
 
                 };
                 // debugger;
-                scope.render(scope.$parent.col);
+                scope.renderChart(scope.$parent.col);
             }
         };
     }]);

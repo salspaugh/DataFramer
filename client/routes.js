@@ -167,7 +167,9 @@ angular.module('data_qs').controller('DatasetController', ['$scope', '$statePara
 
         $meteorSubscribe.subscribe('questions', $stateParams.datasetId)
         .then(function(sub){
-            $scope.questions = $meteorCollection(Questions, $stateParams.datasetId)
+            $scope.questions = $meteorCollection(function(){
+                return Questions.find({dataset_id: $stateParams.datasetId});
+            })
             $scope.addQuestion = function(text){
                 var new_question = {
                     "dataset_id": $stateParams.datasetId,
@@ -219,10 +221,7 @@ angular.module('data_qs').controller('DatasetController', ['$scope', '$statePara
             return $state.current.name == name;
         };
 
-        $scope.changeType = function(col, type){
-            col.datatype = type;
-            // will trigger a re-render
-        };
+        $scope.changeType = changeType;
 
     }]);
 
@@ -279,10 +278,7 @@ angular.module('data_qs').controller('QuestController', ['$scope',
             return $state.current.name == name;
         };
 
-        $scope.changeType = function(col, type){
-            col.datatype = type;
-            // will trigger a re-render
-        }
+        $scope.changeType = changeType;
     }
 ]);
 
@@ -313,3 +309,28 @@ angular.module('data_qs').controller('UploadController', ['$scope',
         }
     }
 ]);
+
+// helper function: DRY datatype change
+function changeType(col, type){
+    col.datatype = type;
+    switch (type) {
+        case "string":
+            col = processString(col);
+            this.$parent.renderChart(col);
+            break;
+        case "date":
+            col = processDate(col);
+            this.$parent.renderChart(col);
+            break;
+        case "float":
+            col = processFloat(col);
+            this.$parent.renderChart(col);
+            break;
+        case "integer":
+            col = processInt(col);
+            this.$parent.renderChart(col);
+            break;
+        default:
+            break;
+        }
+}
