@@ -26,11 +26,13 @@
 
     </h3>
     <h5>nulls: {{ col.nulls }}</h5>
-    <div hist chart-data="[[col]]" control="histControl"></div>
+    <div hist></div>
     <form role="form">
 
         <div class="form-group">
-            <textarea class="form-control" rows="2" ng-model="col.notes" placeholder="Notes"></textarea>
+            <textarea class="form-control" rows="2" ng-model="col.notes"
+                ng-model-options="{debounce: 750}" placeholder="Notes">
+            </textarea>
         </div>
 
 </form>

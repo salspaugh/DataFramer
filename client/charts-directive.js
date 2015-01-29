@@ -4,12 +4,9 @@ angular.module('data_qs')
         return {
             restrict: 'AE',
             replace: false,
-            scope: {
-                data: '=chartData',
-                control: '='
-            },
+            scope: false,
             link: function (scope, element, attrs) {
-
+                // debugger;
                 var col_width = element[0].offsetWidth;
 
                 var margin = {top: 20, right: 20, bottom: 20, left: 20},
@@ -22,12 +19,6 @@ angular.module('data_qs')
                     return scope.$apply();
                 };
 
-                // watch for data changes and re-render
-                scope.$watch('data', function(newVals, oldVals) {
-                    // console.log(newVals)
-                    return scope.render(newVals);
-                }, true);
-
                 // define render function
                 scope.render = function(data){
 
@@ -37,9 +28,9 @@ angular.module('data_qs')
                     var hist = d3.layout.histogram()
                     ;
 
-                    var values = _.flatten(data)[0].values;
+                    var values = data.values;
 
-                    switch(data[0][0].datatype){
+                    switch(data.datatype){
 
                         case "date":
                             d3.selectAll(element)
@@ -314,6 +305,8 @@ angular.module('data_qs')
 
 
                 };
+                // debugger;
+                scope.render(scope.$parent.col);
             }
         };
     }]);

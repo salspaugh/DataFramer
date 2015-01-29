@@ -5,7 +5,7 @@
 
         <div class="row charts-container">
             <div class="col-md-6 chart-container" ng-repeat="col in columns"
-            ng-attr-id="col-{{ question.col_refs[$index] }}">
+            id="{{ col._id }}">
             <ng-include src="'client/templates/df_chart.tpl'"></ng-include>
         </div>
     </div>
@@ -29,8 +29,9 @@
             </div>
             <div class="form-group">
                 <textarea class="form-control" rows="2"
-                ng-model="question.notes"
-                placeholder="Notes"></textarea>
+                    ng-model="question.notes"
+                    ng-model-options="{debounce: 750}"
+                    placeholder="Notes"></textarea>
             </div>
 
         </form>
