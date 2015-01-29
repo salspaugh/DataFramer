@@ -73,56 +73,50 @@ angular.module('data_qs').controller('DatasetsController', ['$scope',
 }]);
 
 angular.module('data_qs').controller('VarsController', ['$scope', '$meteorCollection',
-    '$stateParams', '$state', '$window', '$meteorSubscribe', '$meteorObject',
-    function($scope, $meteorCollection, $stateParams, $state, $window, $meteorSubscribe, $meteorObject){
+    '$stateParams', '$state', '$window', '$meteorSubscribe', '$meteorObject', '$rootScope',
+    function($scope, $meteorCollection, $stateParams, $state, $window, $meteorSubscribe, $meteorObject, $rootScope){
+        // TODO: use events from work area to signal loading
         $scope.subReady = false;
 
-        $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
-        .then(function(sub){
+        $rootScope.$on('colsReady', function(){
             $scope.columns = $meteorCollection(function(){
                 return Columns.find({dataset_id: $stateParams.datasetId},
-                    {fields: {name: 1, set: 1, datatype: 1}})
+                {fields: {name: 1, set: 1, datatype: 1}})
             })
-            $scope.subReady = true;
 
             $scope.datatypes = _.uniq(_.pluck($scope.columns,
                 'datatype'), false);
+            $scope.subReady = true;
+        });
 
-            $scope.colActive = function(col){
-                if ($state.current.name != "dataset.question"){
+        $scope.colActive = function(col){
+            if ($state.current.name != "dataset.question"){
+                return false;
+            }
+
+            if ($scope.question){
+                if (_.contains($scope.question.col_refs, col._id)){
+                    return true;
+                } else {
                     return false;
                 }
-
-                if ($scope.question){
-                    if (_.contains($scope.question.col_refs, col._id)){
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
             }
-        });
+        }
 
-        $meteorSubscribe.subscribe('datasets', $stateParams.datasetId)
-        .then(function(sub){
+        $rootScope.$on('datasetReady', function(){
             $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
-
             $scope.question = _.findWhere($scope.dataset.questions,
             {'_id': $state.params.questionId});
+        })
 
-        });
-
-        $meteorSubscribe.subscribe('questions', $stateParams.datasetId, $stateParams.questionId)
-        .then(function(sub){
+        $rootScope.$on('questionsReady', function(){
             if ($stateParams.questionId) {
                 $scope.questions = $meteorCollection(Questions, {_id:$stateParams.questionId});
                 $scope.question = $meteorObject(Questions, $stateParams.questionId);
             } else {
                 $scope.questions = $meteorCollection(Questions, {dataset_id:$stateParams.datasetId});
             }
-
-
-        });
+        })
 
         $scope.varClick = function(col){
             if ($state.current.name == "dataset.question") {
@@ -162,11 +156,14 @@ angular.module('data_qs').controller('DatasetController', ['$scope', '$statePara
         $scope.chartsReady = false;
 
         $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
+            $scope.$emit('datasetReady');
             $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
+
         });
 
         $meteorSubscribe.subscribe('questions', $stateParams.datasetId)
         .then(function(sub){
+            $scope.$emit('questionsReady');
             $scope.questions = $meteorCollection(function(){
                 return Questions.find({dataset_id: $stateParams.datasetId});
             })
@@ -214,6 +211,7 @@ angular.module('data_qs').controller('DatasetController', ['$scope', '$statePara
                 return Columns.find({dataset_id: $stateParams.datasetId})
             });
             // TODO: event after they're all rendered?
+            $scope.$emit('colsReady');
             $scope.chartsReady = true;
         });
 
@@ -231,6 +229,7 @@ angular.module('data_qs').controller('QuestController', ['$scope',
 
         $meteorSubscribe.subscribe('questions', $stateParams.datasetId, $stateParams.questionId)
         .then(function(sub){
+            $scope.$emit('questionsReady');
             $scope.questions = $meteorCollection(Questions, {_id:$stateParams.questionId});
             $scope.question = $meteorObject(Questions, $stateParams.questionId);
 
@@ -259,11 +258,16 @@ angular.module('data_qs').controller('QuestController', ['$scope',
 
         $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
         .then(function(sub){
+            $scope.$emit('colsReady');
             $scope.columns = $meteorCollection(function(){
                 return Columns.find({_id: {$in: $scope.question.col_refs}});
             });
             $scope.datatypes = _.uniq(_.pluck($scope.columns,
                 'datatype'), false);
+        });
+
+        $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
+            $scope.$emit('datasetReady');            
         });
 
         $rootScope.$on('columnToggle', function(){
