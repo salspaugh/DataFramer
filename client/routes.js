@@ -249,8 +249,11 @@ angular.module('data_qs').controller('QuestController', ['$scope',
             };
 
             $scope.remove = function(col){
-                var i = _.indexOf(val.columns, col);
-                $scope.question.col_refs = _.without($scope.question.col_refs, i);
+                $scope.question.col_refs = _.without($scope.question.col_refs, col._id);
+                $scope.question.save();
+                $scope.columns = $meteorCollection(function(){
+                    return Columns.find({_id: {$in: $scope.question.col_refs}});
+                });
             }
 
         });
