@@ -229,9 +229,7 @@ angular.module('data_qs')
                                     ;
                               }
 
-                            //   expose this via bidirectional control var
-                              scope.control = {};
-                              scope.control.resetBars = function(){
+                              scope.resetBars = function(){
                                   svg.selectAll('rect')
                                       .attr("y", function(d,i){
                                           return yScale(i);

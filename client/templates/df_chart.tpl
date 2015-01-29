@@ -20,7 +20,7 @@
             </ul>
         </span>
 
-        <a class="pull-right control" ng-click="histControl.resetBars()" ng-show="col.datatype == 'string'">
+        <a class="pull-right control" ng-click="resetBars()" ng-show="col.datatype == 'string'">
             <i class="fa fa-refresh"></i>
         </a>
 
