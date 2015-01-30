@@ -281,10 +281,7 @@ angular.module('data_qs').controller('QuestController', ['$scope',
             return $state.current.name == name;
         };
 
-        $scope.changeType = function(col, type){
-            changeType(col, type, this);
-            // $scope.columns.save();
-        }
+        $scope.changeType = changeType;
     }
 ]);
 
@@ -324,24 +321,24 @@ function($scope){
 }]);
 
 // helper function: DRY datatype change
-function changeType(col, type, scope){
+function changeType(col, type){
     col.datatype = type;
     switch (type) {
         case "string":
             col = processString(col);
-            scope.$parent.renderChart(col);
+            this.$parent.renderChart(col);
             break;
         case "date":
             col = processDate(col);
-            scope.$parent.renderChart(col);
+            this.$parent.renderChart(col);
             break;
         case "float":
             col = processFloat(col);
-            scope.$parent.renderChart(col);
+            this.$parent.renderChart(col);
             break;
         case "integer":
             col = processInt(col);
-            scope.$parent.renderChart(col);
+            this.$parent.renderChart(col);
             break;
         default:
             break;
