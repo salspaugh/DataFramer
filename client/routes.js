@@ -105,13 +105,11 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$meteorCollec
 
         $rootScope.$on('datasetReady', function(){
             $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
-            $scope.question = _.findWhere($scope.dataset.questions,
-            {'_id': $state.params.questionId});
         })
 
         $rootScope.$on('questionsReady', function(){
-            if ($stateParams.questionId) {
-                $scope.questions = $meteorCollection(Questions, {_id:$stateParams.questionId});
+            if ($state.current.name == "dataset.question") {
+                // $scope.questions = $meteorCollection(Questions, {_id:$stateParams.questionId});
                 $scope.question = $meteorObject(Questions, $stateParams.questionId);
             } else {
                 $scope.questions = $meteorCollection(Questions, {dataset_id:$stateParams.datasetId});
@@ -122,6 +120,7 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$meteorCollec
             if ($state.current.name == "dataset.question") {
                 // add to question's colrefs
                 var _id = col._id;
+                debugger;
                 if (_.contains($scope.question.col_refs, _id)) {
                     // toggle off
                     $scope.question.col_refs = _.without($scope.question.col_refs, _id);
@@ -267,7 +266,7 @@ angular.module('data_qs').controller('QuestController', ['$scope',
         });
 
         $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
-            $scope.$emit('datasetReady');            
+            $scope.$emit('datasetReady');
         });
 
         $rootScope.$on('columnToggle', function(){
