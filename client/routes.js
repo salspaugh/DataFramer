@@ -120,7 +120,6 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$meteorCollec
             if ($state.current.name == "dataset.question") {
                 // add to question's colrefs
                 var _id = col._id;
-                debugger;
                 if (_.contains($scope.question.col_refs, _id)) {
                     // toggle off
                     $scope.question.col_refs = _.without($scope.question.col_refs, _id);
@@ -282,7 +281,10 @@ angular.module('data_qs').controller('QuestController', ['$scope',
             return $state.current.name == name;
         };
 
-        $scope.changeType = changeType;
+        $scope.changeType = function(col, type){
+            changeType(col, type, this);
+            // $scope.columns.save();
+        }
     }
 ]);
 
@@ -322,24 +324,24 @@ function($scope){
 }]);
 
 // helper function: DRY datatype change
-function changeType(col, type){
+function changeType(col, type, scope){
     col.datatype = type;
     switch (type) {
         case "string":
             col = processString(col);
-            this.$parent.renderChart(col);
+            scope.$parent.renderChart(col);
             break;
         case "date":
             col = processDate(col);
-            this.$parent.renderChart(col);
+            scope.$parent.renderChart(col);
             break;
         case "float":
             col = processFloat(col);
-            this.$parent.renderChart(col);
+            scope.$parent.renderChart(col);
             break;
         case "integer":
             col = processInt(col);
-            this.$parent.renderChart(col);
+            scope.$parent.renderChart(col);
             break;
         default:
             break;

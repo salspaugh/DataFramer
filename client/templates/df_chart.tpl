@@ -1,5 +1,5 @@
 <h3 class="var-name">
-        {{col.name }}
+        {{col.name}}
 
         <a class="pull-right control" ng-click="remove(col)" ng-show="checkState('dataset.question')">
             <i class="fa fa-times-circle"></i>
