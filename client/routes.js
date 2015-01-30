@@ -173,6 +173,7 @@ angular.module('data_qs').controller('DatasetController', ['$scope', '$statePara
                     "notes": null,
                     "answerable": null,
                     "col_refs": [],
+                    "user_id": Meteor.userId()
                 };
 
                 $scope.questions.push(new_question);
@@ -312,6 +313,13 @@ angular.module('data_qs').controller('UploadController', ['$scope',
         }
     }
 ]);
+
+angular.module('data_qs').controller('LoginController', ['$scope',
+function($scope){
+    $scope.loginButtons = function(){
+        return Blaze._globalHelpers.loginButtons()
+    }
+}]);
 
 // helper function: DRY datatype change
 function changeType(col, type){

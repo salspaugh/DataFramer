@@ -1,4 +1,4 @@
-<div class="col-md-9 jumbotron">
+<div class="col-md-9 jumbotron" ng-if="$root.currentUser">
     <h1>Upload a new dataset</h1>
     <h3>note: only CSV files are supported at this time</h3>
 

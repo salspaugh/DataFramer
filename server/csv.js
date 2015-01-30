@@ -12,6 +12,7 @@ function processCsv(csvfile, name){
     .to.array(Meteor.bindEnvironment(function(data){
 
         var dataset = {
+            "user_id": Meteor.userId(),
             "name": name,
             "rowCount": data.length - 1, // subtract the header row
             "questions": []
@@ -33,6 +34,7 @@ function processCsv(csvfile, name){
         // convert arrays to objects, separate name from values
         _.each(cols, function(v,i,a){
             a[i] = {
+                "user_id": Meteor.userId(),
                 name: v[0],
                 values: [],
                 'orig_values': _.rest(v),
