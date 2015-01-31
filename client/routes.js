@@ -107,11 +107,6 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$meteorCollec
 
         $rootScope.$on('datasetReady', function(){
             $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
-
-            $scope.deleteDataset = function(){
-                Meteor.call('removeDataset', this.dataset._id);
-                $state.go('home');
-            }
         })
 
         $rootScope.$on('questionsReady', function(){
@@ -207,6 +202,10 @@ angular.module('data_qs').controller('DatasetController', ['$scope', '$statePara
                         break;
                 }
             };
+
+            $scope.deleteQuestion = function(){
+                Questions.remove(this.question._id);
+            }
         });
 
         $meteorSubscribe.subscribe('columns', $stateParams.datasetId)

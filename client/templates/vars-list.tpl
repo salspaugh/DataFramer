@@ -26,9 +26,6 @@
         <!-- <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="bottom" title="Rename">
             <i class="fa fa-pencil"></i>
         </button> -->
-        <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="bottom" title="Delete" ng-click="deleteDataset()">
-            <i class="fa fa-minus-circle"></i>
-        </button>
     </h4>
     <input type="text" placeholder="Search variables" class="search-box"
     ng-model="columns.search"
