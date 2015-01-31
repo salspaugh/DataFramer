@@ -24,6 +24,9 @@
     <ul class="nav nav-stacked">
         <li ng-repeat="dataset in datasets | filter:searchBox">
             <a ui-sref="dataset({datasetId: dataset._id})">{{ dataset.name }}</a>
+            <button type="button" class="btn btn-default btn-xs delete" data-toggle="tooltip" data-placement="bottom" title="Delete " ng-click="deleteDataset()">
+                <i class="fa fa-minus-circle"></i>
+            </button>
         </li>
     </ul>
 </div>

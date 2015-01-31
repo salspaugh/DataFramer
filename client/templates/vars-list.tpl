@@ -18,11 +18,18 @@
     </li>
 </ul>
 
-<h4 class="name">{{dataset.name}}</h4>
 <div class="loadmask" ng-hide="subReady">
     <i class="fa fa-spinner fa-spin fa-3x"></i>
 </div>
 <div ng-show="subReady">
+    <h4 class="name"><span id="datasetname">{{dataset.name}}</span>
+        <!-- <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="bottom" title="Rename">
+            <i class="fa fa-pencil"></i>
+        </button> -->
+        <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="bottom" title="Delete" ng-click="deleteDataset()">
+            <i class="fa fa-minus-circle"></i>
+        </button>
+    </h4>
     <input type="text" placeholder="Search variables" class="search-box"
     ng-model="columns.search"
     ng-model-options="{debounce: 750}"/>
