@@ -1,17 +1,16 @@
     <ul class="nav nav-pills topnav">
         <li ng-class="{active: checkState('home')}">
-            <a ui-sref="home" data-toggle="tooltip" data-placement="bottom" title="Home">
+            <a ui-sref="home" tooltip="Home" tooltip-placement="bottom" tooltip-append-to-body="true">
                 <i class="fa fa-home"></i>
             </a>
         </li>
         <li ng-class="{active: checkState('home.upload')}">
-            <a ui-sref="home.upload" data-toggle="tooltip" data-placement="bottom" title="Upload new">
+            <a ui-sref="home.upload" tooltip="Upload new" tooltip-placement="bottom" tooltip-append-to-body="true">
                 <i class="fa fa-upload"></i>
             </a>
         </li>
         <li ng-class="{active: checkState('dataset')}">
-            <a ui-sref="dataset({datasetId: dataset._id})"
-            data-toggle="tooltip" data-placement="bottom" title="Dataset overview">
+            <a ui-sref="dataset({datasetId: dataset._id})" tooltip="Dataset overview" tooltip-placement="bottom" tooltip-append-to-body="true">
             <i class="fa fa-question"></i>
             <i class="fa fa-th-large"></i>
         </a>
@@ -23,7 +22,7 @@
 </div>
 <div ng-show="subReady">
     <h4 class="name"><span id="datasetname">{{dataset.name}}</span>
-        <!-- <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="bottom" title="Rename">
+        <!-- <button type="button" class="btn btn-default btn-xs" tooltip="Rename {{dataset.name}}" tooltip-placement="bottom" tooltip-append-to-body="true">
             <i class="fa fa-pencil"></i>
         </button> -->
     </h4>

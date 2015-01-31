@@ -1,11 +1,11 @@
 <ul class="nav nav-pills topnav">
     <li ng-class="{active: checkState('home')}">
-        <a ui-sref="home" data-toggle="tooltip" data-placement="bottom" title="Home">
+        <a ui-sref="home" tooltip="Home" tooltip-placement="bottom" tooltip-append-to-body="true">
             <i class="fa fa-home"></i>
         </a>
     </li>
     <li ng-class="{active: checkState('home.upload')}" ng-if="$root.currentUser">
-        <a ui-sref="home.upload" data-toggle="tooltip" data-placement="bottom" title="Upload new">
+        <a ui-sref="home.upload" tooltip="Upload new" tooltip-placement="bottom" tooltip-append-to-body="true" >
             <i class="fa fa-upload"></i>
         </a>
     </li>
@@ -24,7 +24,7 @@
     <ul class="nav nav-stacked">
         <li ng-repeat="dataset in datasets | filter:searchBox">
             <a ui-sref="dataset({datasetId: dataset._id})">{{ dataset.name }}</a>
-            <button type="button" class="btn btn-default btn-xs delete" data-toggle="tooltip" data-placement="bottom" title="Delete " ng-click="deleteDataset()">
+            <button type="button" class="btn btn-default btn-xs delete" tooltip="Delete {{dataset.name}}" tooltip-placement="bottom" tooltip-append-to-body="true" ng-click="deleteDataset()">
                 <i class="fa fa-minus-circle text-danger"></i>
             </button>
         </li>

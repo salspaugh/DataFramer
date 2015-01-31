@@ -53,8 +53,8 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
 }]);
 
 angular.module('data_qs').controller('DatasetsController', ['$scope',
-  '$state', '$meteorCollection', '$meteorSubscribe',
-  function($scope, $state, $meteorCollection, $meteorSubscribe){
+  '$state', '$meteorCollection', '$meteorSubscribe', '$rootScope',
+  function($scope, $state, $meteorCollection, $meteorSubscribe, $rootScope){
     $scope.subReady = false;
 
     $meteorSubscribe.subscribe('datasets').then(function(sub){
@@ -71,7 +71,6 @@ angular.module('data_qs').controller('DatasetsController', ['$scope',
         return $state.current.name == name;
     }
 
-    $('[data-toggle="tooltip"]').tooltip();
 }]);
 
 angular.module('data_qs').controller('VarsController', ['$scope', '$meteorCollection',
@@ -142,9 +141,6 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$meteorCollec
         $scope.checkState = function(name){
             return $state.current.name == name;
         };
-
-
-        $('[data-toggle="tooltip"]').tooltip();
     }
 ]);
 

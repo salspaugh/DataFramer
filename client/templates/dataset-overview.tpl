@@ -29,7 +29,7 @@
                 <a ui-sref="dataset.question({questionId: question._id})">
                     {{ question.text }}
                 </a>
-                <button type="button" class="btn btn-default pull-right" data-toggle="tooltip" data-placement="bottom" title="Delete" ng-click="deleteQuestion()">
+                <button type="button" class="btn btn-default pull-right" tooltip="Delete this question" tooltip-placement="bottom" tooltip-append-to-body="true" ng-click="deleteQuestion()">
                     <i class="fa fa-minus-circle text-danger"></i>
                 </button>
                 <br/>
