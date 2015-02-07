@@ -25,13 +25,6 @@ angular.module('data_qs')
                     // clear existing chart, if any
                     d3.select(element[0]).html("");
 
-                    var hist = d3.layout.histogram()
-                        .value(function(v){
-                            if (checkNull(v, true)) v = undefined;
-                            return Number(v);
-                        })
-                        ;
-
                     var values = data.values;
                     // if all nulls, short-circuit and display a warning instead
                     if (_.all(values, function(v){return v == null; })){
@@ -291,6 +284,40 @@ angular.module('data_qs')
                                 .classed("num-chart", true)
                                 .classed("date-chart", false);
 
+                            var hist = d3.layout.histogram()
+                                .value(function(v){
+                                    if (checkNull(v, true)) v = undefined;
+                                    return Number(v);
+                                })
+                                .range(function(values){
+                                    // make sure the range is divisible by 10
+                                    var min = _.min(values, function(v){
+                                        if (_.isNaN(v)){
+                                            return undefined;
+                                        } else {
+                                            return v;
+                                        }
+                                    }),
+                                        max = _.max(values, function(v){
+                                            if (_.isNaN(v)){
+                                                return undefined;
+                                            } else {
+                                                return v;
+                                            }
+                                        });
+                                    min = Math.floor(min);
+                                    max = Math.ceil(max);
+                                    while (min % 10){
+                                        min -= 1;
+                                    }
+                                    while (max % 10){
+                                        max += 1;
+                                    }
+                                    return [min, max];
+                                })
+                                .bins(10)
+                                ;
+
                             var bins = hist(values);
 
                             var graph = new Rickshaw.Graph({
@@ -317,7 +344,9 @@ angular.module('data_qs')
                             var hoverDetail = new customHover({
                                 graph: graph,
                                 xFormatter: function(x){
-                                    return "[" + Math.ceil(x) + " : " + Math.floor(x+bins[0].dx) + "]";
+                                    var start = x,
+                                        end = Math.ceil(x + bins[0].dx);
+                                    return "Values: [" + start + " – " + end + ")";
                                 },
                                 yFormatter: function(y){
                                     return parseInt(y);
