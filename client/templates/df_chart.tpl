@@ -25,7 +25,7 @@
         </a>
 
     </h3>
-    <h5>nulls: {{ col.nulls }}</h5>
+    <h5 ng-class="{'bg-warning text-warning': col.nulls}">number of missing values: {{ col.nulls }}</h5>
     <div hist ></div>
     <form role="form">
 

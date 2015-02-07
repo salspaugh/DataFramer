@@ -29,6 +29,24 @@ angular.module('data_qs')
                     ;
 
                     var values = data.values;
+                    // if all nulls, short-circuit and display a warning instead
+                    if (_.all(values, function(v){return v == null; })){
+                        d3.selectAll(element)
+                            .append('div')
+                            .attr('class', "panel panel-warning")
+                                .append('div')
+                                .attr('class', 'panel-heading')
+                                    .append('h3')
+                                    .attr('class', 'panel-title')
+                                    .text('Missing values')
+                                    ;
+                        d3.selectAll(element).select('.panel')
+                            .append('div')
+                            .attr('class', 'panel-body')
+                            .text("This variable contains no data.")
+                            ;
+                        return false;
+                    }
 
                     switch(data.datatype){
 
