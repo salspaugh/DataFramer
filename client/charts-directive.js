@@ -26,7 +26,11 @@ angular.module('data_qs')
                     d3.select(element[0]).html("");
 
                     var hist = d3.layout.histogram()
-                    ;
+                        .value(function(v){
+                            if (checkNull(v, true)) v = undefined;
+                            return Number(v);
+                        })
+                        ;
 
                     var values = data.values;
                     // if all nulls, short-circuit and display a warning instead
