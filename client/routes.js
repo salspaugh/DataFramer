@@ -321,6 +321,7 @@ function($scope){
 // helper function: DRY datatype change
 function changeType(col, type){
     col.datatype = type;
+    col.values = [];
     switch (type) {
         case "string":
             col = processString(col);
