@@ -1,12 +1,12 @@
 <h3 class="var-name">
         {{col.name}}
 
-        <a class="pull-right control" ng-click="remove(col)" ng-show="checkState('dataset.question')">
+        <a class="pull-right control" ng-click="remove(col)" ng-show="checkState('dataset.question')" tooltip="Remove from question" tooltip-placement="bottom" tooltip-append-to-body="true">
             <i class="fa fa-times-circle"></i>
         </a>
 
         <span class="dropdown pull-right control">
-            <a data-toggle="dropdown">
+            <a data-toggle="dropdown" tooltip="Change datatype" tooltip-placement="bottom" tooltip-append-to-body="true">
                 <i class="fa fa-pencil-square"></i><span class="caret"></span>
             </a>
 
@@ -20,7 +20,7 @@
             </ul>
         </span>
 
-        <a class="pull-right control" ng-click="resetBars()" ng-show="col.datatype == 'string'">
+        <a class="pull-right control" ng-click="resetBars()" ng-show="col.datatype == 'string'" tooltip="Reset chart view" tooltip-placement="bottom" tooltip-append-to-body="true">
             <i class="fa fa-refresh"></i>
         </a>
 
