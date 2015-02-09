@@ -59,7 +59,7 @@ angular.module('data_qs').controller('DatasetsController', ['$scope',
 
     $meteorSubscribe.subscribe('datasets').then(function(sub){
         $scope.datasets = $meteorCollection(function(){
-            return Datasets.find({}, {fields: {name: 1}});
+            return Datasets.find({}, {fields: {name: 1}, sort: {name: 1}});
         })
         $scope.deleteDataset = function(){
             Meteor.call('removeDataset', this.dataset._id);
@@ -82,7 +82,7 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$meteorCollec
         $rootScope.$on('colsReady', function(){
             $scope.columns = $meteorCollection(function(){
                 return Columns.find({dataset_id: $stateParams.datasetId},
-                {fields: {name: 1, set: 1, datatype: 1}})
+                {fields: {name: 1, set: 1, datatype: 1}, sort: {name: 1}})
             })
             $scope.datatypes = ['string', 'integer', 'float', 'date', 'time'];
             $scope.subReady = true;
@@ -205,7 +205,8 @@ angular.module('data_qs').controller('DatasetController', ['$scope', '$statePara
         $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
         .then(function(sub){
             $scope.columns = $meteorCollection(function(){
-                return Columns.find({dataset_id: $stateParams.datasetId})
+                return Columns.find({dataset_id: $stateParams.datasetId},
+                    {sort: {name: 1}})
             });
             // TODO: event after they're all rendered?
             $scope.$emit('colsReady');
