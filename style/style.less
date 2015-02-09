@@ -295,6 +295,14 @@ ul.questions-list {
     .y_grid {
         display: none;
     }
+
+    .axis-label {
+        position: absolute;
+        font-size: 9px;
+        text-transform: uppercase;
+        opacity: 0.5;
+        transform: rotate(-90deg) translate(-22px, -33px);
+    }
 }
 
 div[hist] {
@@ -307,6 +315,19 @@ div[hist] {
     .bar {
         rect {
             fill: @string-color;
+        }
+    }
+    .axis {
+        opacity: 0.5;
+        .tick {
+            text {
+                font-size: 12px;
+            }
+        }
+        .axis-label {
+            text-anchor: end;
+            font-size: 9px;
+            text-transform: uppercase;
         }
     }
 }

@@ -49,7 +49,11 @@ angular.module('data_qs')
 
                         case "date":
                             d3.selectAll(element)
-                                .classed("date-chart", true);
+                                .classed("date-chart", true)
+                                .classed("num-chart", false)
+                                    .append('div')
+                                    .attr('class', 'axis-label')
+                                    .text('frequency');
 
                             // calculate frequency for each timestamp in the list
                             var groups = _(values).chain()
@@ -94,9 +98,9 @@ angular.module('data_qs')
 
                         case "string":
                         d3.selectAll(element)
-                            .classed("date-chart rickshaw_graph", false);
+                            .classed("date-chart num-chart rickshaw_graph", false);
 
-                          var axis_height = 25;
+                          var axis_height = 20;
 
                           // calculate frequency for each word in the list
                           var groups = _(values).chain()
@@ -273,7 +277,13 @@ angular.module('data_qs')
                             svg.append('g')
                             .classed('axis', true)
                             .attr('transform', 'translate(0,' + (height - axis_height + 5) + ')')
-                            .call(xAxis);
+                            .call(xAxis)
+                                .append('text')
+                                .attr('class', 'axis-label')
+                                .attr('x', col_width)
+                                .attr('y', -1)
+                                .text('frequency')
+                                ;
 
                             break;
 
@@ -282,7 +292,11 @@ angular.module('data_qs')
 
                             d3.selectAll(element)
                                 .classed("num-chart", true)
-                                .classed("date-chart", false);
+                                .classed("date-chart", false)
+                                    .append('div')
+                                    .attr('class', 'axis-label')
+                                    .text('frequency')
+                                    ;
 
                             var hist = d3.layout.histogram()
                                 .value(function(v){
