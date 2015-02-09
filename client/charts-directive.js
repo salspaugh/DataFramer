@@ -190,6 +190,7 @@ angular.module('data_qs')
                                 height: height,
                                 element: element[0],
                                 renderer: 'line',
+                                interpolation: 'linear',
                                 series: [{
                                     data: groups,
                                     name: 'frequency'
