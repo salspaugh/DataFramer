@@ -84,9 +84,7 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$meteorCollec
                 return Columns.find({dataset_id: $stateParams.datasetId},
                 {fields: {name: 1, set: 1, datatype: 1}})
             })
-
-            $scope.datatypes = _.uniq(_.pluck($scope.columns,
-                'datatype'), false);
+            $scope.datatypes = ['string', 'integer', 'float', 'date'];
             $scope.subReady = true;
         });
 
