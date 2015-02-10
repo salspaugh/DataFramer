@@ -180,20 +180,27 @@ function setupTestData(username){
 
             // detect the datatype
             _.each(cols, function(col){
-                var datatype = detectDataType(col.orig_values);
-                col['datatype'] = datatype[0];
+                // some manual overrides for ambiguous variables
+                if (name == 'faa-on-time-performance-sample.csv' && col['name'] == "Year") {
+                    col['datatype'] = "string";
+                } else if (name == 'faa-wildlife-strike-clean.csv' && col['name'] == "BIRDS_STRUCK") {
+                    col['datatype'] = "string";
+                } else {
+                    var datatype = detectDataType(col.orig_values);
+                    col['datatype'] = datatype[0];
+                }
 
                 // cast numbers and dates before storing
-                if (datatype[0] == 'float'){
+                if (col['datatype'] == 'float'){
                     col = processFloat(col);
 
-                } else if (datatype[0] == 'integer') {
+                } else if (col['datatype'] == 'integer') {
                     col = processInt(col);
 
-                } else if (datatype[0] == 'string') {
+                } else if (col['datatype'] == 'string') {
                     col = processString(col);
 
-                } else if (datatype[0] == 'date') {
+                } else if (col['datatype'] == 'date') {
                     col = processDate(col);
                 }
 
