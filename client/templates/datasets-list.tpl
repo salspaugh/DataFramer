@@ -4,12 +4,6 @@
             <i class="fa fa-home"></i>
         </a>
     </li>
-    <li ng-class="{active: checkState('home.upload')}" ng-if="$root.currentUser">
-        <a ui-sref="home.upload" tooltip="Upload new" tooltip-placement="bottom" tooltip-append-to-body="true" >
-            <i class="fa fa-upload"></i>
-        </a>
-    </li>
-
 </ul>
 
 <div ng-if="$root.currentUser">

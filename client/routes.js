@@ -39,15 +39,6 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                 }
             }
         })
-        .state('home.upload', {
-            url: 'upload',
-            views: {
-                "main@": {
-                    templateUrl: 'client/templates/upload.tpl',
-                    controller: 'UploadController'
-                }
-            }
-        })
         ;
 
 }]);

@@ -4,11 +4,6 @@
                 <i class="fa fa-home"></i>
             </a>
         </li>
-        <li ng-class="{active: checkState('home.upload')}">
-            <a ui-sref="home.upload" tooltip="Upload new" tooltip-placement="bottom" tooltip-append-to-body="true">
-                <i class="fa fa-upload"></i>
-            </a>
-        </li>
         <li ng-class="{active: checkState('dataset')}">
             <a ui-sref="dataset({datasetId: dataset._id})" tooltip="Dataset overview" tooltip-placement="bottom" tooltip-append-to-body="true">
             <i class="fa fa-question"></i>
