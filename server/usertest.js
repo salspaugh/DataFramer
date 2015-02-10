@@ -1,5 +1,4 @@
 Meteor.startup(function(){
-    console.log(Assets.getText('admin_password'));
     if (!Meteor.users.findOne({username: 'admin'})) {
         var userObject = {
             username: "admin",
@@ -18,23 +17,14 @@ Meteor.methods({
         // admins only
         if (this.userId && Meteor.users.findOne(this.userId).profile.is_admin){
             // clear existing users
-            Secrets.remove({});
             Meteor.users.remove({username: {$ne: "admin"}});
 
-            // create new ones and expose their Secrets
-            for (var i=1; i<=40; i++){
-                var username = "student"+i,
-                    password = randomString(8, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
-                var userObject = {
-                    username: username,
-                    password: password
-                };
-                Accounts.createUser(userObject);
-                Secrets.insert(userObject);
-            }
+            // make new ones
+            var users = EJSON.parse(Assets.getText('super_secret_passwords.json'));
+            _.each(users, function(user){
+                Accounts.createUser(user);
+            })
         }
-
-
     }
 });
 
