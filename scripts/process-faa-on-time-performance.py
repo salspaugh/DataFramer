@@ -94,6 +94,9 @@ def clean():
                     new_value = "Yes" if float(new_value) == 1 else "No"
                 if column == "Diverted":
                     new_value = "Yes" if float(new_value) == 1 else "No"
+                if column in ["ArrTimeBlk", "DepTimeBlk"] and value != "":
+                    new_value = value.split("-")[0]
+                    new_value = "%s:%s" % (new_value[:2], new_value[2:])
                 new[column] = new_value
             writer.writerow(new)
 

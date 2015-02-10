@@ -9,7 +9,7 @@ COLUMNS_TO_DELETE = [
     "Cost: Other - lodging, lost revenue, ... (infl adj) (copy)",
     "Cost: Repairs (adj)",
     "Cost: Total $",
-    "Number Damaged"
+    "Number Damaged",
     # Not very meaningful columns
     "SPECIES_ID",
     "AIRPORT_ID",
@@ -21,18 +21,18 @@ COLUMNS_TO_DELETE = [
 
 COLUMN_ENCODINGS = {
     "AC_CLASS" : { 
-        "A": "airplane",
-        "B": "helicopter",
+        "A": "Airplane",
+        "B": "Helicopter",
     },
-    "TYP_ENG": {
-        "A": "reciprocating (piston)",
-        "B": "turbojet",
-        "C": "turboprop",
-        "D": "turbofan",
-        "E": "none (glider)",
-        "F": "turboshaft (helicopter)",
-        "B/D": "turbojet / turbofan",
-        "A/C": "reciprocating (piston) / turboprop"
+    "TYPE_ENG": {
+        "A": "Reciprocating (Piston)",
+        "B": "Turbojet",
+        "C": "Turboprop",
+        "D": "Turbofan",
+        "E": "None (Glider)",
+        "F": "Turboshaft (Helicopter)",
+        "B/D": "Turbojet / Turbofan",
+        "A/C": "Reciprocating (Piston) / Turboprop"
     } ,   
     "BIRDS_SEEN": {
         "10-Feb": "2-10"
@@ -41,26 +41,34 @@ COLUMN_ENCODINGS = {
         "10-Feb": "2-10"
     },
     "DAMAGE": {
-        "N": "none (civilian)",
-        "M": "minor (civilian)",
-        "M?": "uncertain (civilian)",
-        "S": "substantial (civilian)",
-        "D": "destroyed (civilian)",
-        "A": "over $2M (military)",
-        "B": "$500K-2M (military)",
-        "C": "$50-500K (military)",
-        "N": "none (military)",
-        "E": "<$50K (military)"
+        "N": "None (Civilian)",
+        "M": "Minor (Civilian)",
+        "M?": "Uncertain (Civilian)",
+        "S": "Substantial (Civilian)",
+        "D": "Destroyed (Civilian)",
+        "A": "Over $2M (Military)",
+        "B": "$500K-2M (Military)",
+        "C": "$50-500K (Military)",
+        "N": "None (Military)",
+        "E": "<$50K (Military)"
     }
 }
 
 def filter_columns(row):
-    return { k:v for (k,v) in row.iteritems() if k not in COLUMNS_TO_DELETE }
+    return { k:v for (k,v) in row.iteritems() if k.strip() not in COLUMNS_TO_DELETE }
 
 def decode_values(row):
     for (header, val) in row.iteritems():
         if header in COLUMN_ENCODINGS:
             row[header] = COLUMN_ENCODINGS[header].get(val, val)
+
+def clean_time_columns(row):
+    val = row["TIME"]
+    if val != "":
+        val = "%04d" % int(val.replace(",", ""))
+        row["TIME"] = "%s:%s" % (val[:2], val[2:])
+    val = row["REPORTED_DATE"]
+    row["REPORTED_DATE"] = val.split()[0] if val != "" else ""
 
 def clean():
     with open(ORIGINAL) as original, open(CLEANED, "w") as cleaned:
@@ -71,6 +79,7 @@ def clean():
         for row in reader:
             row = filter_columns(row)
             decode_values(row)
+            clean_time_columns(row)
             if first:
                 writer = csv.DictWriter(cleaned, row.keys())
                 writer.writeheader()
