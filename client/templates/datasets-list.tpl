@@ -18,7 +18,7 @@
     <ul class="nav nav-stacked">
         <li ng-repeat="dataset in datasets | filter:searchBox">
             <a ui-sref="dataset({datasetId: dataset._id})">{{ dataset.name }}</a>
-            <button type="button" class="btn btn-default btn-xs delete" tooltip="Delete {{dataset.name}}" tooltip-placement="bottom" tooltip-append-to-body="true" ng-click="deleteDataset()">
+            <button type="button" class="btn btn-default btn-xs delete" tooltip="Delete {{dataset.name}}" tooltip-placement="bottom" tooltip-append-to-body="true" ng-click="deleteDataset()" ng-if="$root.currentUser.profile.is_admin">
                 <i class="fa fa-minus-circle text-danger"></i>
             </button>
         </li>

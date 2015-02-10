@@ -10,6 +10,10 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                 "sidebar": {
                     templateUrl: 'client/templates/datasets-list.tpl',
                     controller: 'DatasetsController',
+                },
+                "main": {
+                    templateUrl: "client/templates/admin-test.tpl",
+                    controller: 'AdminController'
                 }
             },
         })
@@ -309,6 +313,14 @@ function($scope){
         return Blaze._globalHelpers.loginButtons()
     }
 }]);
+
+angular.module('data_qs').controller('AdminController', ['$scope', '$meteorMethods',
+function($scope, $meteorMethods){
+    $scope.adminLoad = function(){
+        $meteorMethods.call('setupTestData', 'admin');
+    }
+}]);
+
 
 // helper function: DRY datatype change
 function changeType(col, type){
