@@ -1,5 +1,6 @@
 Meteor.methods({
     'processCsv': processCsv,
+    'setupTestData': setupTestData
 });
 
 function processCsv(csvfile, name){
@@ -143,4 +144,65 @@ function detectDataType(items){
     }
 
     return result;
+}
+
+function setupTestData(username){
+    var userId = Meteor.users.findOne({username:username})._id;
+    var csvFiles = ['faa-on-time-performance-sample.csv', 'faa-wildlife-strike-clean.csv'];
+    _.each(csvFiles, function(name){
+        CSV()
+        .from.string(Assets.getText(name))
+        // need to bind Meteor environment to callbacks in other libraries
+        .to.array(Meteor.bindEnvironment(function(data){
+            var dataset = {
+                "user_id": userId,
+                "name": name.slice(0,-4),
+                "rowCount": data.length - 1, // subtract the header row
+                "questions": []
+            };
+
+            // add to database or replace existing with same name
+            var d_id = Datasets.insert(dataset);
+            console.log('added dataset', name);
+
+            // convert rows to columns
+            var cols = _.zip.apply(_, data);
+            // convert arrays to objects, separate name from values
+            _.each(cols, function(v,i,a){
+                a[i] = {
+                    "user_id": userId,
+                    name: v[0],
+                    values: [],
+                    'orig_values': _.rest(v),
+                    'dataset_id': d_id
+                };
+            });
+
+            // detect the datatype
+            _.each(cols, function(col){
+                var datatype = detectDataType(col.orig_values);
+                col['datatype'] = datatype[0];
+
+                // cast numbers and dates before storing
+                if (datatype[0] == 'float'){
+                    col = processFloat(col);
+
+                } else if (datatype[0] == 'integer') {
+                    col = processInt(col);
+
+                } else if (datatype[0] == 'string') {
+                    col = processString(col);
+
+                } else if (datatype[0] == 'date') {
+                    col = processDate(col);
+                }
+
+                col.notes = null;
+
+                Columns.insert(col);
+                console.log("added column " + col.name + " for dataset " + dataset.name + " for user " + username)
+            });
+        }));
+    })
+    return "complete";
 }

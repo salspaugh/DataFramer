@@ -23,6 +23,13 @@ Meteor.methods({
             var users = EJSON.parse(Assets.getText('super_secret_passwords.json'));
             _.each(users, function(user){
                 Accounts.createUser(user);
+                // add datasets to user's account
+                var dataLoaded = Meteor.call('setupTestData', user.username);
+                if (dataLoaded == "complete") {
+                    console.log(user.username + ": test data load initiated");
+                } else {
+                    console.log(user.username + ": error with test data setup");
+                }
             })
         }
     }
