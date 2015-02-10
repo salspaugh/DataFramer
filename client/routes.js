@@ -318,6 +318,10 @@ angular.module('data_qs').controller('AdminController', ['$scope', '$meteorMetho
 function($scope, $meteorMethods){
     $scope.adminLoad = function(){
         $meteorMethods.call('setupTestData', 'admin');
+    };
+
+    $scope.usersLoad = function(){
+        $meteorMethods.call('setupUsers');
     }
 }]);
 
