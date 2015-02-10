@@ -356,17 +356,35 @@ angular.module('data_qs')
 
                             graph.render();
 
-                            var hoverDetail = new customHover({
-                                graph: graph,
-                                xFormatter: function(x){
-                                    var start = x,
-                                        end = Math.ceil(x + bins[0].dx);
-                                    return "Values: [" + start + " – " + end + ")";
-                                },
-                                yFormatter: function(y){
-                                    return parseInt(y);
-                                }
-                            });
+                            if (data.datatype ==  "integer") {
+                                var hoverDetail = new customHover({
+                                    graph: graph,
+                                    xFormatter: function(x){
+                                        var start = x,
+                                            end = Math.ceil(x + bins[0].dx);
+                                        if (end - start == 1){
+                                            return "Value: " + start;
+                                        }
+                                        return "Values: [" + start + " – " + end + ")";
+                                    },
+                                    yFormatter: function(y){
+                                        return parseInt(y);
+                                    }
+                                });
+                            } else {
+                                var hoverDetail = new customHover({
+                                    graph: graph,
+                                    xFormatter: function(x){
+                                        var start = x,
+                                            end = Math.ceil(x + bins[0].dx);
+                                        return "Values: [" + start + " – " + end + ")";
+                                    },
+                                    yFormatter: function(y){
+                                        return parseInt(y);
+                                    }
+                                });
+                            }
+
                             break;
                     }
 
