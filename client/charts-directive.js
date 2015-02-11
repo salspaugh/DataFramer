@@ -304,7 +304,14 @@ angular.module('data_qs')
                                     if (checkNull(v, true)) v = undefined;
                                     return Number(v);
                                 })
-                                .range(function(values){
+                                ;
+                            // deal with special time variables
+                            if (_.contains(["ArrTime", "DepTime", "CRSArrTime", "CRSDepTime", "WheelsOff", "WheelsOn"], data.name)){
+                                hist.range([0,2400])
+                                    .bins(24)
+                                    ;
+                            } else {
+                                hist.range(function(values){
                                     // make sure the range is divisible by 10
                                     var min = _.min(values, function(v){
                                         if (_.isNaN(v)){
@@ -332,6 +339,7 @@ angular.module('data_qs')
                                 })
                                 .bins(10)
                                 ;
+                            }
 
                             var bins = hist(values);
 
