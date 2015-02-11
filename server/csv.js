@@ -2,8 +2,14 @@ Meteor.methods({
     'processCsv': processCsv,
     'setupTestData': setupTestData,
     'titanicData': function(){
+        // remove existing
+        Datasets.find({'name': 'titanic_data'}).forEach(function(doc){
+            Datasets.remove({_id: doc._id});
+            Columns.remove({dataset_id: doc._id})
+        })
+
         // add to admin
-        processCsv(Assets.getText('titanic_raw.csv'), 'titanic');
+        processCsv(Assets.getText('titanic_raw.csv'), 'titanic_data');
 
         // add to student1
         var userId = Meteor.users.findOne({username:'student1'})._id;
