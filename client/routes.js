@@ -322,6 +322,10 @@ function($scope, $meteorMethods){
 
     $scope.usersLoad = function(){
         $meteorMethods.call('setupUsers');
+    };
+
+    $scope.titanicLoad = function(){
+        $meteorMethods.call('titanicData');
     }
 }]);
 

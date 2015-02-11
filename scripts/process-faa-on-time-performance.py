@@ -2,8 +2,8 @@ import csv
 import random
 import re
 
-ORIGINAL = "data/faa-on-time-performance-original.csv"
-SAMPLE = "data/faa-on-time-performance-sample.csv"
+ORIGINAL = "../data/faa-on-time-performance-original.csv"
+SAMPLE = "../data/faa-on-time-performance-sample.csv"
 SAMPLE_SIZE = 15000
 TARGET_WEEK = re.compile("2010-01-0[3-9]")
 COLUMNS_TO_KEEP = [
@@ -54,7 +54,7 @@ COLUMNS_TO_KEEP = [
     "ActualElapsedTime",
     "AirTime",
     "Distance",
-    # Delay 
+    # Delay
     "CarrierDelay",
     "WeatherDelay",
     "NASDelay",
@@ -94,9 +94,9 @@ def clean():
                     new_value = "Yes" if float(new_value) == 1 else "No"
                 if column == "Diverted":
                     new_value = "Yes" if float(new_value) == 1 else "No"
-                if column in ["ArrTimeBlk", "DepTimeBlk"] and value != "":
-                    new_value = value.split("-")[0]
-                    new_value = "%s:%s" % (new_value[:2], new_value[2:])
+                # if column in ["ArrTimeBlk", "DepTimeBlk"] and value != "":
+                #     new_value = value.split("-")[0]
+                #     new_value = "%s:%s" % (new_value[:2], new_value[2:])
                 new[column] = new_value
             writer.writerow(new)
 

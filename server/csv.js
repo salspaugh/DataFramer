@@ -1,6 +1,9 @@
 Meteor.methods({
     'processCsv': processCsv,
-    'setupTestData': setupTestData
+    'setupTestData': setupTestData,
+    'titanicData': function(){
+        processCsv(Assets.getText('titanic_raw.csv'), 'titanic');
+    }
 });
 
 function processCsv(csvfile, name){
