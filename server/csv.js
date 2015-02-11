@@ -2,7 +2,73 @@ Meteor.methods({
     'processCsv': processCsv,
     'setupTestData': setupTestData,
     'titanicData': function(){
+        // add to admin
         processCsv(Assets.getText('titanic_raw.csv'), 'titanic');
+
+        // add to student1
+        var userId = Meteor.users.findOne({username:'student1'})._id;
+        CSV()
+        .from.string(Assets.getText('titanic_raw.csv'))
+        // need to bind Meteor environment to callbacks in other libraries
+        .to.array(Meteor.bindEnvironment(function(data){
+
+            var dataset = {
+                "user_id": userId,
+                "name": "titanic_data",
+                "rowCount": data.length - 1, // subtract the header row
+                "questions": []
+                //{
+                //     "id": null,
+                //     "text": null,
+                //     "notes": null,
+                //     "answerable": null,
+                //     "col_refs": []
+                // }
+            };
+
+            // add to database or replace existing with same name
+            var d_id = Datasets.insert(dataset);
+            console.log('added dataset', 'titanic_raw.csv');
+
+            // convert rows to columns
+            var cols = _.zip.apply(_, data);
+            // convert arrays to objects, separate name from values
+            _.each(cols, function(v,i,a){
+                a[i] = {
+                    "user_id": userId,
+                    name: v[0],
+                    values: [],
+                    'orig_values': _.rest(v),
+                    'dataset_id': d_id
+                };
+            });
+
+            // detect the datatype
+            _.each(cols, function(col){
+                var datatype = detectDataType(col.orig_values);
+                col['datatype'] = datatype[0];
+
+                // cast numbers and dates before storing
+                if (datatype[0] == 'float'){
+                    col = processFloat(col);
+
+                } else if (datatype[0] == 'integer') {
+                    col = processInt(col);
+
+                } else if (datatype[0] == 'string') {
+                    col = processString(col);
+
+                } else if (datatype[0] == 'date') {
+                    col = processDate(col);
+                }
+
+                col.notes = null;
+
+                Columns.insert(col);
+            });
+
+
+        }));
     }
 });
 

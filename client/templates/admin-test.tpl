@@ -4,7 +4,7 @@
       <em>useful to make sure the data is processing correctly</em>
     </p>
     <p>
-      <button type="button" class="btn btn-info btn-lg" ng-click="titanicLoad()">Load Titanic Data for Admin Account</button> <br/>
+      <button type="button" class="btn btn-info btn-lg" ng-click="titanicLoad()">Load Titanic Data for Admin Account and Student 1</button> <br/>
       <em>for demo</em>
     </p>
     <hr/>
