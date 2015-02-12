@@ -84,7 +84,7 @@ angular.module('data_qs').controller('VarsController', ['$scope', '$meteorCollec
                 return Columns.find({dataset_id: $stateParams.datasetId},
                 {fields: {name: 1, set: 1, datatype: 1}})
             })
-            $scope.datatypes = ['string', 'integer', 'float', 'date'];
+            $scope.datatypes = ['string', 'integer', 'float', 'date', 'time'];
             $scope.subReady = true;
         });
 
@@ -337,6 +337,10 @@ function changeType(col, type){
             break;
         case "integer":
             col = processInt(col);
+            this.$parent.renderChart(col);
+            break;
+        case "time":
+            col = processTime(col);
             this.$parent.renderChart(col);
             break;
         default:

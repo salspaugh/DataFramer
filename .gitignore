@@ -1,4 +1,9 @@
+# vim
+*.swp
+
+# OSX
 .DS_Store
 
+# project-specific
 data/faa-on-time-performance-original.csv
 data/faa-wildlife-strike-original.csv

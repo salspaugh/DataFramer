@@ -95,6 +95,18 @@ a{
         a:focus {
             background-color: inherit;
         }
+        
+        &.time {
+            border-left-color: @time-color;
+
+            h5, a {
+                color: @time-color;
+            }
+
+            a:hover, a.active {
+                background-color: @time-color-light;
+            }
+        }
 
         &.string {
             border-left-color: @string-color;
@@ -271,6 +283,8 @@ ul.questions-list {
 
 // VIZ styles
 
+@time-color: #cc7a00;
+@time-color-light: #dba24d;
 @string-color: #3fa3dc;
 @string-color-light: #a6cee3;
 @num-color: #33a02c;
@@ -307,6 +321,28 @@ ul.questions-list {
 
 div[hist] {
     margin-bottom: 15px;
+}
+
+.time-chart {
+    overflow: scroll;
+    .bar {
+        rect {
+            fill: @time-color;
+        }
+    }
+    .axis {
+        opacity: 0.5;
+        .tick {
+            text {
+                font-size: 12px;
+            }
+        }
+        .axis-label {
+            text-anchor: end;
+            font-size: 9px;
+            text-transform: uppercase;
+        }
+    }
 }
 
 //doesn't work?
