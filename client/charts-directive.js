@@ -58,10 +58,7 @@ angular.module('data_qs')
                             .attr('class', 'time-chart')
                             .attr('width', col_width)
                             .attr('height', height);
-                            
-                          var xRelative = $(element[0]).offset().left;
-                          var yRelative = $(element[0]).offset().top;
-
+                          
                           var x = d3.time.scale()
                               .range([0, col_width]);
 
@@ -123,6 +120,9 @@ angular.module('data_qs')
                             var h = t.getHours();
                             return h + ":00-" + (h+1) + ":00";
                           }
+
+                          var xRelative = $(element[0]).offset().left;
+                          var yRelative = $(element[0]).offset().top;
 
                           svg.selectAll(".bar")
                               .data(histogram)
