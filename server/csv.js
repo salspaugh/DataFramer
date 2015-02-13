@@ -59,6 +59,9 @@ function processCsv(csvfile, name){
 
             } else if (datatype[0] == 'date') {
                 col = processDate(col);
+
+            } else if (datatype[0] == 'time') {
+                col = processTime(col);
             }
 
             col.notes = null;
@@ -81,7 +84,7 @@ function detectDataType(items){
     var sample = _.sample(new_items, new_items.length);
 
     // initialize vote tallies
-    var counts = {integer: 0, float: 0, date: 0, number: 0, string: 0};
+    var counts = {integer: 0, float: 0, date: 0, number: 0, string: 0, time: 0};
 
     _.each(new_items, function(item) {
 
@@ -114,6 +117,11 @@ function detectDataType(items){
             // vote for date
             counts['date'] += 1;
         }
+
+        time = item.match(/(\d:[0-5]\d)|([0-1]\d:[0-5]\d)/i);
+        if (time != null) {
+            counts.time += 1;
+        }
     });
 
     var metrics = _.map(counts, function(value, key) {
@@ -140,6 +148,8 @@ function detectDataType(items){
         }
         else if (max.name === 'date')
             result[0] = 'date';
+        else if (max.name == 'time')
+            result[0] = 'time';
     }
 
     return result;

@@ -47,6 +47,124 @@ angular.module('data_qs')
 
                     switch(data.datatype){
 
+                        case "time":
+
+                          d3.selectAll(element)
+                              .classed("date-chart num-chart rickshaw_graph", false)
+                              .classed("time-chart", true);
+
+                          var svg = d3.select(element[0])
+                            .append('svg')
+                            .attr('class', 'time-chart')
+                            .attr('width', col_width)
+                            .attr('height', height);
+                          
+                          var x = d3.time.scale()
+                              .range([0, col_width]);
+
+                          var y = d3.scale.linear()
+                              .range([height, 0]);
+
+                          var xAxis = d3.svg.axis()
+                              .ticks(12)
+                              .scale(x)
+                              .orient("bottom");
+
+                          var yAxis = d3.svg.axis()
+                              .scale(y)
+                              .orient("left");
+
+                          var format = d3.time.format("%H:%M");
+                          var firstTime = format.parse("00:00");
+                          var lastTime = format.parse("23:59");
+
+                          x.domain([firstTime, lastTime]);
+                          xAxis.tickFormat(format);
+
+                          var bins = x.ticks(24);
+                          var groups = _.groupBy(values, function (d) { 
+                            if (d != null) { 
+                                d = format.parse(d);
+                                return d.getHours(); } 
+                            });
+                          var max = _.max(_.map(_.values(groups), function (x) { 
+                              return x.length; }));
+
+                          y.domain([0, max]);
+                          var histogram = _.map(bins, function (x) { 
+                              return { 
+                                  "bin": x, 
+                                  "frequency": groups[x.getHours()].length
+                                  };
+                              });
+                          
+                          svg.append("g")
+                              .attr("class", "y axis")
+                              .call(yAxis)
+                            .append("text")
+                              .classed("axis-label", true)
+                              .attr("transform", "rotate(-90)")
+                              .attr("y", 6)
+                              .attr("dy", ".5em")
+                              .text("FREQUENCY");
+
+                          var rangeTooltip = d3.select("body").append("div")   
+                            .attr("class", "tooltip")               
+                            .style("opacity", 0);
+
+                          var frequencyTooltip = d3.select("body").append("div")   
+                            .classed("tooltip frequency", true)
+                            .style("opacity", 0);
+                            
+                          binLabel = function(t) {
+                            var h = t.getHours();
+                            return h + ":00-" + (h+1) + ":00";
+                          }
+
+                          var xRelative = $(element[0]).offset().left;
+                          var yRelative = $(element[0]).offset().top;
+
+                          svg.selectAll(".bar")
+                              .data(histogram)
+                            .enter().append("rect")
+                              .attr("class", "bar")
+                              .attr("x", function(d) { return x(d.bin); })
+                              .attr("width", Math.floor((x.range()[1]/24)-1)+"px")
+                              .attr("y", function(d) { return y(d.frequency); })
+                              .attr("height", function(d) { 
+                                return height - y(d.frequency); })
+                              .on("mouseover", function(d) {
+                                rangeTooltip.transition()        
+                                    .duration(300)      
+                                    .style("opacity", .9);      
+                                rangeTooltip.html("Values: " + binLabel(d.bin))  
+                                    .style("left", (d3.event.pageX) + "px")     
+                                    .style("top", (d3.event.pageY - 28) + "px");    
+                                frequencyTooltip.transition()        
+                                    .duration(300)      
+                                    .style("opacity", .8);      
+                                frequencyTooltip.html("frequency: " + d.frequency)  
+                                    .style("left", xRelative + Math.floor((x.range()[1]/24)-1)/2 + x(d.bin) + "px") 
+                                    .style("top", yRelative + 115 + y(d.frequency) + "px");
+                                })                  
+                              .on("mouseout", function(d) {       
+                                rangeTooltip.transition()        
+                                    .duration(500)      
+                                    .style("opacity", 0);   
+                                frequencyTooltip.transition()        
+                                    .duration(500)      
+                                    .style("opacity", 0);   
+                              });
+
+                          svg.append("g")
+                              .attr("class", "x axis")
+                              .attr("transform", "translate(0," + height + ")")
+                              .call(xAxis)
+                                .selectAll("text")
+                                .attr("dy", "-1em");
+
+                              break;
+
                         case "date":
                             d3.selectAll(element)
                                 .classed("date-chart", true)
@@ -97,195 +215,195 @@ angular.module('data_qs')
                             break;
 
                         case "string":
-                        d3.selectAll(element)
-                            .classed("date-chart num-chart rickshaw_graph", false);
+                          d3.selectAll(element)
+                              .classed("date-chart num-chart rickshaw_graph", false);
 
-                          var axis_height = 20;
+                            var axis_height = 20;
 
-                          // calculate frequency for each word in the list
-                          var groups = _(values).chain()
-                              .groupBy(_.identity)
-                              .map(function (values, key) {
-                                  return {
-                                      freq: values.length,
-                                      value: key
-                                  };
-                              })
-                              .sortBy(function (d) { return -d.freq; })
-                              .value();
+                            // calculate frequency for each word in the list
+                            var groups = _(values).chain()
+                                .groupBy(_.identity)
+                                .map(function (values, key) {
+                                    return {
+                                        freq: values.length,
+                                        value: key
+                                    };
+                                })
+                                .sortBy(function (d) { return -d.freq; })
+                                .value();
 
-                          //   remove nulls
-                          groups = _.filter(groups, function(obj){
-                              return obj.value != "null";
-                          });
+                            //   remove nulls
+                            groups = _.filter(groups, function(obj){
+                                return obj.value != "null";
+                            });
 
-                          var maxFreq = d3.max(groups, function (d) { return d.freq});
+                            var maxFreq = d3.max(groups, function (d) { return d.freq});
 
-                          var svg = d3
-                            .select(element[0])
-                            .append('svg')
-                            .attr('class', 'string-chart')
-                            .attr('width', col_width)
-                            .attr('height', height)
-                            .attr('style', "overflow: visible;")
-                            ;
+                            var svg = d3
+                              .select(element[0])
+                              .append('svg')
+                              .attr('class', 'string-chart')
+                              .attr('width', col_width)
+                              .attr('height', height)
+                              .attr('style', "overflow: visible;")
+                              ;
 
-                          if (groups.length < 15) {
+                            if (groups.length < 15) {
 
-                            var padding = 3;
-                            var barHeight = height / groups.length - padding;
-                            ySteps = d3.range(10, height, 16);
-
-                            var yScale = d3.scale.ordinal()
-                              .domain(d3.range(groups.length))
-                              .rangeBands([padding, height - axis_height], 0.3);
-
-                              var xScale = d3.scale.linear()
-                              .domain([0, maxFreq])
-                              .range([0, col_width]);
-
-                              var bars = svg.selectAll('.bar')
-                                .data(groups)
-                                .enter().append('g')
-                                    .classed('bar', true);
-
-                              bars
-                                  .append('rect')
-                                  .attr('x', 0)
-                                  .attr('y', function (d, i) { return yScale(i); })
-                                  .attr("width", function (d) { return xScale(d.freq); })
-                                  .attr("height", function(){
-                                      return yScale.rangeBand();
-                                  })
-                                  ;
-
-                              bars.append('text')
-                                  .text(function (d) { return d.value; })
-                                  .attr('x', padding)
-                                  .attr('y', function (d, i) { return yScale(i)})
-                                  .attr('dy', '1em');
-
-
-                          } else {
-
-                              var padding = 10;
+                              var padding = 3;
+                              var barHeight = height / groups.length - padding;
+                              ySteps = d3.range(10, height, 16);
 
                               var yScale = d3.scale.ordinal()
-                                  .domain(d3.range(groups.length))
-                                  .rangeBands([padding, height - axis_height], 0.1);
+                                .domain(d3.range(groups.length))
+                                .rangeBands([padding, height - axis_height], 0.3);
+
+                                var xScale = d3.scale.linear()
+                                .domain([0, maxFreq])
+                                .range([0, col_width]);
+
+                                var bars = svg.selectAll('.bar')
+                                  .data(groups)
+                                  .enter().append('g')
+                                      .classed('bar', true);
+
+                                bars
+                                    .append('rect')
+                                    .attr('x', 0)
+                                    .attr('y', function (d, i) { return yScale(i); })
+                                    .attr("width", function (d) { return xScale(d.freq); })
+                                    .attr("height", function(){
+                                        return yScale.rangeBand();
+                                    })
+                                    ;
+
+                                bars.append('text')
+                                    .text(function (d) { return d.value; })
+                                    .attr('x', padding)
+                                    .attr('y', function (d, i) { return yScale(i)})
+                                    .attr('dy', '1em');
 
 
-                              var xScale = d3.scale.linear()
-                                  .domain([0, maxFreq])
-                                  .range([0, col_width]);
+                            } else {
 
-                              var yFisheye = d3.fisheye.ordinal()
-                                    .rangeBands([padding, height - axis_height], 0.1)
-                                    .distortion(groups.length / 10);
+                                var padding = 10;
 
-                              yFisheye.domain(_.range(groups.length));
+                                var yScale = d3.scale.ordinal()
+                                    .domain(d3.range(groups.length))
+                                    .rangeBands([padding, height - axis_height], 0.1);
 
-                              var bars = svg.selectAll('.bar')
-                                .data(groups)
-                                .enter().append('g')
-                                    .classed('bar', true);
 
-                              bars
-                                  .append('rect')
-                                  .attr('x', 0)
-                                  .attr('y', function (d, i) { return yScale(i) })
-                                  .attr('width', function (d) { return xScale(d.freq); })
-                                  .attr('height', yScale.rangeBand())
-                                  ;
+                                var xScale = d3.scale.linear()
+                                    .domain([0, maxFreq])
+                                    .range([0, col_width]);
 
-                              bars.append('text')
-                                  .text(function (d) { return d.value; })
-                                  .classed("label", true)
-                                  .attr('x', padding)
-                                  .attr('y', function (d, i) { return yScale(i); })
-                                  .attr('dy', '1em')
-                                  .attr('text-anchor', 'start')
-                                  .attr('font-size', function(d,i){
-                                      return yScale.rangeBand();
-                                  })
-                                  .classed("hidden", true)
-                                  ;
+                                var yFisheye = d3.fisheye.ordinal()
+                                      .rangeBands([padding, height - axis_height], 0.1)
+                                      .distortion(groups.length / 10);
 
-                              // add fisheye functionality
-                              svg.on('mouseover', function(){
-                                  svg.selectAll('text.label')
-                                    .classed('hidden', false)
-                              });
+                                yFisheye.domain(_.range(groups.length));
 
-                              svg.on("mousemove", function() {
-                                    var mouse = d3.mouse(this);
-                                    var y_pos = mouse[1];
-                                    if (y_pos > height - axis_height){
-                                        y_pos = height - axis_height;
-                                    } else if (y_pos < padding){
-                                        y_pos = padding;
-                                    }
-                                    yFisheye.focus(y_pos);
-                                    redraw();
+                                var bars = svg.selectAll('.bar')
+                                  .data(groups)
+                                  .enter().append('g')
+                                      .classed('bar', true);
 
-                              });
+                                bars
+                                    .append('rect')
+                                    .attr('x', 0)
+                                    .attr('y', function (d, i) { return yScale(i) })
+                                    .attr('width', function (d) { return xScale(d.freq); })
+                                    .attr('height', yScale.rangeBand())
+                                    ;
 
-                              function redraw() {
-                                    // debugger;
+                                bars.append('text')
+                                    .text(function (d) { return d.value; })
+                                    .classed("label", true)
+                                    .attr('x', padding)
+                                    .attr('y', function (d, i) { return yScale(i); })
+                                    .attr('dy', '1em')
+                                    .attr('text-anchor', 'start')
+                                    .attr('font-size', function(d,i){
+                                        return yScale.rangeBand();
+                                    })
+                                    .classed("hidden", true)
+                                    ;
+
+                                // add fisheye functionality
+                                svg.on('mouseover', function(){
+                                    svg.selectAll('text.label')
+                                      .classed('hidden', false)
+                                });
+
+                                svg.on("mousemove", function() {
+                                      var mouse = d3.mouse(this);
+                                      var y_pos = mouse[1];
+                                      if (y_pos > height - axis_height){
+                                          y_pos = height - axis_height;
+                                      } else if (y_pos < padding){
+                                          y_pos = padding;
+                                      }
+                                      yFisheye.focus(y_pos);
+                                      redraw();
+
+                                });
+
+                                function redraw() {
+                                      // debugger;
+                                      svg.selectAll('rect')
+                                          .attr("y", function(d,i){
+                                              return yFisheye(i);
+                                          })
+                                          .attr('height', function(d,i){
+                                              return yFisheye.rangeBand(i);
+                                          })
+                                          ;
+                                      svg.selectAll('text.label')
+                                      .attr("y", function(d,i){
+                                          return yFisheye(i);
+                                      })
+                                      .attr('font-size', function(d,i){
+                                          return yFisheye.rangeBand(i);
+                                      })
+                                      ;
+                                }
+
+                                scope.resetBars = function(){
                                     svg.selectAll('rect')
                                         .attr("y", function(d,i){
-                                            return yFisheye(i);
+                                            return yScale(i);
                                         })
                                         .attr('height', function(d,i){
-                                            return yFisheye.rangeBand(i);
+                                            return yScale.rangeBand();
                                         })
                                         ;
                                     svg.selectAll('text.label')
-                                    .attr("y", function(d,i){
-                                        return yFisheye(i);
-                                    })
-                                    .attr('font-size', function(d,i){
-                                        return yFisheye.rangeBand(i);
-                                    })
-                                    ;
-                              }
+                                        .attr("y", function(d,i){
+                                            return yScale(i);
+                                        })
+                                        .attr('height', function(d,i){
+                                            return yScale.rangeBand();
+                                        })
+                                        .classed('hidden', true)
+                                        ;
+                                }
+                          }
+                              // add X-axis
+                              var xAxis = d3.svg.axis()
+                              .scale(xScale);
 
-                              scope.resetBars = function(){
-                                  svg.selectAll('rect')
-                                      .attr("y", function(d,i){
-                                          return yScale(i);
-                                      })
-                                      .attr('height', function(d,i){
-                                          return yScale.rangeBand();
-                                      })
-                                      ;
-                                  svg.selectAll('text.label')
-                                      .attr("y", function(d,i){
-                                          return yScale(i);
-                                      })
-                                      .attr('height', function(d,i){
-                                          return yScale.rangeBand();
-                                      })
-                                      .classed('hidden', true)
-                                      ;
-                              }
-                        }
-                            // add X-axis
-                            var xAxis = d3.svg.axis()
-                            .scale(xScale);
+                              svg.append('g')
+                              .classed('axis', true)
+                              .attr('transform', 'translate(0,' + (height - axis_height + 5) + ')')
+                              .call(xAxis)
+                                  .append('text')
+                                  .attr('class', 'axis-label')
+                                  .attr('x', col_width)
+                                  .attr('y', -1)
+                                  .text('frequency')
+                                  ;
 
-                            svg.append('g')
-                            .classed('axis', true)
-                            .attr('transform', 'translate(0,' + (height - axis_height + 5) + ')')
-                            .call(xAxis)
-                                .append('text')
-                                .attr('class', 'axis-label')
-                                .attr('x', col_width)
-                                .attr('y', -1)
-                                .text('frequency')
-                                ;
-
-                            break;
+                              break;
 
                         default:
                             // ints and floats
