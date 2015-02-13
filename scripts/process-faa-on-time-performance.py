@@ -4,8 +4,10 @@ import re
 
 ORIGINAL = "data/faa-on-time-performance-original.csv"
 SAMPLE = "data/faa-on-time-performance-sample.csv"
-SAMPLE_SIZE = 15000
+#SAMPLE_SIZE = 15000
+SAMPLE_SIZE = 5000
 TARGET_WEEK = re.compile("2010-01-0[3-9]")
+TIMES = ["ArrTime", "CRSArrTime", "DepTime", "CRSDepTime"]
 COLUMNS_TO_KEEP = [
     # Time
     "Year",
@@ -94,8 +96,9 @@ def clean():
                     new_value = "Yes" if float(new_value) == 1 else "No"
                 if column == "Diverted":
                     new_value = "Yes" if float(new_value) == 1 else "No"
-                if column in ["ArrTimeBlk", "DepTimeBlk"] and value != "":
-                    new_value = int(value.split("-")[0])
+                if column in TIMES and value != "":
+                    new_value = "%04d" % int(value)
+                    new_value = "%s:%s" % (new_value[:2], new_value[2:])
                 new[column] = new_value
             writer.writerow(new)
 
