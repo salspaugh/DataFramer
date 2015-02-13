@@ -11,7 +11,7 @@
             </a>
 
             <ul class="dropdown-menu" role="menu">
-                <li role="presentation" ng-repeat="type in ['string', 'integer', 'float', 'date']">
+                <li role="presentation" ng-repeat="type in ['string', 'integer', 'float', 'date', 'time']">
                     <a role="menuitem" tabindex="-1" href="#" ng-click="changeType(col, type)">
                         change datatype to {{ type }}
                         <span ng-show="type == 'string'"> (categorical)</span>

@@ -15,6 +15,27 @@
 
 /* CSS declarations go here */
 
+div.tooltip {   
+  width: 130px;                  
+  height: 28px;                 
+  padding: 8px;             
+  font: 12px sans-serif;        
+  background: white;   
+  border: 1px;      
+  border-width: 1px;
+  border-style: solid;
+  border-color: #dddddd;
+  border-radius: 3px;           
+  pointer-events: none;         
+}
+div.tooltip.frequency {
+  width: 100px; 
+  background: black;
+  font: 12px sans-serif;        
+  color: #ffffff;
+  border-style: none;
+}
+
 li {
     text-decoration: none;
 }
@@ -324,24 +345,16 @@ div[hist] {
 }
 
 .time-chart {
-    overflow: scroll;
-    .bar {
-        rect {
-            fill: @time-color;
-        }
+    rect {
+        fill: @time-color;
     }
     .axis {
         opacity: 0.5;
-        .tick {
-            text {
-                font-size: 12px;
-            }
-        }
-        .axis-label {
-            text-anchor: end;
-            font-size: 9px;
-            text-transform: uppercase;
-        }
+    }
+    .axis-label {
+        text-anchor: end;
+        font-size: 9px;
+        text-transform: uppercase;
     }
 }
 
