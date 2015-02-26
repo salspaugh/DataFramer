@@ -64,11 +64,9 @@ def decode_values(row):
 
 def clean_time_columns(row):
     val = row["TIME"]
-    if val != "":
-        val = "%04d" % int(val.replace(",", ""))
-        row["TIME"] = "%s:%s" % (val[:2], val[2:])
+    row["TIME"] = "%04d" % int(val.replace(",", "")) if val != "" else val
     val = row["REPORTED_DATE"]
-    row["REPORTED_DATE"] = val.split()[0] if val != "" else ""
+    row["REPORTED_DATE"] = val.split()[0] if val != "" else val
 
 def clean():
     with open(ORIGINAL) as original, open(CLEANED, "w") as cleaned:
