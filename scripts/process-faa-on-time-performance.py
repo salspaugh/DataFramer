@@ -61,7 +61,20 @@ COLUMNS_TO_KEEP = [
     "WeatherDelay",
     "NASDelay",
     "SecurityDelay",
-    "LateAircraftDelay"
+    "LateAircraftDelay",
+    # Diversions
+    "DivAirportLandings",
+    "DivReachedDest",
+    "DivActualElapsedTime",
+    "DivArrDelay",
+    "DivDistance"
+]
+DIVERSIONS = [
+    "DivAirportLandings",
+    "DivReachedDest",
+    "DivActualElapsedTime",
+    "DivArrDelay",
+    "DivDistance"
 ]
 
 def filter_by_date(row):
