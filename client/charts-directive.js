@@ -58,7 +58,7 @@ angular.module('data_qs')
                             .attr('class', 'time-chart')
                             .attr('width', col_width)
                             .attr('height', height);
-                          
+
                           var x = d3.time.scale()
                               .range([0, col_width]);
 
@@ -82,22 +82,22 @@ angular.module('data_qs')
                           xAxis.tickFormat(format);
 
                           var bins = x.ticks(24);
-                          var groups = _.groupBy(values, function (d) { 
-                            if (d != null) { 
+                          var groups = _.groupBy(values, function (d) {
+                            if (d != null) {
                                 d = format.parse(d);
-                                return d.getHours(); } 
+                                return d.getHours(); }
                             });
-                          var max = _.max(_.map(_.values(groups), function (x) { 
+                          var max = _.max(_.map(_.values(groups), function (x) {
                               return x.length; }));
 
                           y.domain([0, max]);
-                          var histogram = _.map(bins, function (x) { 
-                              return { 
-                                  "bin": x, 
+                          var histogram = _.map(bins, function (x) {
+                              return {
+                                  "bin": x,
                                   "frequency": groups[x.getHours()].length
                                   };
                               });
-                          
+
                           svg.append("g")
                               .attr("class", "y axis")
                               .call(yAxis)
@@ -108,14 +108,14 @@ angular.module('data_qs')
                               .attr("dy", ".5em")
                               .text("FREQUENCY");
 
-                          var rangeTooltip = d3.select("body").append("div")   
-                            .attr("class", "tooltip")               
+                          var rangeTooltip = d3.select("body").append("div")
+                            .attr("class", "timetip")
                             .style("opacity", 0);
 
-                          var frequencyTooltip = d3.select("body").append("div")   
-                            .classed("tooltip frequency", true)
+                          var frequencyTooltip = d3.select("body").append("div")
+                            .classed("timetip frequency", true)
                             .style("opacity", 0);
-                            
+
                           binLabel = function(t) {
                             var h = t.getHours();
                             return h + ":00-" + (h+1) + ":00";
@@ -131,29 +131,29 @@ angular.module('data_qs')
                               .attr("x", function(d) { return x(d.bin); })
                               .attr("width", Math.floor((x.range()[1]/24)-1)+"px")
                               .attr("y", function(d) { return y(d.frequency); })
-                              .attr("height", function(d) { 
+                              .attr("height", function(d) {
                                 return height - y(d.frequency); })
                               .on("mouseover", function(d) {
-                                rangeTooltip.transition()        
-                                    .duration(300)      
-                                    .style("opacity", .9);      
-                                rangeTooltip.html("Values: " + binLabel(d.bin))  
-                                    .style("left", (d3.event.pageX) + "px")     
-                                    .style("top", (d3.event.pageY - 28) + "px");    
-                                frequencyTooltip.transition()        
-                                    .duration(300)      
-                                    .style("opacity", .8);      
-                                frequencyTooltip.html("frequency: " + d.frequency)  
-                                    .style("left", xRelative + Math.floor((x.range()[1]/24)-1)/2 + x(d.bin) + "px") 
+                                rangeTooltip.transition()
+                                    .duration(300)
+                                    .style("opacity", .9);
+                                rangeTooltip.html("Values: " + binLabel(d.bin))
+                                    .style("left", (d3.event.pageX) + "px")
+                                    .style("top", (d3.event.pageY - 28) + "px");
+                                frequencyTooltip.transition()
+                                    .duration(300)
+                                    .style("opacity", .8);
+                                frequencyTooltip.html("frequency: " + d.frequency)
+                                    .style("left", xRelative + Math.floor((x.range()[1]/24)-1)/2 + x(d.bin) + "px")
                                     .style("top", yRelative + 115 + y(d.frequency) + "px");
-                                })                  
-                              .on("mouseout", function(d) {       
-                                rangeTooltip.transition()        
-                                    .duration(500)      
-                                    .style("opacity", 0);   
+                                })
+                              .on("mouseout", function(d) {
+                                rangeTooltip.transition()
+                                    .duration(500)
+                                    .style("opacity", 0);
                                 frequencyTooltip.transition()        
-                                    .duration(500)      
-                                    .style("opacity", 0);   
+                                    .duration(500)
+                                    .style("opacity", 0);
                               });
 
                           svg.append("g")
