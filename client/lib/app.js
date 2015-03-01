@@ -1,5 +1,5 @@
-angular.module('data_qs',['angular-meteor', 'ui.router', 'ui.bootstrap']);
+angular.module('dataFramer',['angular-meteor', 'ui.router', 'ui.bootstrap']);
 
 Meteor.startup(function () {
-    angular.bootstrap(document, ['data_qs']);
+    angular.bootstrap(document, ['dataFramer']);
 });

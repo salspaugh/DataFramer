@@ -14,7 +14,7 @@
   "button-groups":        true,
   "input-groups":         true,
   "navs":                 true,
-  "navbar":               false,
+  "navbar":               true,
   "breadcrumbs":          false,
   "pagination":           false,
   "pager":                false,

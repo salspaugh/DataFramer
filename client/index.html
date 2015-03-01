@@ -4,18 +4,20 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-2" id="sidebar-wrapper">
-                <h3>DataFramer</h3>
-                <div ui-view="sidebar"></div>
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">DataFramer</a>
             </div>
-            <div class="col-md-10 col-md-offset-2">
-                <ul class="list-unstyled">
-                    {{>loginButtons}}
-                </ul>
-                <div ui-view="main"></div>
-            </div>
+
+            <div ui-view="controlBar"></div>
+
+            <ul class="nav navbar-nav navbar-right">
+                {{>loginButtons}}
+            </ul>
         </div>
+    </nav>
+    <div class="container">
+        <div ui-view="main"></div>
     </div>
 </body>
