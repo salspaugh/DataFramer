@@ -25,7 +25,7 @@
   "alerts":               false,
   "progress-bars":        false,
   "media":                false,
-  "list-group":           false,
+  "list-group":           true,
   "panels":               true,
   "responsive-embed":     false,
   "wells":                false,
