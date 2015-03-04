@@ -1,8 +1,19 @@
 // ***********************************
-// ControlBarController
+// NavBarController
 // ***********************************
-angular.module('dataFramer').controller('ControlBarController', ['$scope',
-function($scope){
+angular.module('dataFramer').controller('NavBarController', ['$scope',
+'$state', '$stateParams', '$meteorSubscribe', '$meteorCollection', '$meteorObject',
+function($scope, $state, $stateParams, $meteorSubscribe, $meteorCollection, $meteorObject) {
+
+    $scope.startPage = false;
+    if ($state.current.name == 'start' || $state.current.name == 'dataset') {
+        $scope.startPage = true;
+    }
+
+    $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
+        $scope.$emit('datasetReady');
+        $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
+    });
 
 }]);
 
@@ -13,8 +24,9 @@ function($scope){
 // see _OLD DatasetsController, UploadController
 // ***********************************
 angular.module('dataFramer').controller('DatasetIndexController', ['$scope',
-'$meteorCollection', '$meteorSubscribe',
-function($scope, $meteorCollection, $meteorSubscribe){
+'$state', '$meteorCollection', '$meteorSubscribe',
+function($scope, $state, $meteorCollection, $meteorSubscribe){
+
     $scope.subReady = false;
 
     $meteorSubscribe.subscribe('datasets').then(function(sub){
@@ -50,6 +62,10 @@ function($scope, $meteorCollection, $meteorSubscribe){
         }
     }
     
+    $scope.checkState = function(name){
+        return $state.current.name == name;
+    }
+    
 }]);
 
 
@@ -59,8 +75,11 @@ function($scope, $meteorCollection, $meteorSubscribe){
 // see _OLD DatasetController
 // ***********************************
 angular.module('dataFramer').controller('QuestionIndexController', ['$scope',
-function($scope){
-
+'$state',
+function($scope, $state){
+    $scope.checkState = function(name){
+        return $state.current.name == name;
+    }
 }]);
 
 
@@ -70,17 +89,21 @@ function($scope){
 // see _OLD VarsController (sidebar) and QuestController
 // ***********************************
 angular.module('dataFramer').controller('QuestionSingleController', ['$scope',
-function($scope){
+'$state',
+function($scope, $state){
 
 }]);
 
 
 
 // ***********************************
-// DistributionsController
+// ChartsController
 // see _OLD VarsController (sidebar) and DatasetController
 // ***********************************
-angular.module('dataFramer').controller('DistributionsController', ['$scope',
-function($scope){
-
+angular.module('dataFramer').controller('ChartsController', ['$scope',
+'$state',
+function($scope, $state){
+    $scope.checkState = function(name){
+        return $state.current.name == name;
+    }
 }]);

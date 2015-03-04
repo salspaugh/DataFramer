@@ -24,7 +24,9 @@
         </section>
     </section>
     </div>
+
     <div ng-if="!$root.currentUser">
-        <h2>Please sign in or create an account to start using DataFramer.</h2>
+        <h3 class="text-center">Please sign in or create an account to start using DataFramer.</h3>
     </div>
+
 </div>
