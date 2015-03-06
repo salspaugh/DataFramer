@@ -58,10 +58,118 @@ function($scope, $meteorCollection, $meteorSubscribe){
 // QuestionIndexController
 // see _OLD DatasetController
 // ***********************************
-angular.module('dataFramer').controller('QuestionIndexController', ['$scope',
-function($scope){
 
-}]);
+angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$meteorCollection', 
+    '$stateParams', '$meteorSubscribe', '$state', '$meteorObject', '$rootScope', '$meteorUtils',
+    function($scope, $meteorCollection, $stateParams, $meteorSubscribe, 
+        $state, $meteorObject, $rootScope, $meteorUtils){
+
+        $scope.$emit('questionsReady');
+        $scope.questions = $meteorCollection(Questions, {_id:$stateParams.questionId});
+        $scope.question = $meteorObject(Questions, $stateParams.questionId);
+
+        $scope.varNames = function(){
+            $scope.vars = $meteorCollection(function(){
+                return Columns.find({_id: $scope.question.col_refs});
+            });
+        }
+
+        $scope.isSet = function(ans_value){
+            // if answerable state isn't set, fade the button
+            if ($scope.question.answerable != ans_value) {
+                return "fade";
+            }
+        };
+
+        $scope.setAns = function(ans_value){
+            $scope.question.answerable = ans_value;
+        };
+
+        $scope.remove = function(col){
+            $scope.question.col_refs = _.without($scope.question.col_refs, col._id);
+            $scope.question.save();
+            $scope.columns = $meteorCollection(function(){
+                return Columns.find({_id: {$in: $scope.question.col_refs}});
+            });
+        }
+
+        $scope.addQuestion = function(text){
+                var new_question = {
+                    "dataset_id": $stateParams.datasetId,
+                    "text": text.$modelValue,
+                    "notes": null,
+                    "answerable": null,
+                    "col_refs": [],
+                    "user_id": Meteor.userId()
+                };
+
+                $scope.questions.push(new_question);
+            };
+
+            $scope.answerable = function(q_id){
+                switch (_.findWhere($scope.questions, {_id: q_id}).answerable) {
+                    case true:
+                        return "ans true";
+                    case false:
+                        return "ans false";
+                    default:
+                        return "ans unknown";
+                }
+            };
+
+            $scope.answerableIcon = function(q_id){
+                switch (_.findWhere($scope.questions, {_id: q_id}).answerable) {
+                    case true:
+                        return "fa-check";
+                        break;
+                    case false:
+                        return "fa-close";
+                        break;
+                    default:
+                        return "fa-question";
+                        break;
+                }
+            };
+
+            $scope.deleteQuestion = function(){
+                Questions.remove(this.question._id);
+            }
+        
+
+        $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
+            $scope.$emit('datasetReady');
+            $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
+        });
+
+        $meteorSubscribe.subscribe('questions', $stateParams.datasetId, $stateParams.questionId)
+        .then(function(sub){
+            $scope.$emit('questionsReady');
+            $scope.questions = $meteorCollection(Questions, {_id:$stateParams.questionId});
+            $scope.question = $meteorObject(Questions, $stateParams.questionId);
+
+            $scope.isSet = function(ans_value){
+                // if answerable state isn't set, fade the button
+                if ($scope.question.answerable != ans_value) {
+                    return "fade";
+                }
+            };
+
+            $scope.setAns = function(ans_value){
+                $scope.question.answerable = ans_value;
+                // TODO: this probably doesn't work
+            };
+
+            $scope.remove = function(col){
+                $scope.question.col_refs = _.without($scope.question.col_refs, col._id);
+                $scope.question.save();
+                $scope.columns = $meteorCollection(function(){
+                    return Columns.find({_id: {$in: $scope.question.col_refs}});
+                });
+            }
+
+        });
+    }
+]);
 
 
 

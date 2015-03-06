@@ -1,4 +1,4 @@
-angular.module('data_qs')
+angular.module('dataFramer')
     .directive('hist', [function() {
 
         return {

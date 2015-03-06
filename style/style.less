@@ -72,6 +72,15 @@ a{
     transition: all 0.4s ease 0s;
 }
 
+#question-wrapper {
+    width: 80%;
+    margin: 0 auto;
+}
+
+#q-list-title {
+    text-align: center;
+}
+
 .selected{
     width: 100%;
 }
@@ -215,12 +224,23 @@ ul.questions-list {
     list-style: none;
     padding-left: 0;
 
-    li {
+    li.question-text {
 
-        font-size: 24px;
+        font-size: 22px;
         margin-top: 30px;
     }
 }
+
+li.var-pill {
+    list-style: none;
+    font-size: 16px;
+    color: white;
+    display: inline;
+    margin: 5px;
+    background: #575757;
+
+}
+
 
 // set some color variables so we can lighten/darken
 @ans-unk: #b9b9b9;
