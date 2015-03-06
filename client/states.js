@@ -7,9 +7,9 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
         .state('start', {
             url: '/',
             views: {
-                controlBar: {
-                    templateUrl: 'client/templates/control-bar.tpl',
-                    controller: 'ControlBarController'
+                navBar: {
+                    templateUrl: 'client/templates/nav-bar.tpl',
+                    controller: 'NavBarController'
                 },
                 // in this state, all the navigation elements should be disabled
                 main: {
@@ -22,9 +22,9 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
             url: '/dataset/:datasetId',
             views: {
                 // this will be inherited by all the other dataset.x states
-                controlBar: {
-                    templateUrl: 'client/templates/control-bar.tpl',
-                    controller: 'ControlBarController'
+                navBar: {
+                    templateUrl: 'client/templates/nav-bar.tpl',
+                    controller: 'NavBarController'
                 }
             }
         })
@@ -48,8 +48,8 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                 }
             }
         })
-        .state('dataset.distributions', {
-            url: '/distributions',
+        .state('dataset.charts', {
+            url: '/charts',
             views: {
                 // all the charts, like before
                 'main@': {

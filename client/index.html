@@ -6,15 +6,15 @@
 <body>
     <nav class="navbar navbar-default">
         <div class="container">
+
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">DataFramer</a>
+                <a class="navbar-brand" ui-sref="start"><p class="lead">DataFramer</p></a>
             </div>
-
-            <div ui-view="controlBar"></div>
-
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav df-login">
                 {{>loginButtons}}
             </ul>
+            <div ui-view="navBar"></div>
+
         </div>
     </nav>
     <div class="container">
