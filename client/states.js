@@ -53,8 +53,8 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
             views: {
                 // all the charts, like before
                 'main@': {
-                    templateUrl: 'client/templates/distributions.tpl',
-                    controller: 'DistributionsController'
+                    templateUrl: 'client/templates/charts.tpl',
+                    controller: 'ChartsController'
                 }
             }
         })
