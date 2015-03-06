@@ -52,7 +52,7 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
             url: '/charts',
             views: {
                 // all the charts, like before
-                main: {
+                "main@": {
                     templateUrl: 'client/templates/charts.tpl',
                     controller: 'ChartsController'
                 }

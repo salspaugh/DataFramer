@@ -1,13 +1,19 @@
+var DATATYPE_SORT_IDX = {
+  "string": 0,
+  "integer": 1,
+  "float": 2,
+  "date": 3,
+  "time": 4
+};
+
 Meteor.methods({
     'processCsv': processCsv,
 });
 
 function processCsv(csvfile, name){
-    // var csvfile = CSVs.findOne({'_id': csvfile_id});
 
     // using collectionFS package
-    CSV()
-    .from.string(csvfile)
+    CSV().from.string(csvfile)
     // need to bind Meteor environment to callbacks in other libraries
     .to.array(Meteor.bindEnvironment(function(data){
 
@@ -16,13 +22,6 @@ function processCsv(csvfile, name){
             "name": name,
             "rowCount": data.length - 1, // subtract the header row
             "questions": []
-            //{
-            //     "id": null,
-            //     "text": null,
-            //     "notes": null,
-            //     "answerable": null,
-            //     "col_refs": []
-            // }
         };
 
         // add to database or replace existing with same name
@@ -41,11 +40,12 @@ function processCsv(csvfile, name){
                 'dataset_id': d_id
             };
         });
-
+        
         // detect the datatype
-        _.each(cols, function(col){
+        _.each(cols, function(col) {
             var datatype = detectDataType(col.orig_values);
             col['datatype'] = datatype[0];
+            col['datatypeIdx'] = DATATYPE_SORT_IDX[datatype[0]];
 
             // cast numbers and dates before storing
             if (datatype[0] == 'float'){

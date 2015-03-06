@@ -1,3 +1,4 @@
+var DATATYPE_LIST = ["string", "integer", "float", "date", "time"];
 // ***********************************
 // NavBarController
 // ***********************************
@@ -101,9 +102,63 @@ function($scope, $state){
 // see _OLD VarsController (sidebar) and DatasetController
 // ***********************************
 angular.module('dataFramer').controller('ChartsController', ['$scope',
-'$state',
-function($scope, $state){
+'$state', '$window', '$stateParams', '$meteorSubscribe', '$meteorCollection', '$meteorObject',
+function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollection, $meteorObject){
+
+    $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
+        $scope.$emit('datasetReady');
+        $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
+    });
+        
+    $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
+    .then(function(sub){
+        $scope.columns = $meteorCollection(function(){
+            return Columns.find({dataset_id: $stateParams.datasetId}, {sort: {datatypeIdx: 1, name: 1}});
+        });
+        $scope.$emit('colsReady');
+        $scope.chartsReady = true;
+    });
+            
+    $scope.datatypes = DATATYPE_LIST;
+
     $scope.checkState = function(name){
         return $state.current.name == name;
     }
+        
+    $scope.varClick = function(col){
+       $window.scroll(0,$('#'+col._id).offset().top);
+    };
+    
+    $scope.changeType = changeType;
+
 }]);
+
+function changeType(col, type){
+    col.datatype = type;
+    col.values = [];
+    scope = this.$parent
+    switch (type) {
+        case "string":
+            col = processString(col);
+            scope.renderChart(scope);
+            break;
+        case "date":
+            col = processDate(col);
+            scope.renderChart(scope);
+            break;
+        case "float":
+            col = processFloat(col);
+            scope.renderChart(scope);
+            break;
+        case "integer":
+            col = processInt(col);
+            scope.renderChart(scope);
+            break;
+        case "time":
+            col = processTime(col);
+            scope.renderChart(scope);
+            break;
+        default:
+            break;
+        }
+}
