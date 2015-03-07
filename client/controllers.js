@@ -80,17 +80,52 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
     function($scope, $meteorCollection, $stateParams, $meteorSubscribe, 
         $state, $meteorObject, $rootScope, $meteorUtils){
 
+        $meteorSubscribe.subscribe('columns', $stateParams.datasetId);
+
+        $meteorSubscribe.subscribe('questions', $stateParams.datasetId, $stateParams.questionId)
+        .then(function(sub){
+            $scope.$emit('questionsReady');
+            $scope.questions = $meteorCollection(Questions, {_id:$stateParams.questionId});
+            $scope.question = $meteorObject(Questions, $stateParams.questionId);
+
+            $scope.isSet = function(ans_value){
+                // if answerable state isn't set, fade the button
+                if ($scope.question.answerable != ans_value) {
+                    return "fade";
+                }
+            };
+
+            $scope.setAns = function(ans_value){
+                $scope.question.answerable = ans_value;
+                // TODO: this probably doesn't work
+            };
+
+            $scope.remove = function(col){
+                $scope.question.col_refs = _.without($scope.question.col_refs, col._id);
+                $scope.question.save();
+                $scope.columns = $meteorCollection(function(){
+                    return Columns.find({_id: {$in: $scope.question.col_refs}});
+                });
+            }
+
+        });
+
+        $scope.sections = 
+           [{'name': 'Keep', 'answerable': true, 'color': 'green' },
+            {'name': 'Undecided' , 'answerable': null, 'color': 'grey' },
+            {'name': 'Discard', 'answerable': false, 'color': 'red' }];
+
+        $scope.getVars = function(var_id) {
+            return Columns.findOne(var_id).name;
+        }
+
         $scope.checkState = function(name){
             return $state.current.name == name;
         }
 
-        $scope.$emit('questionsReady');
-        $scope.questions = $meteorCollection(Questions, {_id:$stateParams.questionId});
-        $scope.question = $meteorObject(Questions, $stateParams.questionId);
-
         $scope.varNames = function(){
             $scope.vars = $meteorCollection(function(){
-                return Columns.find({_id: $scope.question.col_refs});
+                return Columns.find({_id: {$in: $scope.question.col_refs}});
             });
         }
 
@@ -154,40 +189,7 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
             $scope.deleteQuestion = function(){
                 Questions.remove(this.question._id);
             }
-        
-
-        $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
-            $scope.$emit('datasetReady');
-            $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
-        });
-
-        $meteorSubscribe.subscribe('questions', $stateParams.datasetId, $stateParams.questionId)
-        .then(function(sub){
-            $scope.$emit('questionsReady');
-            $scope.questions = $meteorCollection(Questions, {_id:$stateParams.questionId});
-            $scope.question = $meteorObject(Questions, $stateParams.questionId);
-
-            $scope.isSet = function(ans_value){
-                // if answerable state isn't set, fade the button
-                if ($scope.question.answerable != ans_value) {
-                    return "fade";
-                }
-            };
-
-            $scope.setAns = function(ans_value){
-                $scope.question.answerable = ans_value;
-                // TODO: this probably doesn't work
-            };
-
-            $scope.remove = function(col){
-                $scope.question.col_refs = _.without($scope.question.col_refs, col._id);
-                $scope.question.save();
-                $scope.columns = $meteorCollection(function(){
-                    return Columns.find({_id: {$in: $scope.question.col_refs}});
-                });
-            }
-
-        });
+    
     }
 ]);
 
