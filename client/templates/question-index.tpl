@@ -9,26 +9,74 @@
 		        <ul class="questions-list">
 		            <li class="question-text" ng-repeat="question in questions">
 		            	<div class="question-card" ng-if="section.answerable == question.answerable">
+			                
+			                <span class="dropdown pull-right control q-list-dropdown">
+					            <a data-toggle="dropdown" tooltip="Edit question or bin" tooltip-placement="bottom" tooltip-append-to-body="true">
+					                <i class="fa fa-pencil-square"></i><span class="caret"></span>
+					            </a>
+
+					            <ul class="dropdown-menu" role="menu">
+					                <li role="presentation">
+					                    <a role="menuitem" ng-click="deleteQuestion()">
+					                    	Edit question
+					                    </a>
+					                </li>
+					                <li role="presentation">
+					                    <a role="menuitem" ng-click="setAns(true)">
+					                    	Move to Keep bin
+					                    </a>
+					                </li>
+					                <li role="presentation">
+					                    <a role="menuitem" ng-click="setAns(false)">
+					                    	Move to Discard bin
+					                    </a>
+					                </li>
+					                <li role="presentation">
+					                    <a role="menuitem" ng-click="setAns(null)">
+					                    	Move to Undecided bin
+					                    </a>
+					                </li>
+					               <!--  <li role="presentation">
+					                    <a role="menuitem dropdown dropdown-submenu">Change bin</a>
+		                              	<ul class="dropdown-menu">
+		                                	<li role="menuitem "><a href="#">Page with comments</a></li>
+		                                	<li role="menuitem "><a href="#">Page with comments disabled</a></li>	
+		                              	</ul>
+					                </li> -->
+					                <li role="presentation">
+					                    <a role="menuitem" ng-click="deleteQuestion()">
+					                    	Go to chart view
+					                    </a>
+					                </li>
+					                <li role="presentation">
+					                    <a role="menuitem" ng-click="deleteQuestion()">
+					                    	Delete this question
+					                    </a>
+					                </li>
+					            </ul>
+					        </span>
+
 			                <span ng-class="answerable(question._id)">
 			                    <i class="fa ng-class:answerableIcon(question._id);"></i>
 			                </span>
-			                <a ui-sref="dataset.question({questionId: question._id})" contenteditable="true">
+			                <a ui-sref="dataset.question({questionId: question._id})">
 			                    {{ question.text }}
+
 			                </a>
 			                <div ng-if="question.col_refs.length > 0">
-				                <!-- <hr> -->
-				                <!-- <span class="column-section">Columns: </span> -->
 				                <ul class="vars-on-q">
-				                	<li class="var-pill label" ng-repeat ="var in question.col_refs">
-				                	{{ getVars(var) }}
+				                	<li class="var-pill label" ng-repeat ="var in question.col_refs" type="var.type">
+				                		{{ getVarName(var) }}
 				                	</li>
 				                </ul>
 				            </div>    
 			                
-			               <!--  <button type="button" class="btn btn-default pull-right" tooltip="Delete this question" tooltip-placement="bottom" tooltip-append-to-body="true" ng-click="deleteQuestion()">
+			              <!--   <button type="button" class="btn btn-default pull-right" tooltip="Delete this question" tooltip-placement="bottom" tooltip-append-to-body="true" ng-click="deleteQuestion()">
 			                    <i class="fa fa-minus-circle text-danger"></i>
 			                </button> -->
+
 			                <div ng-if="question.notes">
+			                	<hr>
 			                	<span>Notes: </span>
 			                	<small class="text-muted">{{ question.notes }}</small>
 			            	</div>

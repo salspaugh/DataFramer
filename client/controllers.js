@@ -111,12 +111,17 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
         });
 
         $scope.sections = 
-           [{'name': 'Keep', 'answerable': true, 'color': 'green' },
-            {'name': 'Undecided' , 'answerable': null, 'color': 'grey' },
-            {'name': 'Discard', 'answerable': false, 'color': 'red' }];
+           [{'name': 'Keep', 'answerable': true },
+            {'name': 'Undecided' , 'answerable': null },
+            {'name': 'Discard', 'answerable': false }];
 
-        $scope.getVars = function(var_id) {
+        $scope.getVarName = function(var_id) {
             return Columns.findOne(var_id).name;
+        }
+
+        // TODO: use this to set var labels to right datatype color
+        $scope.getVarTypeColor = function(var_id) {
+            return Columns.findOne(var_id).datatype;
         }
 
         $scope.checkState = function(name){
@@ -138,6 +143,7 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
 
         $scope.setAns = function(ans_value){
             $scope.question.answerable = ans_value;
+            $scope.question.save();
         };
 
         $scope.remove = function(col){
