@@ -59,7 +59,7 @@
 			                <span ng-class="answerable(question._id)">
 			                    <i class="fa ng-class:answerableIcon(question._id);"></i>
 			                </span>
-			                <a ui-sref="dataset.question({questionId: question._id})">
+			                <a ui-sref="dataset.question({questionId: question._id})" contenteditable>
 			                    {{ question.text }}
 
 			                </a>
@@ -78,7 +78,7 @@
 			                <div ng-if="question.notes">
 			                	<hr>
 			                	<span>Notes: </span>
-			                	<small class="text-muted">{{ question.notes }}</small>
+			                	<small class="text-muted" contenteditable>{{ question.notes }}</small>
 			            	</div>
 		                </div>
 		            </li>
