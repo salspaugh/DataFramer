@@ -82,10 +82,12 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
 
         $meteorSubscribe.subscribe('columns', $stateParams.datasetId);
 
-        $meteorSubscribe.subscribe('questions', $stateParams.datasetId, $stateParams.questionId)
+        $meteorSubscribe.subscribe('questions', $stateParams.datasetId)
         .then(function(sub){
             $scope.$emit('questionsReady');
-            $scope.questions = $meteorCollection(Questions, {_id:$stateParams.questionId});
+            $scope.questions = $meteorCollection(function(){
+                return Questions.find({dataset_id:$stateParams.datasetId});
+            });
             $scope.question = $meteorObject(Questions, $stateParams.questionId);
 
             $scope.isSet = function(ans_value){
