@@ -28,10 +28,12 @@
 @time-color: #fd8d3c;
 @time-color-light: #fee8d2;
 
+@navbar-padding: 70px;
+
 // Miscellaneous
 
 body {
-  padding-top: 70px;
+  padding-top: @navbar-padding;
 }
 
 .attention {
@@ -228,7 +230,8 @@ li.var-pill {
 .sidebar {
   padding-bottom: 25px;
   position: fixed;
-  height: 100%;
+  top: @navbar-padding;
+  bottom: 20px;
   overflow-x: visible;
   overflow-y: auto;
   z-index: 1000;
