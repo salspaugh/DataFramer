@@ -109,16 +109,20 @@ ul.questions-list {
     }
 }
 
-.question-card-text {
-    color: black;
+.question-editable {
+    // color: black;
     position: relative;
 }
 
-.question-card-text:hover {
+.question-editable:hover {
     background-color: #e3e3e3;
     color: black;
 }
 
+.question-editable:empty:not(:focus):before{
+        content:attr(data-placeholder);
+        font-style: italic;
+    }
 
 .q-list-dropdown {
     margin-left: 10px;
