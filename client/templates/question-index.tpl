@@ -41,27 +41,16 @@
 				            	
 	               				<span class="dropdown pull-right control q-list-dropdown">
 					            <a data-toggle="dropdown" tooltip="Move to different bin" tooltip-placement="bottom" tooltip-append-to-body="true">
-					                <i class="fa fa-exchange"></i><span class="caret"></span>
+					                <i class="fa fa-exchange"><span class="caret"></span></i>
 					            </a>
 
 					            <ul class="dropdown-menu" role="menu">
-					                
-					                <li role="presentation">
-					                    <a role="menuitem" ng-click="setAns(true)">
-					                    	Move to Keep bin
-					                    </a>
-					                </li>
-					                <li role="presentation">
-					                    <a role="menuitem" ng-click="setAns(false)">
-					                    	Move to Reject bin
-					                    </a>
-					                </li>
-					                <li role="presentation">
-					                    <a role="menuitem" ng-click="setAns(null)">
-					                    	Move to Undecided bin
-					                    </a>
-					                </li>
-					          
+
+					            	<li role="presentation" ng-repeat="s in sections">
+								      <a role="menuitem" tabindex="-1" href="#" ng-click="setAns(s.answerable)">
+								        <p ng-class="{'text-muted': question.answerable == s.answerable}">Move to {{s.name}} bin</p
+								      </a>
+								    </li>
 					            </ul>
 					        	</span>
 					        	<span class= "pull-right control chart-view-link">
