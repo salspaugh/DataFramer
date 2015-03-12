@@ -9,7 +9,6 @@ data/faa-on-time-performance-original.csv
 data/faa-wildlife-strike-original.csv
 
 private/admin_password
-
-private/persimmon/
-
 private/super_secret_passwords.json
+
+persimmon/
