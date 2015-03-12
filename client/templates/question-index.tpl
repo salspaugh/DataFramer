@@ -13,7 +13,7 @@
 			                <span ng-class="answerable(question._id)">
 			                    <i class="fa ng-class:answerableIcon(question._id);"></i>
 			                </span>
-			                <a contenteditable>
+			                <a class="question-card-text" contenteditable>
 			                    {{ question.text }}
 
 			                </a>
@@ -27,14 +27,15 @@
 			                
 			              
 			                <div>
-			                	<hr>
-			                	<span class="notes-section">Notes: </span>
-			                	<small class="text-muted" contenteditable>{{ question.notes }}</small>
+			                	<hr class="q-notes-divider">
+			                	<span class="q-notes-label">Notes: </span>
+			                	<small class="notes-section"><a class="question-card-text text-muted" contenteditable>{{ question.notes }}</a></small>
+			                	
 			            	</div>
 
 			            	<div class="row q-icon-row">
 
-		            			<span class="pull-right" tooltip="Delete this question" tooltip-placement="bottom" tooltip-append-to-body="true" ng-click="deleteQuestion()" ng-confirm-click="Are you sure you want to delete this question?">
+		            			<span class="pull-right" tooltip="Delete this question" tooltip-placement="bottom" tooltip-append-to-body="true" ng-confirm-click="Are you sure you would like to delete this question?: \n\n{{question.text}}" confirmed-click="deleteQuestion()" >
 				                    <i class="fa fa-trash-o"></i>
 				                </span>
 				            	

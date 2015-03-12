@@ -103,6 +103,7 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
             // };
 
             $scope.remove = function(col){
+                alert("Are you sure you want to remove this question?");
                 $scope.question.col_refs = _.without($scope.question.col_refs, col._id);
                 $scope.question.save();
                 $scope.columns = $meteorCollection(function(){
@@ -196,6 +197,10 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
         $scope.setAns = function(ans_value){
             Questions.update({ _id: this.question._id }, { $set: { answerable: ans_value } });
         };
+
+        $scope.clearField = function() {
+            return ''
+        }
 
         document.addEventListener('keydown', function (event) {
           var esc = event.which == 27,
