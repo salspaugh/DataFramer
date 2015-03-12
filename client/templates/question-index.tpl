@@ -10,48 +10,6 @@
 		            <li class="question-text" ng-repeat="question in questions">
 		            	<div class="question-card" ng-if="section.answerable == question.answerable">
 
-			                <span class="dropdown pull-right control q-list-dropdown">
-					            <a data-toggle="dropdown" tooltip="Edit question or bin" tooltip-placement="bottom" tooltip-append-to-body="true">
-					                <i class="fa fa-pencil-square"></i><span class="caret"></span>
-					            </a>
-
-					            <ul class="dropdown-menu" role="menu">
-					                
-					                <li role="presentation">
-					                    <a role="menuitem" ng-click="setAns(true)">
-					                    	Move to Keep bin
-					                    </a>
-					                </li>
-					                <li role="presentation">
-					                    <a role="menuitem" ng-click="setAns(false)">
-					                    	Move to Discard bin
-					                    </a>
-					                </li>
-					                <li role="presentation">
-					                    <a role="menuitem" ng-click="setAns(null)">
-					                    	Move to Undecided bin
-					                    </a>
-					                </li>
-					               <!--  <li role="presentation">
-					                    <a role="menuitem dropdown dropdown-submenu">Change bin</a>
-		                              	<ul class="dropdown-menu">
-		                                	<li role="menuitem "><a href="#">Page with comments</a></li>
-		                                	<li role="menuitem "><a href="#">Page with comments disabled</a></li>	
-		                              	</ul>
-					                </li> -->
-					                <li role="presentation">
-					                    <a role="menuitem" ng-click="deleteQuestion()">
-					                    	Go to chart view
-					                    </a>
-					                </li>
-					                <li role="presentation">
-					                    <a role="menuitem" ng-click="deleteQuestion()">
-					                    	Delete this question
-					                    </a>
-					                </li>
-					            </ul>
-					        </span>
-
 			                <span ng-class="answerable(question._id)">
 			                    <i class="fa ng-class:answerableIcon(question._id);"></i>
 			                </span>
@@ -67,22 +25,52 @@
 				                </ul>
 				            </div>    
 			                
-			              <!--   <button type="button" class="btn btn-default pull-right" tooltip="Delete this question" tooltip-placement="bottom" tooltip-append-to-body="true" ng-click="deleteQuestion()">
-			                    <i class="fa fa-minus-circle text-danger"></i>
-			                </button> -->
-
-			                <div ng-if="question.notes">
+			              
+			                <div>
 			                	<hr>
-			                	<span>Notes: </span>
+			                	<span class="notes-section">Notes: </span>
 			                	<small class="text-muted" contenteditable>{{ question.notes }}</small>
 			            	</div>
-			            	<div class="row chart-view-row">
-				            	<span class= "pull-right control chart-view-link">
+
+			            	<div class="row q-icon-row">
+
+		            			<span class="pull-right" tooltip="Delete this question" tooltip-placement="bottom" tooltip-append-to-body="true" ng-click="deleteQuestion()" ng-confirm-click="Are you sure you want to delete this question?">
+				                    <i class="fa fa-trash-o"></i>
+				                </span>
+				            	
+	               				<span class="dropdown pull-right control q-list-dropdown">
+					            <a data-toggle="dropdown" tooltip="Move to different bin" tooltip-placement="bottom" tooltip-append-to-body="true">
+					                <i class="fa fa-exchange"></i><span class="caret"></span>
+					            </a>
+
+					            <ul class="dropdown-menu" role="menu">
+					                
+					                <li role="presentation">
+					                    <a role="menuitem" ng-click="setAns(true)">
+					                    	Move to Keep bin
+					                    </a>
+					                </li>
+					                <li role="presentation">
+					                    <a role="menuitem" ng-click="setAns(false)">
+					                    	Move to Reject bin
+					                    </a>
+					                </li>
+					                <li role="presentation">
+					                    <a role="menuitem" ng-click="setAns(null)">
+					                    	Move to Undecided bin
+					                    </a>
+					                </li>
+					          
+					            </ul>
+					        	</span>
+					        	<span class= "pull-right control chart-view-link">
 				                	<a tooltip="Go to chart view" tooltip-placement="bottom" tooltip-append-to-body="true" ui-sref="dataset.questionSingle({question: question._id})">
 				                		<i class="fa fa-bar-chart"></i>
 				                	</a>
 	               				</span>
-               				</div>
+			            		
+			            	</div>
+			            	
 		                </div>
 		            </li>
 		        </ul>

@@ -115,7 +115,7 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
         $scope.sections = 
            [{'name': 'Keep', 'answerable': true },
             {'name': 'Undecided' , 'answerable': null },
-            {'name': 'Discard', 'answerable': false }];
+            {'name': 'Reject', 'answerable': false }];
 
         $scope.getVarName = function(var_id) {
             return Columns.findOne(var_id).name;
