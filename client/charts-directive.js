@@ -6,7 +6,7 @@ var renderStringChart = function(scope, dimensions) {
     .classed("float-chart", false)
     .classed("date-chart", false)
     .classed("time-chart", false);
-  
+
   // Calculate frequency for each word in the list
   var groups = _(data.values).chain()
     .groupBy(_.identity)
@@ -18,7 +18,7 @@ var renderStringChart = function(scope, dimensions) {
      })
     .sortBy(function(d) { return -d.freq; })
     .value();
-  
+
   // Remove nulls
   groups = _.filter(groups, function(obj) { return obj.value != "null"; });
   var maxFreq = d3.max(groups, function(d) { return d.freq; });
@@ -29,75 +29,75 @@ var renderStringChart = function(scope, dimensions) {
     .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
     .attr("class", "string-chart")
     .attr("style", "overflow: visible;");
-  
+
   if (groups.length < 10) {
-  
+
     var yScale = d3.scale.ordinal()
       .domain(d3.range(groups.length))
       .rangeBands([0, dimensions.height + dimensions.margin.top], 0.15);
-    
+
     var xScale = d3.scale.linear()
       .domain([0, maxFreq])
       .range([0, dimensions.width + dimensions.margin.left + dimensions.margin.right]);
-    
+
     var bars = svg.selectAll(".bar")
       .data(groups)
       .enter().append("g")
       .classed("bar", true);
-    
+
     bars.append("rect")
      .attr("x", 0)
      .attr("y", function(d, i) { return yScale(i); })
      .attr("width", function(d) { return xScale(d.freq); })
      .attr("height", yScale.rangeBand());
-    
+
     bars.append("text")
      .text(function(d) { return d.value; })
      .attr("x", 5)
      .attr("y", function(d, i) { return yScale(i) + yScale.rangeBand()/2; });
-  
+
   } else {
-  
+
     var yScale = d3.scale.ordinal()
      .domain(d3.range(groups.length))
      .rangeBands([0, dimensions.height + dimensions.margin.top], 0.1);
-    
+
     var xScale = d3.scale.linear()
      .domain([0, maxFreq])
      .range([0, dimensions.width + dimensions.margin.left + dimensions.margin.right]);
-    
+
     var yFisheye = d3.fisheye.ordinal()
       .rangeBands([0, dimensions.height], 0.1)
       .distortion(groups.length / 20);
-    
+
     yFisheye.domain(_.range(groups.length));
-    
+
     var bars = svg.selectAll(".bar")
       .data(groups)
       .enter().append("g")
       .classed("bar", true);
-    
+
     bars.append("rect")
      .attr("x", 0)
      .attr("y", function(d, i) { return yScale(i) })
      .attr("width", function(d) { return xScale(d.freq); })
      .attr("height", yScale.rangeBand());
-    
+
     bars.append("text")
      .text(function(d) { return d.value; })
-     .classed("label", true)
+     .classed("bar-label", true)
      .attr("x", 2)
      .attr("y", function(d, i) { return yScale(i); })
      .attr("dy", "1em")
      .attr("text-anchor", "start")
      .attr("font-size", yScale.rangeBand())
      .classed("hidden", true);
-    
+
     // Add fisheye functionality
     svg.on("mouseover", function() {
-      svg.selectAll("text.label").classed("hidden", false); 
+      svg.selectAll("text.bar-label").classed("hidden", false);
     });
-    
+
     svg.on("mousemove", function() {
       var mouse = d3.mouse(this);
       var yPos = mouse[1];
@@ -109,12 +109,12 @@ var renderStringChart = function(scope, dimensions) {
       yFisheye.focus(yPos);
       redraw();
     });
-    
+
     function redraw() {
       svg.selectAll("rect")
         .attr("y", function(d,i) { return yFisheye(i); })
         .attr("height", function(d,i) { return yFisheye.rangeBand(i); });
-      svg.selectAll("text.label")
+      svg.selectAll("text.bar-label")
         .attr("y", function(d,i) { return yFisheye(i); })
         .attr("font-size", function(d,i) { return yFisheye.rangeBand(i); });
     }
@@ -122,7 +122,7 @@ var renderStringChart = function(scope, dimensions) {
       svg.selectAll("rect")
         .attr("y", function(d,i) { return yScale(i); })
         .attr("height", function(d,i) { return yScale.rangeBand(); });
-      svg.selectAll("text.label")
+      svg.selectAll("text.bar-label")
         .attr("y", function(d,i) { return yScale(i); })
         .attr("height", function(d,i) { return yScale.rangeBand(); })
         .classed("hidden", true);
@@ -135,7 +135,7 @@ var renderStringChart = function(scope, dimensions) {
     .scale(xScale)
     .tickFormat(d3.format("d"))
     .tickSubdivide(0);
-  
+
   var xCall = svg.append("g")
     .classed("axis", true)
     .attr("transform", "translate(0," + (dimensions.height + dimensions.margin.top) + ")")
@@ -183,7 +183,7 @@ var renderDateChart = function(scope, dimensions) {
 
   var data = scope.$parent.column
     , bisectDate = d3.bisector(function(d) { return d.x; }).left;
-  
+
   // Calculate frequency for each timestamp in the list
   var groups = _(data.values).chain()
     .groupBy(_.identity)
@@ -204,7 +204,7 @@ var renderDateChart = function(scope, dimensions) {
   var y = d3.scale.linear()
     .domain([0, d3.max(groups, function(d) { return d.y; })])
     .range([dimensions.height, 0]);
- 
+
   var xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom");
@@ -249,9 +249,9 @@ var renderDateChart = function(scope, dimensions) {
     .text("Frequency");
 
   // Tooltip
-  var focus = svg.append("g") 
-    .style("display", "none");  
- 
+  var focus = svg.append("g")
+    .style("display", "none");
+
   // Append the rectangle to capture mouse
   svg.append("rect")
     .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
@@ -259,13 +259,13 @@ var renderDateChart = function(scope, dimensions) {
     .style("fill", "none")
     .style("pointer-events", "all")
     .on("mouseover", function() { focus.style("display", null); })
-    .on("mouseout", function() { 
-        focus.style("display", "none"); 
+    .on("mouseout", function() {
+        focus.style("display", "none");
         tooltip.style("visibility", "hidden");
      })
     .on("mousemove", mousemove);
 
-  // Append the circle at the intersection 
+  // Append the circle at the intersection
   focus.append("circle")
     .attr("class", "y")
     .style("fill", "#000")
@@ -292,8 +292,8 @@ var renderDateChart = function(scope, dimensions) {
     tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px")
       .style("visibility", "visible")
       .text("Point: " + d.x  + "\nNumber of items: " + d.y);
-  
-  } 
+
+  }
 }
 
 var renderTimeChart = function(scope, dimensions) {
@@ -366,14 +366,14 @@ var renderTimeChart = function(scope, dimensions) {
     .data(histogram)
     .enter().append("g")
     .classed("bar", true);
-      
+
   bars.append("rect")
     .attr("x", function(d) { return x(d.bin); })
     .attr("width", Math.floor((x.range()[1]/24)-1)+"px")
     .attr("y", function(d) { return y(d.frequency); })
     .attr("height", function(d) {
       return (dimensions.height + dimensions.margin.top) - y(d.frequency); })
-    .on("mouseover", function(d){ 
+    .on("mouseover", function(d){
         tooltip.text("Bin: [" + binLabel(d.bin) + ")\nNumber of items: " + d.frequency);
         return tooltip.style("visibility", "visible"); })
     .on("mousemove", function(){ return tooltip.style("top",
@@ -403,7 +403,7 @@ var renderTimeChart = function(scope, dimensions) {
 
 var renderDefaultChart = function(scope, dimensions) {
   var data = scope.$parent.column;
-  
+
   var min = _.min(data.values, function(v) {
     if (_.isNaN(v)) { return undefined; }
     return v;
@@ -437,11 +437,11 @@ var renderDefaultChart = function(scope, dimensions) {
   var xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom");
- 
+
   var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left");
- 
+
   var svg = d3.select(scope.container[0])
     .append("svg")
     .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
@@ -465,7 +465,7 @@ var renderDefaultChart = function(scope, dimensions) {
     .attr("width", x(bins[0].dx) - 4)
     .attr("y", dimensions.margin.top)
     .attr("height", function(d) { return dimensions.height - y(d.y); })
-    .on("mouseover", function(d){ 
+    .on("mouseover", function(d){
         tooltip.text("Bin: [" + d.x + " - " + (d.x + d.dx) +")\nNumber of items: " + d.y);
         return tooltip.style("visibility", "visible"); })
     .on("mousemove", function(){ return tooltip.style("top",

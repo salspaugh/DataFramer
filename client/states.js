@@ -32,7 +32,7 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
             url: '/questions',
             views: {
                 // the list of questions - separate from charts
-                main: {
+                'main@': {
                     templateUrl: 'client/templates/question-index.tpl',
                     controller: 'QuestionIndexController'
                 }
@@ -42,7 +42,7 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
             url: '/questions/:questionId',
             views: {
                 // a single question view - not that different than before
-                main: {
+                'main@': {
                     templateUrl: 'client/templates/question-single.tpl',
                     controller: 'QuestionSingleController'
                 }

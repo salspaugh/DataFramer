@@ -75,14 +75,158 @@ function($scope, $state, $meteorCollection, $meteorSubscribe){
 // QuestionIndexController
 // see _OLD DatasetController
 // ***********************************
-angular.module('dataFramer').controller('QuestionIndexController', ['$scope',
-'$state',
-function($scope, $state){
-    $scope.checkState = function(name){
-        return $state.current.name == name;
-    }
-}]);
 
+angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$meteorCollection', 
+    '$stateParams', '$meteorSubscribe', '$state', '$meteorObject', '$rootScope', '$meteorUtils',
+    function($scope, $meteorCollection, $stateParams, $meteorSubscribe, 
+        $state, $meteorObject, $rootScope, $meteorUtils){
+
+        $meteorSubscribe.subscribe('columns', $stateParams.datasetId);
+
+        $meteorSubscribe.subscribe('questions', $stateParams.datasetId)
+        .then(function(sub){
+            $scope.$emit('questionsReady');
+            $scope.questions = $meteorCollection(function(){
+                return Questions.find({dataset_id:$stateParams.datasetId});
+            });
+            $scope.question = $meteorObject(Questions, $stateParams.questionId);
+
+            $scope.isSet = function(ans_value){
+                // if answerable state isn't set, fade the button
+                if ($scope.question.answerable != ans_value) {
+                    return "fade";
+                }
+            };
+
+            // $scope.setAns = function(ans_value){
+            //     $scope.question.answerable = ans_value;
+            //     // TODO: this probably doesn't work
+            // };
+
+            $scope.remove = function(col){
+                alert("Are you sure you want to remove this question?");
+                $scope.question.col_refs = _.without($scope.question.col_refs, col._id);
+                $scope.question.save();
+                $scope.columns = $meteorCollection(function(){
+                    return Columns.find({_id: {$in: $scope.question.col_refs}});
+                });
+            }
+
+        });
+
+        $scope.sections = 
+           [{'name': 'Keep', 'answerable': true },
+            {'name': 'Undecided' , 'answerable': null },
+            {'name': 'Reject', 'answerable': false }];
+
+        $scope.getVarName = function(var_id) {
+            return Columns.findOne(var_id).name;
+        };
+
+        // TODO: use this to set var labels to right datatype color
+        $scope.getVarTypeColor = function(var_id) {
+            return Columns.findOne(var_id).datatype;
+        };
+
+        $scope.checkState = function(name){
+            return $state.current.name == name;
+        };
+
+        $scope.varNames = function(){
+            $scope.vars = $meteorCollection(function(){
+                return Columns.find({_id: {$in: $scope.question.col_refs}});
+            });
+        };
+
+        $scope.isSet = function(ans_value){
+            // if answerable state isn't set, fade the button
+            if ($scope.question.answerable != ans_value) {
+                return "fade";
+            }
+        };
+
+        $scope.remove = function(col){
+            $scope.question.col_refs = _.without($scope.question.col_refs, col._id);
+            $scope.question.save();
+            $scope.columns = $meteorCollection(function(){
+                return Columns.find({_id: {$in: $scope.question.col_refs}});
+            });
+        };
+
+        $scope.addQuestion = function(text){
+            var new_question = {
+                "dataset_id": $stateParams.datasetId,
+                "text": text.$modelValue,
+                "notes": null,
+                "answerable": null,
+                "col_refs": [],
+                "user_id": Meteor.userId()
+            };
+
+            $scope.questions.push(new_question);
+        };
+
+        $scope.answerable = function(q_id){
+            switch (_.findWhere($scope.questions, {_id: q_id}).answerable) {
+                case true:
+                    return "ans true";
+                case false:
+                    return "ans false";
+                default:
+                    return "ans unknown";
+            }
+        };
+
+        $scope.answerableIcon = function(q_id){
+            switch (_.findWhere($scope.questions, {_id: q_id}).answerable) {
+                case true:
+                    return "fa-check";
+                    break;
+                case false:
+                    return "fa-close";
+                    break;
+                default:
+                    return "fa-question";
+                    break;
+            }
+        };
+
+        $scope.deleteQuestion = function(){
+            Questions.remove(this.question._id);
+        };
+
+        $scope.setAns = function(ans_value){
+            Questions.update({ _id: this.question._id }, { $set: { answerable: ans_value } });
+        };
+
+        $scope.clearField = function() {
+            return ''
+        }
+
+        document.addEventListener('keydown', function (event) {
+          var esc = event.which == 27,
+              nl = event.which == 13,
+              el = event.target,
+              input = el.nodeName != 'INPUT' && el.nodeName != 'TEXTAREA'
+              // data = {};
+
+          if (input) {
+            if (esc) {
+              // restore state
+              document.execCommand('undo');
+              el.blur();
+            } else if (nl) {
+
+                //TODO: $scope seems to only save it in current veiw.. probably need to save text and notes separately
+                Questions.update({ _id: $scope.question._id }, { $set: { text: el.innerHTML, notes: el.innerHTML } });
+
+                el.blur();
+                event.preventDefault();
+            }
+          }
+        }, true);
+
+}]);
 
 
 // ***********************************
