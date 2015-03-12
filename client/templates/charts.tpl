@@ -1,7 +1,14 @@
-<div class="row">
-  
+<div ng-if="chartsLoading">
+    <h1 style="text-align: center;">Loading...</h1>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-info active" role="progressbar" style="width: 100%"></div>
+    </div>
+</div>
+
+<div class="row" ng-if="!chartsLoading">
+
   <div class="col-md-3 sidebar">
-    <input type="text" placeholder="Search full text of dataset" class="search-box" 
+    <input type="text" placeholder="Search full text of dataset" class="search-box"
     ng-model="columns.search" ng-model-options="{debounce: 750}"/>
     <p class="text-muted">Columns in dataset <br />{{dataset.name}}:</p>
 
@@ -16,7 +23,7 @@
       </ul>
     </div>
   </div>
-  
+
   <div class="col-md-9 chart-area">
     <div class="row dataset-shape-container">
       <div class="col-md-6"><p class="text-muted">Total rows: {{dataset.rowCount}}</p></div>

@@ -28,7 +28,7 @@ angular.module('dataFramer').controller('DatasetIndexController', ['$scope',
 '$state', '$meteorCollection', '$meteorSubscribe',
 function($scope, $state, $meteorCollection, $meteorSubscribe){
 
-    $scope.subReady = false;
+    $scope.subLoading = true;
 
     $meteorSubscribe.subscribe('datasets').then(function(sub){
         $scope.datasets = $meteorCollection(function(){
@@ -39,7 +39,7 @@ function($scope, $state, $meteorCollection, $meteorSubscribe){
             Meteor.call('removeDataset', this.dataset._id);
         }
 
-        $scope.subReady = true;
+        $scope.subLoading = false;
     });
 
     $scope.processCsv = function(event) {
@@ -62,11 +62,11 @@ function($scope, $state, $meteorCollection, $meteorSubscribe){
             event.target.value = '';
         }
     }
-    
+
     $scope.checkState = function(name){
         return $state.current.name == name;
     }
-    
+
 }]);
 
 
@@ -76,16 +76,17 @@ function($scope, $state, $meteorCollection, $meteorSubscribe){
 // see _OLD DatasetController
 // ***********************************
 
-angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$meteorCollection', 
+angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$meteorCollection',
     '$stateParams', '$meteorSubscribe', '$state', '$meteorObject', '$rootScope', '$meteorUtils',
-    function($scope, $meteorCollection, $stateParams, $meteorSubscribe, 
+    function($scope, $meteorCollection, $stateParams, $meteorSubscribe,
         $state, $meteorObject, $rootScope, $meteorUtils){
+
+        $scope.questionsLoading = true;
 
         $meteorSubscribe.subscribe('columns', $stateParams.datasetId);
 
         $meteorSubscribe.subscribe('questions', $stateParams.datasetId)
         .then(function(sub){
-            $scope.$emit('questionsReady');
             $scope.questions = $meteorCollection(function(){
                 return Questions.find({dataset_id:$stateParams.datasetId});
             });
@@ -111,10 +112,10 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
                     return Columns.find({_id: {$in: $scope.question.col_refs}});
                 });
             }
-
+            $scope.questionsLoading = false;
         });
 
-        $scope.sections = 
+        $scope.sections =
            [{'name': 'Keep', 'answerable': true },
             {'name': 'Undecided' , 'answerable': null },
             {'name': 'Reject', 'answerable': false }];
@@ -249,30 +250,30 @@ angular.module('dataFramer').controller('ChartsController', ['$scope',
 '$state', '$window', '$stateParams', '$meteorSubscribe', '$meteorCollection', '$meteorObject',
 function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollection, $meteorObject){
 
+    $scope.chartsLoading = true;
     $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
         $scope.$emit('datasetReady');
         $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
     });
-        
+
     $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
     .then(function(sub){
         $scope.columns = $meteorCollection(function(){
             return Columns.find({dataset_id: $stateParams.datasetId}, {sort: {datatypeIdx: 1, name: 1}});
         });
-        $scope.$emit('colsReady');
-        $scope.chartsReady = true;
+        $scope.chartsLoading = false;
     });
-            
+
     $scope.datatypes = DATATYPE_LIST;
 
     $scope.checkState = function(name){
         return $state.current.name == name;
     }
-        
+
     $scope.varClick = function(col){
        $window.scroll(0,$('#'+col._id).offset().top);
     };
-    
+
     $scope.changeType = changeType;
 
 }]);

@@ -1,8 +1,15 @@
+<div ng-if="questionsLoading">
+    <h1 style="text-align: center;">Loading...</h1>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-info active" role="progressbar" style="width: 100%"></div>
+    </div>
+</div>
+
 <!-- interface for browsing and creating questions - separated and expanded from previous version, in a single column -->
 
-     <div id="question-wrapper">
+     <div id="question-wrapper" ng-if="!questionsLoading">
      	<h2 id="q-list-title">My Questions</h2>
-      
+
       	<div class="row">
 		    <div ng-repeat= "section in sections" class="col-md-4 question-bin">
 		    	<span class="q-section-name">{{ section.name }}</span>
@@ -23,14 +30,14 @@
 				                		{{ getVarName(var) }}
 				                	</li>
 				                </ul>
-				            </div>    
-			                
-			              
+				            </div>
+
+
 			                <div>
 			                	<hr class="q-notes-divider">
 			                	<span class="q-notes-label">Notes: </span>
 			                	<small class="notes-section"><a class="question-card-text text-muted" contenteditable>{{ question.notes }}</a></small>
-			                	
+
 			            	</div>
 
 			            	<div class="row q-icon-row">
@@ -38,7 +45,7 @@
 		            			<span class="pull-right" tooltip="Delete this question" tooltip-placement="bottom" tooltip-append-to-body="true" ng-confirm-click="Are you sure you would like to delete this question?: \n\n{{question.text}}" confirmed-click="deleteQuestion()" >
 				                    <i class="fa fa-trash-o"></i>
 				                </span>
-				            	
+
 	               				<span class="dropdown pull-right control q-list-dropdown">
 					            <a data-toggle="dropdown" tooltip="Move to different bin" tooltip-placement="bottom" tooltip-append-to-body="true">
 					                <i class="fa fa-exchange"><span class="caret"></span></i>
@@ -58,9 +65,9 @@
 				                		<i class="fa fa-bar-chart"></i>
 				                	</a>
 	               				</span>
-			            		
+
 			            	</div>
-			            	
+
 		                </div>
 		            </li>
 		        </ul>
@@ -85,4 +92,3 @@
         </form>
 
     </div>
-
