@@ -2,7 +2,7 @@
 
      <div id="question-wrapper">
      	<h2 id="q-list-title">My Questions</h2>
-      
+
       	<div class="row">
 		    <div ng-repeat= "section in sections" class="col-md-4 question-bin">
 		    	<span class="q-section-name">{{ section.name }}</span>
@@ -13,24 +13,23 @@
 			                <span ng-class="answerable(question._id)">
 			                    <i class="fa ng-class:answerableIcon(question._id);"></i>
 			                </span>
-			                <a class="question-card-text" contenteditable>
+			                <span class="question-card-text question-editable" contenteditable ng-keypress="editQuestion($event, question._id)">
 			                    {{ question.text }}
-
-			                </a>
+			                </span>
 			                <div ng-if="question.col_refs.length > 0">
 				                <ul class="vars-on-q">
 				                	<li class="var-pill label" ng-repeat ="var in question.col_refs" type="var.type">
 				                		{{ getVarName(var) }}
 				                	</li>
 				                </ul>
-				            </div>    
-			                
-			              
+				            </div>
+
+
 			                <div>
 			                	<hr class="q-notes-divider">
 			                	<span class="q-notes-label">Notes: </span>
-			                	<small class="notes-section"><a class="question-card-text text-muted" contenteditable>{{ question.notes }}</a></small>
-			                	
+			                	<small class="notes-section"><span class="question-card-notes question-editable text-muted" contenteditable ng-keypress="editQuestion($event, question._id)" data-placeholder="Click to add...">{{ question.notes }}</span></small>
+
 			            	</div>
 
 			            	<div class="row q-icon-row">
@@ -38,7 +37,7 @@
 		            			<span class="pull-right" tooltip="Delete this question" tooltip-placement="bottom" tooltip-append-to-body="true" ng-confirm-click="Are you sure you would like to delete this question?: \n\n{{question.text}}" confirmed-click="deleteQuestion()" >
 				                    <i class="fa fa-trash-o"></i>
 				                </span>
-				            	
+
 	               				<span class="dropdown pull-right control q-list-dropdown">
 					            <a data-toggle="dropdown" tooltip="Move to different bin" tooltip-placement="bottom" tooltip-append-to-body="true">
 					                <i class="fa fa-exchange"><span class="caret"></span></i>
@@ -58,9 +57,9 @@
 				                		<i class="fa fa-bar-chart"></i>
 				                	</a>
 	               				</span>
-			            		
+
 			            	</div>
-			            	
+
 		                </div>
 		            </li>
 		        </ul>
@@ -85,4 +84,3 @@
         </form>
 
     </div>
-
