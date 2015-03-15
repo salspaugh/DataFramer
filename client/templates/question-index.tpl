@@ -60,7 +60,7 @@
 					            </ul>
 					        	</span>
 					        	<span class= "pull-right control chart-view-link">
-				                	<a tooltip="Go to chart view" tooltip-placement="bottom" tooltip-append-to-body="true" ui-sref="dataset.questionSingle({question: question._id})">
+				                	<a tooltip="Go to chart view" tooltip-placement="bottom" tooltip-append-to-body="true" ui-sref="dataset.questionSingle({questionId: question._id})">
 				                		<i class="fa fa-bar-chart"></i>
 				                	</a>
 	               				</span>
