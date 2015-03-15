@@ -27,9 +27,9 @@
     <div class="row question-header">
         <div class="col-md-12">
             <h1>{{question.text}}</h1>
-            <a class="label label-success" ng-class="{active: question.answerable == 1}" ng-click="setAns(1)">Keep</a>
+            <a class="label label-success" ng-class="{active: question.answerable == true}" ng-click="setAns(true)">Keep</a>
             <a class="label label-default" ng-class="{active: question.answerable == null}" ng-click="setAns(null)">Undecided</a>
-            <a class="label label-danger" ng-class="{active: question.answerable == 0}" ng-click="setAns(0)">Reject</a>
+            <a class="label label-danger" ng-class="{active: question.answerable == false}" ng-click="setAns(false)">Reject</a>
         </div>
     </div>
     <div class="row">
