@@ -1,6 +1,13 @@
+<div ng-if="questionsLoading">
+    <h1 style="text-align: center;">Loading...</h1>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-info active" role="progressbar" style="width: 100%"></div>
+    </div>
+</div>
+
 <!-- interface for browsing and creating questions - separated and expanded from previous version, in a single column -->
 
-     <div id="question-wrapper">
+     <div id="question-wrapper" ng-if="!questionsLoading">
      	<h2 id="q-list-title">My Questions</h2>
 
       	<div class="row">
