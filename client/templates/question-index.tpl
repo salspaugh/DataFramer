@@ -20,10 +20,9 @@
 			                <span ng-class="answerable(question._id)">
 			                    <i class="fa ng-class:answerableIcon(question._id);"></i>
 			                </span>
-			                <a class="question-card-text" contenteditable>
+			                <span class="question-card-text question-editable" contenteditable ng-keypress="editQuestion($event, question._id)">
 			                    {{ question.text }}
-
-			                </a>
+			                </span>
 			                <div ng-if="question.col_refs.length > 0">
 				                <ul class="vars-on-q">
 				                	<li class="var-pill label" ng-repeat ="var in question.col_refs" type="var.type">
@@ -36,7 +35,7 @@
 			                <div>
 			                	<hr class="q-notes-divider">
 			                	<span class="q-notes-label">Notes: </span>
-			                	<small class="notes-section"><a class="question-card-text text-muted" contenteditable>{{ question.notes }}</a></small>
+			                	<small class="notes-section"><span class="question-card-notes question-editable text-muted" contenteditable ng-keypress="editQuestion($event, question._id)" data-placeholder="Click to add...">{{ question.notes }}</span></small>
 
 			            	</div>
 

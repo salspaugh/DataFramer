@@ -90,29 +90,6 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
             $scope.questions = $meteorCollection(function(){
                 return Questions.find({dataset_id:$stateParams.datasetId});
             });
-            $scope.question = $meteorObject(Questions, $stateParams.questionId);
-
-            $scope.isSet = function(ans_value){
-                // if answerable state isn't set, fade the button
-                if ($scope.question.answerable != ans_value) {
-                    return "fade";
-                }
-            };
-
-            // $scope.setAns = function(ans_value){
-            //     $scope.question.answerable = ans_value;
-            //     // TODO: this probably doesn't work
-            // };
-
-            $scope.remove = function(col){
-                alert("Are you sure you want to remove this question?");
-                $scope.question.col_refs = _.without($scope.question.col_refs, col._id);
-                $scope.question.save();
-                $scope.columns = $meteorCollection(function(){
-                    return Columns.find({_id: {$in: $scope.question.col_refs}});
-                });
-            }
-            $scope.questionsLoading = false;
         });
 
         $scope.sections =
@@ -131,27 +108,6 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
 
         $scope.checkState = function(name){
             return $state.current.name == name;
-        };
-
-        $scope.varNames = function(){
-            $scope.vars = $meteorCollection(function(){
-                return Columns.find({_id: {$in: $scope.question.col_refs}});
-            });
-        };
-
-        $scope.isSet = function(ans_value){
-            // if answerable state isn't set, fade the button
-            if ($scope.question.answerable != ans_value) {
-                return "fade";
-            }
-        };
-
-        $scope.remove = function(col){
-            $scope.question.col_refs = _.without($scope.question.col_refs, col._id);
-            $scope.question.save();
-            $scope.columns = $meteorCollection(function(){
-                return Columns.find({_id: {$in: $scope.question.col_refs}});
-            });
         };
 
         $scope.addQuestion = function(text){
@@ -204,28 +160,31 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
             return ''
         }
 
-        document.addEventListener('keydown', function (event) {
-          var esc = event.which == 27,
-              nl = event.which == 13,
-              el = event.target,
-              input = el.nodeName != 'INPUT' && el.nodeName != 'TEXTAREA'
-              // data = {};
+        $scope.editQuestion = function(event, q_id){
+            var esc = event.which == 27,
+                nl = event.which == 13,
+                el = event.target,
+                input = el.nodeName != 'INPUT' && el.nodeName != 'TEXTAREA'
+                ;
 
-          if (input) {
-            if (esc) {
-              // restore state
-              document.execCommand('undo');
-              el.blur();
-            } else if (nl) {
-
-                //TODO: $scope seems to only save it in current veiw.. probably need to save text and notes separately
-                Questions.update({ _id: $scope.question._id }, { $set: { text: el.innerHTML, notes: el.innerHTML } });
-
-                el.blur();
-                event.preventDefault();
+            if (input) {
+                if (esc) {
+                  // restore state
+                  document.execCommand('undo');
+                  el.blur();
+                } else if (nl) {
+                    // are we editing the question or the notes?
+                    if (el.classList.contains('question-card-text')) {
+                        Questions.update({ _id: q_id }, { $set: { text: el.innerHTML} });
+                    } else if (el.classList.contains('question-card-notes')) {
+                        Questions.update({ _id: q_id }, { $set: { notes: el.innerHTML} });
+                    }
+                    el.blur();
+                    event.preventDefault();
+                }
             }
-          }
-        }, true);
+        }
+
 
 }]);
 
