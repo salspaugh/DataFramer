@@ -6,7 +6,7 @@
   <i class="fa fa-plus-square fa-lg attention" style="margin-left: 10px;"></i>
 </a>
 
-<a class="pull-right control" ng-click="remove(column)" ng-show="checkState('dataset.question')" 
+<a class="pull-right control" ng-click="remove(column)" ng-show="checkState('dataset.question')"
   tooltip="Remove from question" tooltip-placement="bottom" tooltip-append-to-body="true">
   <i class="fa fa-times-circle fa-lg icon-grey"></i>
 </a>
@@ -27,17 +27,10 @@
 
 </span>
 
-<a class="pull-right control" ng-click="resetBars()" ng-show="column.datatype == 'string'" 
+<a class="pull-right control" ng-click="resetBars()" ng-show="column.datatype == 'string'"
   tooltip="Reset chart view" tooltip-placement="bottom" tooltip-append-to-body="true">
   <i class="fa fa-refresh fa-lg icon-grey" style="margin-right: 10px;"></i>
 </a>
 
 <span ng-class="{'bg-warning text-warning': column.nulls}">Number of blank or null entries in column: {{column.nulls}}</span>
 <div chart ></div>
-
-<form role="form">
-  <div class="form-group">
-    <textarea class="form-control" rows="2" ng-model="column.notes"
-      ng-model-options="{debounce: 750}" placeholder="Notes"></textarea>
-  </div>
-</form>
