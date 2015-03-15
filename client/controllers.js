@@ -227,6 +227,10 @@ function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollectio
         $scope.colActive = function(col_id){
             return _.contains($scope.col_refs, col_id);
         }
+
+        $scope.setAns = function(ans_value){
+            $scope.question.answerable = ans_value;
+        };
     });
 
     $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
@@ -242,7 +246,6 @@ function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollectio
         // react to add/remove actions in the sidebar
         return Columns.find({_id: {$in: $scope.getReactively('col_refs')}}, {sort: {datatypeIdx: 1, name: 1}});
     });
-
 
 }]);
 
