@@ -90,6 +90,7 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
             $scope.questions = $meteorCollection(function(){
                 return Questions.find({dataset_id:$stateParams.datasetId});
             });
+            $scope.questionsLoading = false;
         });
 
         $scope.sections =
