@@ -195,8 +195,54 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
 // see _OLD VarsController (sidebar) and QuestController
 // ***********************************
 angular.module('dataFramer').controller('QuestionSingleController', ['$scope',
-'$state',
-function($scope, $state){
+'$meteorSubscribe', '$stateParams', '$meteorObject', '$meteorCollection', '$meteorUtils',
+function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollection, $meteorUtils){
+
+    $scope.col_refs = [];
+
+    $meteorSubscribe.subscribe('questions', $stateParams.datasetId, $stateParams.questionId)
+    .then(function(sub){
+        $scope.question = $meteorObject(Questions, $stateParams.questionId);
+
+        // store this in the scope so we can get and save it reactively
+        $scope.col_refs = $scope.question.col_refs;
+
+        $scope.varClick = function(col_id){
+            // toggle in scope's col_refs
+            if (_.contains($scope.col_refs, col_id)) {
+                // remove
+                $scope.col_refs = _.without($scope.col_refs, col_id);
+            } else {
+                // add
+                // NOTE: this is a dumb hack to make getReactively (below)
+                // recognize the change to col_refs, which it doesn't do for
+                // some reason if we just push to the array
+                var newrefs = _.union($scope.col_refs, [col_id]);
+                $scope.col_refs = newrefs;
+            }
+            // save to the question object
+            $scope.question.col_refs = $scope.col_refs;
+        }
+
+        $scope.colActive = function(col_id){
+            return _.contains($scope.col_refs, col_id);
+        }
+    });
+
+    $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
+    .then(function(sub){
+        $scope.columns = $meteorCollection(function(){
+            return Columns.find({dataset_id: $stateParams.datasetId}, {sort: {datatypeIdx: 1, name: 1}});
+        });
+    });
+
+    $scope.datatypes = DATATYPE_LIST;
+
+    $scope.activeColumns = $meteorCollection(function(){
+        // react to add/remove actions in the sidebar
+        return Columns.find({_id: {$in: $scope.getReactively('col_refs')}}, {sort: {datatypeIdx: 1, name: 1}});
+    });
+
 
 }]);
 
