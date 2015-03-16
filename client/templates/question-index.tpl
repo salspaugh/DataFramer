@@ -8,7 +8,7 @@
 <!-- interface for browsing and creating questions - separated and expanded from previous version, in a single column -->
 
      <div id="question-wrapper" ng-if="!questionsLoading">
-     	<h2 id="q-list-title">My Questions</h2>
+     	<h1>Questions</h1>
 
       	<div class="row">
 		    <div ng-repeat= "section in sections" class="col-md-4 question-bin">

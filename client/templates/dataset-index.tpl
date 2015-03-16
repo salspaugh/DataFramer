@@ -1,6 +1,8 @@
 <!-- the first-time start page, the list of datasets, and the upload form -->
 <!-- see _OLD datasets-list.tpl, upload.tpl for usable pieces -->
-<div class="col-md-8 col-md-offset-2">
+<div class="row">
+
+<div class="col-md-12">
 
     <div ng-if="subLoading">
         <h1 style="text-align: center;">Loading...</h1>
@@ -10,9 +12,7 @@
     </div>
 
     <div ng-if="$root.currentUser">
-    <section class="page-header">
-        <h1>Datasets</h1>
-    </section>
+    <h1>Datasets</h1>
 
     <section class="list-group" ng-if="!subLoading">
         <div class="list-group-item" ng-repeat="dataset in datasets">
@@ -39,4 +39,5 @@
         <h3 class="text-center">Please sign in or create an account to start using DataFramer.</h3>
     </div>
 
+</div>
 </div>
