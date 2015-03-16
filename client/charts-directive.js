@@ -340,16 +340,23 @@ var renderTimeChart = function(scope, dimensions) {
   var groups = _.groupBy(data.values, function(d) {
     if (d != null) {
       d = format.parse(d);
-      return d.getHours(); }
-    });
+      return d.getHours();
+    }
+  });
   var max = _.max(_.map(_.values(groups), function(x) {
-    return x.length; }));
+    return x.length; 
+  }));
 
   y.domain([0, max]);
-  var histogram = _.map(bins, function(x) {
+  var histogram = _.map(bins, function(b) {
+    var itemsInBin = groups[b.getHours()]
+      , f = 0.0;
+    if (!_.isUndefined(itemsInBin)) {
+      f = itemsInBin.length; 
+    }
     return {
-      "bin": x,
-      "frequency": groups[x.getHours()].length
+      "bin": b,
+      "frequency": f
       };
   });
 
