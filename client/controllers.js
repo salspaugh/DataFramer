@@ -16,6 +16,10 @@ function($scope, $state, $stateParams, $meteorSubscribe, $meteorCollection, $met
         $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
     });
 
+    $scope.checkState = function(name){
+        return $state.current.name == name;
+    }
+
 }]);
 
 
