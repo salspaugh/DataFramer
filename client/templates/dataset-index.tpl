@@ -11,13 +11,15 @@
 
     <div ng-if="$root.currentUser">
     <section class="page-header">
-        <h1>Your Datasets</h1>
+        <h1>Datasets</h1>
     </section>
 
     <section class="list-group" ng-if="!subLoading">
-        <a class="list-group-item" ng-repeat="dataset in datasets" ui-sref="dataset.questionIndex({datasetId: dataset._id})">
-            <h4 class="list-group-item-heading">{{dataset.name}}</h4>
-        </a>
+        <div class="list-group-item" ng-repeat="dataset in datasets">
+            <button class="btn btn-danger pull-right btn-xs" ng-confirm-click="Are you sure you want to delete this dataset ({{dataset.name}})?" confirmed-click="deleteDataset(dataset._id)">Delete</button>
+            <h4 class="list-group-item-heading"><a ui-sref="dataset.questionIndex({datasetId: dataset._id})">{{dataset.name}}</a></h4>
+            <!--  -->
+        </div>
         <section class="list-group-item disabled" ng-if="datasets.length == 0">
             <h4 class="list-group-item-heading">You haven't uploaded any datasets yet.</h4>
         </section>
