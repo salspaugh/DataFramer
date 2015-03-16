@@ -372,15 +372,59 @@ Question Single
 
 .chart-container {
   overflow: visible;
-  margin-top: 13px;
+  margin-top: 20px;
+  padding-right: 20px;
   .control {
-    margin-left: .5em;
+    margin-left: 1em;
   }
+}
+
+.add-to-q-row {
+  width: inherit;
+}
+
+.add-to-q-btn {
+  margin-left: 15px;
+/*  margin-bottom: 15px;
+*/  background-color: #e0e0e0;
+  border: 1px solid black;
+}
+
+.col-chart-title {
+  font-weight: 400;
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.row.chart-controls-row {
+  width: inherit;
+  padding-right: 30px;
+  margin-bottom: 10px;
+
+}
+
+/* micro clearfix */
+.chart-controls-row.clearfix:before,
+.chart-controls-row.clearfix:after {
+  content: " ";
+  display: table;
+}
+
+.chart-controls-row.clearfix:after {
+  clear: both;
+}
+
+.chart-wrapper {
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-top: 10px;
 }
 
 .chart {
   background: #eee;
-  padding: 3px;
+  width: inherit;
+  padding-left: 10px;
+  padding-top: 10px;
 }
 
 .chart div {
@@ -391,10 +435,14 @@ Question Single
   font: 10px sans-serif;
   background-color: steelblue;
   text-align: right;
-  padding: 3px;
+  padding: 10px;
   margin: 5px;
   color: white;
   box-shadow: 2px 2px 2px #666;
+}
+
+.null-disclaimer {
+  padding-left: inherit;
 }
 
 .rickshaw-graph {

@@ -273,6 +273,10 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
         $scope.chartsLoading = false;
     });
 
+    $scope.percentNull = function(column) {
+        return parseInt(column.nulls / $scope.dataset.rowCount * 100)
+    }
+
     $scope.datatypes = DATATYPE_LIST;
 
     $scope.checkState = function(name){
