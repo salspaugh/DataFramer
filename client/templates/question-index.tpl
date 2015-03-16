@@ -31,14 +31,6 @@
 				                </ul>
 				            </div>
 
-
-			                <div>
-			                	<hr class="q-notes-divider">
-			                	<span class="q-notes-label">Notes: </span>
-			                	<small class="notes-section"><span class="question-card-notes question-editable text-muted" contenteditable ng-keypress="editQuestion($event, question._id)" data-placeholder="Click to add...">{{ question.notes }}</span></small>
-
-			            	</div>
-
 			            	<div class="row q-icon-row">
 
 		            			<span class="pull-right" tooltip="Delete this question" tooltip-placement="bottom" tooltip-append-to-body="true" ng-confirm-click="Are you sure you would like to delete this question?: \n\n{{question.text}}" confirmed-click="deleteQuestion()" >
