@@ -4,18 +4,33 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-2" id="sidebar-wrapper">
-                <h3>DataFramer</h3>
-                <div ui-view="sidebar"></div>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+
+            <div class="navbar-header">
+                <a class="navbar-brand" ui-sref="start"><p class="lead">DataFramer</p></a>
             </div>
-            <div class="col-md-10 col-md-offset-2">
-                <ul class="list-unstyled">
-                    {{>loginButtons}}
-                </ul>
-                <div ui-view="main"></div>
-            </div>
+
+            <ul class="nav navbar-nav df-login">
+                {{>loginButtons}}
+            </ul>
+
+            <div ui-view="navBar"></div>
+
         </div>
+    </nav>
+
+    <div class="container">
+        <div ui-view="main"></div>
     </div>
+
+    <div class="modal fade" id="addToQuestionModal" tabindex="-1" role="dialog" 
+      aria-labelledby="addToQuestionModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <ng-include src="'client/templates/add-question.tpl'"></ng-include>
+        </div>
+      </div>
+    </div>
+
 </body>

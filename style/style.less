@@ -1,4 +1,4 @@
-// Import Vendors
+// Import vendors
 @import "vendor/custom.bootstrap.mixins.import.less";
 @import "vendor/custom.bootstrap.import.less";
 
@@ -11,215 +11,316 @@
 // Sites
 @import "sites/home.import.less";
 
-// Custom
+// Colors
+// Taken from: https://github.com/mbostock/d3/wiki/Ordinal-Scales#categorical-colors
+@string-color: #3182bd;
+@string-color-light: #cae2f1;
 
-/* CSS declarations go here */
+@integer-color: #31a354;
+@integer-color-light: #ccf0d7;
 
-div.timetip {
-    position: absolute;
-    width: 130px;
-    height: 28px;
-    padding: 8px;
-    font: 12px sans-serif;
-    background: white;
-    border: 1px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #dddddd;
-    border-radius: 3px;
-    pointer-events: none;
+@float-color: #74c476;
+@float-color-light: #dff1df;
 
-    &.frequency {
-        width: 100px;
-        background: black;
-        font: 12px sans-serif;
-        color: #ffffff;
-        border-style: none;
-    }
+@date-color: #e6550d;
+@date-color-light: #fdd0a2;
+
+@time-color: #fd8d3c;
+@time-color-light: #fee8d2;
+
+@navbar-padding: 70px;
+
+// Miscellaneous
+
+body {
+  padding-top: @navbar-padding;
+}
+
+.attention {
+  //color: #d62728;
+  color: #d9534f;
 }
 
 li {
-    text-decoration: none;
+  text-decoration: none;
 }
 
-.axis path,
-.axis line {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
+a:hover {
+  text-decoration: none;
 }
 
-.x.axis path {
-    display: none;
-}
-
-.line {
-    fill: none;
-    stroke: steelblue;
-    stroke-width: 1.5px;
-}
-
-a:hover{
-    text-decoration: none;
-}
-
-a{
-    text-decoration: none;
-}
-
-#wrapper {
-    padding-left: 250px;
-    transition: all 0.4s ease 0s;
+a {
+  text-decoration: none;
 }
 
 .selected{
     width: 100%;
 }
 
-#page-content-wrapper {
+// #wrapper {
+//     padding-left: 250px;
+//     transition: all 0.4s ease 0s;
+// }
 
+/****QUESTIONS INDEX****/
+
+#question-wrapper {
+    width: 90%;
+    margin: 0 auto;
 }
 
-/****NAVBAR****/
-
-#sidebar-wrapper {
-    padding-bottom: 25px;
-    background: #ededed;
-    position: fixed;
-    height: 100%;
-    overflow-x: visible;
-    overflow-y: auto;
-    z-index: 1000;
-    @media (min-width: @screen-md-min){
-        width: (@container-md / 12 * 2);
-    }
-    @media (min-width: @screen-lg-min){
-        width: (@container-lg / 12 * 2);
-    }
-
-    .nav.topnav {
-        margin: 10px 0;
-        li {
-            a {
-                padding: .1em .4em;
-            }
-        }
-    }
-
-    .name {
-        word-wrap: break-word;
-    }
-
-    .datatype {
-        border-left: 3px solid;
-        padding-left: 10px;
-        margin-top: 20px;
-
-        a:focus {
-            background-color: inherit;
-        }
-
-        &.time {
-            border-left-color: @time-color;
-
-            h5, a {
-                color: @time-color;
-            }
-
-            a:hover, a.active {
-                background-color: @time-color-light;
-            }
-        }
-
-        &.string {
-            border-left-color: @string-color;
-            // background-color: @string-color-light;
-
-            h5, a {
-                color: @string-color;
-            }
-
-            a:hover, a.active {
-                background-color: @string-color-light;
-            }
-        }
-
-        &.integer, &.float {
-            border-left-color: @num-color;
-            // background-color: @num-color-light;
-
-            h5, a {
-                color: @num-color;
-            }
-
-            a:hover, a.active {
-                background-color: @num-color-light;
-            }
-        }
-
-        &.date {
-            border-left-color: @date-color;
-            // background-color: @date-color-light;
-
-            h5, a {
-                color: @date-color;
-            }
-
-            a:hover, a.active {
-                background-color: @date-color-light;
-            }
-        }
-    }
-}
-
-hr {
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar-brand a{
-    color: white;
-    font-size: 26px;
+#q-list-title {
     text-align: center;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
 }
 
-.search-box {
-    width: 100%;
-    height: 40px;
+.question-bin {
+    /*border: 1px solid black;*/
+    background-color: #e2e4e6;
     padding: 5px;
-    /*	text-align: center;
-    */	margin-bottom: 20px;
-    display: block;
+    margin: 5px;
+    width: 32%;
 }
 
-.side-nav-label a{
-    display: block;
-    /*	text-decoration: underline;
-    */	color: #FFFFFF;
-    font-size: 25px;
-    text-align: center;
+.question-card {
+    padding: 10px;
+    margin-top: 8px;
+    margin-right: 3px;
+    margin-left: 3px;
+    background-color: white;
+    border-radius: 2px;
 }
 
-.side-nav-link{
-    display: block;
-    text-decoration: none;
-    color: #FFFFFF;
+.q-section-name {
     font-size: 20px;
-}
-
-.navbar.container {
-    color: #344A5F;
+    font-weight: 500;
+    margin-left: 10px;
+    margin-top: 15px;
 }
 
 ul.questions-list {
     list-style: none;
     padding-left: 0;
 
-    li {
-
-        font-size: 24px;
-        margin-top: 30px;
+    li.question-text {
+        font-size: 16px;
+        font-weight: 300;
     }
+}
+
+.question-editable {
+    // color: black;
+    position: relative;
+}
+
+.question-editable:hover {
+    background-color: #e3e3e3;
+    color: black;
+}
+
+.question-editable:empty:not(:focus):before{
+        content:attr(data-placeholder);
+        font-style: italic;
+    }
+
+.q-list-dropdown {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.q-icon-row{
+    margin-right: inherit;
+    margin-left: inherit;
+    margin-top: 10px;
+}
+
+.q-notes-label{
+    position: relative;
+}
+
+.q-notes-divider {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+ul[class~='vars-on-q'] {
+    display: inline-block;
+    padding: 0;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+li.var-pill {
+    list-style: none;
+    font-size: 14px;
+    font-weight: 200;
+    color: white;
+    display: inline;
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 2px;
+    background: #7e7e7e; /* todo: color based on data type*/
+}
+
+.chart-tooltip {
+  position: absolute;
+  z-index: 10;
+  visibility: hidden;
+  white-space: pre-wrap;
+  font: 12px sans-serif;
+  padding: 5px;
+  line-height: 150%;
+  background: white;
+  border: 1px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #000;
+  border-radius: 3px;
+}
+
+
+/*******************************
+Question Single
+*******************************/
+.question-header {
+    .label {
+        opacity: 0.3;
+        &.active {
+            opacity: 1.0;
+        }
+    }
+}
+
+
+// Navigation bar
+.df-nav-btn {
+  font: 18px sans-serif;
+}
+.nav-link {
+  margin-top: 14px;
+}
+.df-login {
+  margin-top: 6px;
+}
+
+// Icons
+.icon-grey {
+  color: #777;
+}
+
+// File button hack
+// http://www.abeautifulsite.net/whipping-file-inputs-into-shape-with-bootstrap-3/
+.btn-file {
+  position: relative;
+  overflow: hidden;
+  input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+  }
+}
+
+// Columns list
+.search-box {
+  width: 100%;
+  height: 40px;
+  padding: 5px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+#sidebar-wrapper {
+}
+
+.sidebar {
+  padding-bottom: 25px;
+  position: fixed;
+  top: @navbar-padding;
+  bottom: 20px;
+  overflow-x: visible;
+  overflow-y: auto;
+  z-index: 1000;
+  @media (min-width: @screen-md-min){
+      width: (@container-md / 12 * 3);
+  }
+  @media (min-width: @screen-lg-min){
+      width: (@container-lg / 12 * 3);
+  }
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(238,238,238,1);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(238,238,238,1);
+  box-shadow: 0px 0px 5px 0px rgba(238,238,238,1);
+  outline: 1px solid #ddd;
+}
+
+.chart-area {
+  @media (min-width: @screen-md-min){
+      margin-left: (@container-md / 12 * 3);
+  }
+  @media (min-width: @screen-lg-min){
+      margin-left: (@container-lg / 12 * 3);
+  }
+
+}
+
+.datatype {
+  margin-top: 20px;
+  &.string {
+    //border-left-color: @string-color;
+    p, a {
+      color: @string-color;
+    }
+    a:hover, a.active {
+      background-color: @string-color-light;
+    }
+  }
+  &.integer {
+    //border-left-color: @integer-color;
+    p, a {
+      color: @integer-color;
+    }
+    a:hover, a.active {
+      background-color: @integer-color-light;
+    }
+  }
+  &.float {
+    //border-left-color: @float-color;
+    p, a {
+      color: @float-color;
+    }
+    a:hover, a.active {
+      background-color: @float-color-light;
+    }
+  }
+  &.date {
+    //border-left-color: @date-color;
+    p, a {
+      color: @date-color;
+    }
+    a:hover, a.active {
+      background-color: @date-color-light;
+    }
+  }
+  &.time {
+    //border-left-color: @time-color;
+    p, a {
+      color: @time-color;
+    }
+    a:hover, a.active {
+      background-color: @time-color-light;
+    }
+  }
 }
 
 // set some color variables so we can lighten/darken
@@ -228,62 +329,58 @@ ul.questions-list {
 @ans-false: #ec2424;
 
 .ans {
-    display: inline-block;
-    margin-right: .5em;
-    color: #ffffff;
-    width: 1.75em;
-    text-align: center;
-
-    &.unknown {
-        background-color: @ans-unk;
-        &.fade {
-            background-color: lighten(desaturate(@ans-unk, 50%), 25%);
-        }
+  display: inline-block;
+  margin-right: .5em;
+  color: #ffffff;
+  width: 1.75em;
+  text-align: center;
+  &.unknown {
+    background-color: @ans-unk;
+    &.fade {
+      background-color: lighten(desaturate(@ans-unk, 50%), 25%);
     }
-
-    &.true {
-        background-color: @ans-true;
-        &.fade {
-            background-color: lighten(desaturate(@ans-true, 75%), 25%);
-        }
+  }
+  &.true {
+    background-color: @ans-true;
+    &.fade {
+      background-color: lighten(desaturate(@ans-true, 75%), 25%);
     }
-
-    &.false {
-        background-color: @ans-false;
-        &.fade {
-            background-color: lighten(desaturate(@ans-false, 50%), 25%);
-        }
+  }
+  &.false {
+    background-color: @ans-false;
+    &.fade {
+      background-color: lighten(desaturate(@ans-false, 50%), 25%);
     }
-
+  }
+}
+.charts-container {
+  // same as height of floating column
+  margin-bottom: 125px;
 }
 
-.charts-container {
-    // same as height of floating column
-    margin-bottom: 125px;
+// Charts
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.dataset-shape-container {
+  margin-top: 25px;
 }
 
 .chart-container {
-    height: 450px;
-    .control {
-        margin-left: .5em;
-    }
-}
-.floating-column {
-    position:fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 125px;
-    .answerable-form {
-        padding-top: 20px;
-        font-size: 20px;
-        background-color: rgba(255,255,255,0.9);
-    }
+  overflow: visible;
+  margin-top: 13px;
+  .control {
+    margin-left: .5em;
+  }
 }
 
 .chart {
-    background: #eee;
-    padding: 3px;
+  background: #eee;
+  padding: 3px;
 }
 
 .chart div {
@@ -291,9 +388,6 @@ ul.questions-list {
   transition: all 1s ease-out;
   -moz-transition: all 1s ease-out;
   -webkit-transition: all 1s ease-out;
-}
-
-.chart div {
   font: 10px sans-serif;
   background-color: steelblue;
   text-align: right;
@@ -303,100 +397,94 @@ ul.questions-list {
   box-shadow: 2px 2px 2px #666;
 }
 
-
-// VIZ styles
-
-@time-color: #cc7a00;
-@time-color-light: #dba24d;
-@string-color: #3fa3dc;
-@string-color-light: #a6cee3;
-@num-color: #33a02c;
-@num-color-light: #b2df8a;
-@date-color: #e31a1c;
-@date-color-light: #fb9a99;
-
-.rickshaw_graph {
-
-    svg {
-        overflow: visible;
+.rickshaw-graph {
+  svg {
+    overflow: visible;
+  }
+  .detail {
+    .x_label {
+      opacity: 0.9;
     }
-    .detail {
-        .x_label {
-            opacity: 0.9;
-        }
-    }
-
-    .x_grid_d3 {
-        display: none;
-    }
-    .y_grid {
-        display: none;
-    }
-
-    .axis-label {
-        position: absolute;
-        font-size: 9px;
-        text-transform: uppercase;
-        opacity: 0.5;
-        transform: rotate(-90deg) translate(-22px, -33px);
-    }
+  }
+  .x_grid_d3 {
+    display: none;
+  }
+  .y_grid {
+    display: none;
+  }
+  .axis-label {
+    position: absolute;
+    font-size: 12px;
+    opacity: 0.5;
+    transform: rotate(-90deg) translate(-22px, -33px);
+  }
 }
 
-div[hist] {
-    margin-bottom: 15px;
-}
-
-.time-chart {
-    rect {
-        fill: @time-color;
-    }
-    .axis {
-        opacity: 0.5;
-    }
-    .axis-label {
-        text-anchor: end;
-        font-size: 9px;
-        text-transform: uppercase;
-    }
-}
-
-//doesn't work?
 .string-chart {
-    overflow: scroll;
-    .bar {
-        rect {
-            fill: @string-color;
-        }
+  .bar {
+    rect {
+      fill: @string-color;
     }
-    .axis {
-        opacity: 0.5;
-        .tick {
-            text {
-                font-size: 12px;
-            }
-        }
-        .axis-label {
-            text-anchor: end;
-            font-size: 9px;
-            text-transform: uppercase;
-        }
+  }
+ .bar:hover {
+    rect {
+      fill: @string-color-light;
+      stroke: #000;
     }
+ }
+  .axis-label {
+    text-anchor: middle;
+    fill: #000;
+  }
 }
 
 .date-chart {
-    path {
-        stroke: @date-color;
-    }
+  .line {
+    stroke: @date-color;
+    stroke-width: 1.5;
+    fill: none;
+  }
 }
-
-.num-chart {
+.float-chart {
+  .bar {
     rect {
-        fill: @num-color;
+      fill: @float-color;
     }
+  }
+ .bar:hover {
+    rect {
+      fill: @float-color-light;
+      stroke: #000;
+    }
+ }
+}
+.time-chart {
+  .bar {
+    rect {
+      fill: @time-color;
+    }
+  }
+ .bar:hover {
+    rect {
+      fill: @time-color-light;
+      stroke: #000;
+    }
+ }
 }
 
-.btn.delete {
-    position:absolute;
-    top: 9px;
-    right: 0;
+.integer-chart {
+  .bar {
+    rect {
+      fill: @integer-color;
+    }
+  }
+ .bar:hover {
+    rect {
+      fill: @integer-color-light;
+      stroke: #000;
+    }
+ }
+}
+.form-group {
+  margin-top: 1em;
 }
