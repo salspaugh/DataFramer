@@ -141,7 +141,7 @@ function checkIsDate(item) {
   return moment(item).isValid(); 
 }
 
-function detectDataType(column) {
+function detectDataType(items) {
   
   var validItems = _.filter(items, function(item, idx) {
     return !checkNull(item, true);
