@@ -1,15 +1,8 @@
-<div ng-if="questionsLoading">
-    <h1 style="text-align: center;">Loading...</h1>
-    <div class="progress">
-        <div class="progress-bar progress-bar-striped progress-bar-info active" role="progressbar" style="width: 100%"></div>
-    </div>
-</div>
+<div ng-if="questionsLoading" ng-include="'client/templates/loading.tpl'"></div>
 
 <!-- interface for browsing and creating questions - separated and expanded from previous version, in a single column -->
 
      <div id="question-wrapper" ng-if="!questionsLoading">
-     	<h1>Questions</h1>
-
       	<div class="row">
 		    <div ng-repeat= "section in sections" class="col-md-4 question-bin">
 		    	<span class="q-section-name">{{ section.name }}</span>
