@@ -62,6 +62,35 @@ a {
 //     transition: all 0.4s ease 0s;
 // }
 
+.title-block {
+    margin-bottom: 30px;
+
+    h1,h2,h3,h4,h5,h6 {
+        font-weight: normal;
+        .view-title {
+            display: inline-block;
+            margin-right: 25px;
+        }
+        small {
+            font-style: italic;
+        }
+    }
+}
+
+
+/*******************************
+Navbar
+*******************************/
+
+.navbar {
+    .lead {
+        margin: 0;
+    }
+}
+
+
+
+
 /****QUESTIONS INDEX****/
 
 #q-list-title {
@@ -181,12 +210,16 @@ li.var-pill {
 Question Single
 *******************************/
 .question-header {
-    .label {
+    h1,h2,h3,h4,h5,h6 {
+        font-weight: normal;
+    }
+    .btn {
         opacity: 0.3;
-        &.active {
+        &.activeStatus {
             opacity: 1.0;
         }
     }
+    margin-bottom: 45px;
 }
 
 
@@ -264,7 +297,6 @@ Question Single
 // }
 
 .datatype {
-  margin-top: 20px;
   &.string {
     //border-left-color: @string-color;
     p, a {
@@ -361,7 +393,7 @@ Question Single
 
 .chart-container {
   overflow: visible;
-  margin-top: 13px;
+  margin-bottom: 35px;
   .control {
     margin-left: .5em;
   }
