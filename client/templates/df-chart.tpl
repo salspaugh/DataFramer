@@ -45,7 +45,7 @@
 <div class="chart-wrapper">
   <div chart ></div>
 </div>
-<span class="null-disclaimer" ng-class="{'bg-warning text-warning': column.nulls}">Number of nulls: {{column.nulls}} ({{percentNull(column)}}% of rows)</span>
+<span class="null-disclaimer" ng-class="{'bg-warning text-warning': column.nulls}" ng-show="column.nulls > 0">Number of nulls: <strong>{{column.nulls}}</strong> ({{percentNull(column)}}% of rows)</span>
 
 <!-- <form role="form">
   <div class="form-group">
