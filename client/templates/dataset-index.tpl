@@ -16,8 +16,11 @@
 
     <section class="list-group" ng-if="!subLoading">
         <div class="list-group-item" ng-repeat="dataset in datasets">
-            <button class="btn btn-danger pull-right btn-xs" ng-confirm-click="Are you sure you want to delete this dataset ({{dataset.name}})?" confirmed-click="deleteDataset(dataset._id)">Delete</button>
-            <h4 class="list-group-item-heading"><a ui-sref="dataset.questionIndex({datasetId: dataset._id})">{{dataset.name}}</a></h4>
+            <h4 class="list-group-item-heading">
+                <a ui-sref="dataset.questionIndex({datasetId: dataset._id})">{{dataset.name}}</a> <a class="pull-right text-danger" ng-confirm-click="Are you sure you want to delete this dataset ({{dataset.name}})?" confirmed-click="deleteDataset(dataset._id)" tooltip="Delete this dataset" tooltip-placement="bottom" tooltip-append-to-body="true" href="#">
+                    <i class="fa fa-trash-o"></i>
+                </a>
+            </h4>
             <!--  -->
         </div>
         <section class="list-group-item disabled" ng-if="datasets.length == 0">
