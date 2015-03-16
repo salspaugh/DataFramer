@@ -35,12 +35,12 @@ function($scope, $state, $meteorCollection, $meteorSubscribe){
             return Datasets.find({}, {fields: {name: 1}, sort: {name: 1}});
         });
 
-        $scope.deleteDataset = function(){
-            Meteor.call('removeDataset', this.dataset._id);
-        }
-
         $scope.subLoading = false;
     });
+
+    $scope.deleteDataset = function(dataset_id){
+        Meteor.call('removeDataset', dataset_id);
+    }
 
     $scope.processCsv = function(event) {
         var files = event.target.files;
