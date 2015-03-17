@@ -3,7 +3,7 @@
 <a class="pull-right" ng-show="checkState('dataset.charts')"
   data-toggle="modal" data-target="#addToQuestionModal"
   tooltip="Add to question" tooltip-placement="bottom" tooltip-append-to-body="true">
-  <i class="fa fa-plus-square fa-lg attention" style="margin-left: 10px;"></i>
+  <i class="fa fa-plus-square fa-lg text-primary" style="margin-left: 10px;"></i>
 </a>
 
 <a class="pull-right control" ng-click="remove(column)" ng-show="checkState('dataset.question')"
