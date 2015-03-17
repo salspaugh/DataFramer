@@ -1,15 +1,8 @@
-<div ng-if="questionsLoading">
-    <h1 style="text-align: center;">Loading...</h1>
-    <div class="progress">
-        <div class="progress-bar progress-bar-striped progress-bar-info active" role="progressbar" style="width: 100%"></div>
-    </div>
-</div>
+<div ng-if="questionsLoading" ng-include="'client/templates/loading.tpl'"></div>
 
 <!-- interface for browsing and creating questions - separated and expanded from previous version, in a single column -->
 
      <div id="question-wrapper" ng-if="!questionsLoading">
-     	<h2 id="q-list-title">My Questions</h2>
-
       	<div class="row">
 		    <div ng-repeat= "section in sections" class="col-md-4 question-bin">
 		    	<span class="q-section-name">{{ section.name }}</span>
@@ -25,7 +18,7 @@
 			                </span>
 			                <div ng-if="question.col_refs.length > 0">
 				                <ul class="vars-on-q">
-				                	<li class="var-pill label" ng-repeat ="var in question.col_refs" type="var.type">
+				                	<li class="var-pill label" ng-repeat ="var in question.col_refs" ng-class="getVarType(var)">
 				                		{{ getVarName(var) }}
 				                	</li>
 				                </ul>
@@ -34,7 +27,7 @@
 			            	<div class="row q-icon-row">
 
 		            			<span class="pull-right" tooltip="Delete this question" tooltip-placement="bottom" tooltip-append-to-body="true" ng-confirm-click="Are you sure you would like to delete this question?: \n\n{{question.text}}" confirmed-click="deleteQuestion()" >
-				                    <i class="fa fa-trash-o"></i>
+				                    <i class="fa fa-trash-o text-danger"></i>
 				                </span>
 
 	               				<span class="dropdown pull-right control q-list-dropdown">

@@ -12,9 +12,12 @@ function($scope, $state, $stateParams, $meteorSubscribe, $meteorCollection, $met
     }
 
     $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
-        $scope.$emit('datasetReady');
         $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
     });
+
+    $scope.checkState = function(name){
+        return $state.current.name == name;
+    }
 
 }]);
 
@@ -93,6 +96,10 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
             $scope.questionsLoading = false;
         });
 
+        $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
+            $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
+        });
+
         $scope.sections =
            [{'name': 'Keep', 'answerable': true },
             {'name': 'Undecided' , 'answerable': null },
@@ -103,7 +110,7 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
         };
 
         // TODO: use this to set var labels to right datatype color
-        $scope.getVarTypeColor = function(var_id) {
+        $scope.getVarType = function(var_id) {
             return Columns.findOne(var_id).datatype;
         };
 
@@ -200,6 +207,8 @@ function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollectio
 
     $scope.col_refs = [];
 
+    $scope.chartsLoading = true;
+
     $meteorSubscribe.subscribe('questions', $stateParams.datasetId, $stateParams.questionId)
     .then(function(sub){
         $scope.question = $meteorObject(Questions, $stateParams.questionId);
@@ -238,6 +247,11 @@ function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollectio
         $scope.columns = $meteorCollection(function(){
             return Columns.find({dataset_id: $stateParams.datasetId}, {sort: {datatypeIdx: 1, name: 1}});
         });
+        $scope.chartsLoading = false;
+    });
+
+    $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
+        $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
     });
 
     $scope.datatypes = DATATYPE_LIST;
