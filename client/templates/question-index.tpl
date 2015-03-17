@@ -27,7 +27,7 @@
 			            	<div class="row q-icon-row">
 
 		            			<span class="pull-right" tooltip="Delete this question" tooltip-placement="bottom" tooltip-append-to-body="true" ng-confirm-click="Are you sure you would like to delete this question?: \n\n{{question.text}}" confirmed-click="deleteQuestion()" >
-				                    <i class="fa fa-trash-o"></i>
+				                    <i class="fa fa-trash-o text-danger"></i>
 				                </span>
 
 	               				<span class="dropdown pull-right control q-list-dropdown">

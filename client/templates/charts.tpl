@@ -13,7 +13,7 @@
   <div class="col-md-3">
       <div class="sidebar">
           <input type="text" placeholder="Search full text of dataset" class="search-box"
-          ng-model="columns.search" ng-model-options="{debounce: 750}"/>
+          ng-model="columns.search" ng-model-options="{debounce: 250}"/>
 
           <div class="title-block">
               <h5><span class="text-muted">Total rows:</span> {{dataset.rowCount}}</h5>
