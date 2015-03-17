@@ -188,7 +188,23 @@ li.var-pill {
     float: left;
     margin-right: 5px;
     margin-bottom: 2px;
-    background: #7e7e7e; /* todo: color based on data type*/
+    border: 1px solid #a8a8a8;
+    // opacity: 0.75;
+    &.string {
+        color: @string-color;
+    }
+    &.integer {
+        color: @integer-color;
+    }
+    &.float {
+        color: @float-color;
+    }
+    &.date {
+        color: @date-color;
+    }
+    &.time {
+        color: @time-color;
+    }
 }
 
 .chart-tooltip {

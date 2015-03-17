@@ -110,7 +110,7 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
         };
 
         // TODO: use this to set var labels to right datatype color
-        $scope.getVarTypeColor = function(var_id) {
+        $scope.getVarType = function(var_id) {
             return Columns.findOne(var_id).datatype;
         };
 

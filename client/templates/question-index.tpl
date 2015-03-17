@@ -18,7 +18,7 @@
 			                </span>
 			                <div ng-if="question.col_refs.length > 0">
 				                <ul class="vars-on-q">
-				                	<li class="var-pill label" ng-repeat ="var in question.col_refs" type="var.type">
+				                	<li class="var-pill label" ng-repeat ="var in question.col_refs" ng-class="getVarType(var)">
 				                		{{ getVarName(var) }}
 				                	</li>
 				                </ul>
