@@ -274,8 +274,8 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
         $scope.chartsLoading = false;
     });
 
-    $scope.currentColumn = function(col_id) {
-        return Columns.findOne(col_id);
+    $scope.setCurrentColumn = function(col_id) {
+        $scope.currentColumn = Columns.findOne(col_id);
     }
 
     $meteorSubscribe.subscribe('questions', $stateParams.datasetId)
@@ -377,11 +377,10 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
 // ChartsController
 // see _OLD VarsController (sidebar) and DatasetController
 // ***********************************
-angular.module('dataFramer').controller('AddToQuestionController', ['$scope',
-'$state', '$window', '$stateParams', '$meteorSubscribe', '$meteorCollection', '$meteorObject', '$modalInstance',
-function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollection, $meteorObject, $modalInstance){
+// angular.module('dataFramer').controller('AddToQuestionController', ['$scope',
+// '$state', '$window', '$stateParams', '$meteorSubscribe', '$meteorCollection', '$meteorObject', '$modalInstance',
+// function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollection, $meteorObject, $modalInstance){
 
-    $scope.columns = columns;
 
     // $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
     //     $scope.$emit('datasetReady');
@@ -459,10 +458,6 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
     // };
 
     // $scope.changeType = changeType;
-
-
-
-}]);
 
 
 function changeType(col, type){

@@ -3,7 +3,7 @@
 <div class="row add-to-q-row">
   <button ng-show="checkState('dataset.charts')"
     data-toggle="modal" data-target="#addToQuestionModal"
-    class="btn btn-sm add-to-q-btn attention pull-left" ng-click="currentColumn(column._id)">Add to question
+    class="btn btn-sm add-to-q-btn attention pull-left" ng-click="setCurrentColumn(column._id)">Add to question
   </button>
 </div>  
 
