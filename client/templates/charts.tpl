@@ -31,9 +31,18 @@
     </div>
     <div class="row">
       <div class="col-md-6 chart-container" ng-repeat="column in columns" id="{{column._id}}">
-        <ng-include src="'client/templates/df-chart.tpl'"></ng-include>
+        <ng-include src="'client/templates/df-chart.tpl'" id="{{column._id}}"></ng-include>
       </div>
     </div>
   </div>
 
+</div>
+
+<div class="modal fade" id="addToQuestionModal" tabindex="-1" role="dialog" 
+      aria-labelledby="addToQuestionModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <ng-include src="'client/templates/add-question.tpl'"></ng-include>
+    </div>
+  </div>
 </div>

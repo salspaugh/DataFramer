@@ -270,8 +270,25 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
         $scope.columns = $meteorCollection(function(){
             return Columns.find({dataset_id: $stateParams.datasetId}, {sort: {datatypeIdx: 1, name: 1}});
         });
+
         $scope.chartsLoading = false;
     });
+
+    $scope.currentColumn = function(col_id) {
+        return Columns.findOne(col_id);
+    }
+
+    $meteorSubscribe.subscribe('questions', $stateParams.datasetId)
+    .then(function(sub){
+        $scope.questions = $meteorCollection(function(){
+            return Questions.find({dataset_id:$stateParams.datasetId});
+        });
+        $scope.questionsLoading = false;
+    });
+
+    $scope.getVarName = function(var_id) {
+        return Columns.findOne(var_id).name;
+    };
 
     $scope.percentNull = function(column) {
         return parseInt(column.nulls / $scope.dataset.rowCount * 100)
@@ -287,9 +304,166 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
        $window.scroll(0,$('#'+col._id).offset().top);
     };
 
+    $scope.checkState = function(name){
+        return $state.current.name == name;
+    };
+
+    $scope.addQuestion = function(text){
+        var new_question = {
+            "dataset_id": $stateParams.datasetId,
+            "text": text.$modelValue,
+            "notes": null,
+            "answerable": null,
+            "col_refs": [],
+            "user_id": Meteor.userId()
+        };
+
+        $scope.questions.push(new_question);
+    };
+
+    $scope.answerable = function(q_id){
+        switch (_.findWhere($scope.questions, {_id: q_id}).answerable) {
+            case true:
+                return "ans true";
+            case false:
+                return "ans false";
+            default:
+                return "ans unknown";
+        }
+    };
+
+    $scope.answerableIcon = function(q_id){
+        switch (_.findWhere($scope.questions, {_id: q_id}).answerable) {
+            case true:
+                return "fa-check";
+                break;
+            case false:
+                return "fa-close";
+                break;
+            default:
+                return "fa-question";
+                break;
+        }
+    };
+
+    $scope.sections =
+           [{'name': 'Keep', 'answerable': true },
+            {'name': 'Undecided' , 'answerable': null },
+            {'name': 'Reject', 'answerable': false }];
+
     $scope.changeType = changeType;
 
+    // $scope.openQuestionModal = function (col_id) {
+    
+    //     var modalInstance = $modal.open({
+    //         templateUrl: 'add-question.tpl',
+    //         controller: 'AddToQuestionController',
+    //         resolve: {
+    //             columns: function(){
+    //               return $scope.columns;//Columns.findOne(this.columns._id)
+    //             }
+    //         }
+    //     });
+
+    //     // modalInstance.result.then(function (entry) {
+    //     //   $scope.entry = entry;
+    //     // });
+    // };
+
+
 }]);
+
+// ***********************************
+// ChartsController
+// see _OLD VarsController (sidebar) and DatasetController
+// ***********************************
+angular.module('dataFramer').controller('AddToQuestionController', ['$scope',
+'$state', '$window', '$stateParams', '$meteorSubscribe', '$meteorCollection', '$meteorObject', '$modalInstance',
+function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollection, $meteorObject, $modalInstance){
+
+    $scope.columns = columns;
+
+    // $meteorSubscribe.subscribe('datasets', $stateParams.datasetId).then(function(sub){
+    //     $scope.$emit('datasetReady');
+    //     $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
+    // });
+
+    // $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
+    // .then(function(sub){
+    //     $scope.columns = $meteorCollection(function(){
+    //         return Columns.find({dataset_id: $stateParams.datasetId}, {sort: {datatypeIdx: 1, name: 1}});
+    //     });
+    // });
+
+    // $meteorSubscribe.subscribe('questions', $stateParams.datasetId)
+    // .then(function(sub){
+    //     $scope.questions = $meteorCollection(function(){
+    //         return Questions.find({dataset_id:$stateParams.datasetId});
+    //     });
+    // });
+
+    // $scope.getVarName = function(var_id) {
+    //     return Columns.findOne(var_id).name;
+    // };
+
+    // $scope.datatypes = DATATYPE_LIST;
+
+    // $scope.checkState = function(name){
+    //     return $state.current.name == name;
+    // }
+
+    // $scope.varClick = function(col){
+    //    $window.scroll(0,$('#'+col._id).offset().top);
+    // };
+
+    // $scope.checkState = function(name){
+    //     return $state.current.name == name;
+    // };
+
+    // $scope.addQuestion = function(text){
+    //     var new_question = {
+    //         "dataset_id": $stateParams.datasetId,
+    //         "text": text.$modelValue,
+    //         "notes": null,
+    //         "answerable": null,
+    //         "col_refs": [],
+    //         "user_id": Meteor.userId()
+    //     };
+
+    //     $scope.questions.push(new_question);
+    // };
+
+    // $scope.answerable = function(q_id){
+    //     switch (_.findWhere($scope.questions, {_id: q_id}).answerable) {
+    //         case true:
+    //             return "ans true";
+    //         case false:
+    //             return "ans false";
+    //         default:
+    //             return "ans unknown";
+    //     }
+    // };
+
+    // $scope.answerableIcon = function(q_id){
+    //     switch (_.findWhere($scope.questions, {_id: q_id}).answerable) {
+    //         case true:
+    //             return "fa-check";
+    //             break;
+    //         case false:
+    //             return "fa-close";
+    //             break;
+    //         default:
+    //             return "fa-question";
+    //             break;
+    //     }
+    // };
+
+    // $scope.changeType = changeType;
+
+
+
+}]);
+
 
 function changeType(col, type){
     col.datatype = type;
