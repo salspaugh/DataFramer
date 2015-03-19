@@ -6,18 +6,12 @@
 <body>
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
-
-            <div class="navbar-header">
-                <a class="navbar-brand" ui-sref="start"><p class="lead">DataFramer</p></a>
-            </div>
-
-            <ul class="nav navbar-nav df-login">
+            <div ui-view="navBar"></div>
+            <ul class="nav navbar-nav navbar-right df-login">
                 {{>loginButtons}}
             </ul>
-
-            <div ui-view="navBar"></div>
-
         </div>
+
     </nav>
 
     <div class="container">

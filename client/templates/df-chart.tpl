@@ -45,9 +45,5 @@
     <textarea class="form-control" rows="2" ng-model="column.notes"
       ng-model-options="{debounce: 750}" placeholder="Notes"></textarea>
   </div>
-</form> -->
-
-<a class="pull-right control" ng-click="resetBars()" ng-show="column.datatype == 'string'"
-  tooltip="Reset chart view" tooltip-placement="bottom" tooltip-append-to-body="true">
-  <i class="fa fa-refresh fa-lg icon-grey" style="margin-right: 10px;"></i>
-</a>
+</form>
+ -->

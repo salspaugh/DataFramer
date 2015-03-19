@@ -13,8 +13,8 @@
 
 // Colors
 // Taken from: https://github.com/mbostock/d3/wiki/Ordinal-Scales#categorical-colors
-@string-color: #3182bd;
-@string-color-light: #cae2f1;
+@string-color: #756bb1;
+@string-color-light: #bcbddc;
 
 @integer-color: #31a354;
 @integer-color-light: #ccf0d7;
@@ -66,12 +66,38 @@ a {
 //     transition: all 0.4s ease 0s;
 // }
 
-/****QUESTIONS INDEX****/
+.title-block {
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #ddd;
 
-#question-wrapper {
-    width: 90%;
-    margin: 0 auto;
+    h1,h2,h3,h4,h5,h6 {
+        font-weight: normal;
+        .view-title {
+            display: inline-block;
+            margin-right: 25px;
+        }
+        small {
+            font-style: italic;
+        }
+    }
 }
+
+
+/*******************************
+Navbar
+*******************************/
+
+.navbar {
+    .lead {
+        margin: 0;
+    }
+}
+
+
+
+
+/****QUESTIONS INDEX****/
 
 #q-list-title {
     text-align: center;
@@ -137,7 +163,7 @@ ul.questions-list {
 .q-icon-row{
     margin-right: inherit;
     margin-left: inherit;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 
 .q-notes-label{
@@ -166,7 +192,23 @@ li.var-pill {
     float: left;
     margin-right: 5px;
     margin-bottom: 2px;
-    background: #7e7e7e; /* todo: color based on data type*/
+    border: 1px solid #a8a8a8;
+    // opacity: 0.75;
+    &.string {
+        color: @string-color;
+    }
+    &.integer {
+        color: @integer-color;
+    }
+    &.float {
+        color: @float-color;
+    }
+    &.date {
+        color: @date-color;
+    }
+    &.time {
+        color: @time-color;
+    }
 }
 
 .chart-tooltip {
@@ -206,24 +248,22 @@ Question Modal
 Question Single
 *******************************/
 .question-header {
-    .label {
+    h1,h2,h3,h4,h5,h6 {
+        font-weight: normal;
+    }
+    .btn {
         opacity: 0.3;
-        &.active {
+        &.activeStatus {
             opacity: 1.0;
         }
     }
+    margin-bottom: 45px;
 }
 
 
 // Navigation bar
-.df-nav-btn {
-  font: 18px sans-serif;
-}
-.nav-link {
-  margin-top: 14px;
-}
 .df-login {
-  margin-top: 6px;
+    margin-right: 5px;
 }
 
 // Icons
@@ -261,11 +301,11 @@ Question Single
   margin-top: 15px;
   margin-bottom: 15px;
 }
-#sidebar-wrapper {
-}
 
 .sidebar {
   padding-bottom: 25px;
+  padding-left: 10px;
+  padding-right: 10px;
   position: fixed;
   top: @navbar-padding;
   bottom: 20px;
@@ -284,18 +324,17 @@ Question Single
   outline: 1px solid #ddd;
 }
 
-.chart-area {
-  @media (min-width: @screen-md-min){
-      margin-left: (@container-md / 12 * 3);
-  }
-  @media (min-width: @screen-lg-min){
-      margin-left: (@container-lg / 12 * 3);
-  }
-
-}
+// .chart-area {
+//   @media (min-width: @screen-md-min){
+//       margin-left: (@container-md / 12 * 3);
+//   }
+//   @media (min-width: @screen-lg-min){
+//       margin-left: (@container-lg / 12 * 3);
+//   }
+//
+// }
 
 .datatype {
-  margin-top: 20px;
   &.string {
     //border-left-color: @string-color;
     p, a {
@@ -392,8 +431,7 @@ Question Single
 
 .chart-container {
   overflow: visible;
-  margin-top: 20px;
-  padding-right: 20px;
+  margin-bottom: 35px;
   .control {
     margin-left: 1em;
   }
