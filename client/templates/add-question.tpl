@@ -6,7 +6,7 @@
 
 	<div class="modal-body">
 		<ul ng-repeat= "section in sections">
-			
+
 			<div class="panel">
 			    <div class="panel-heading" role="tab">
 			        <h4 class="panel-title">
@@ -18,7 +18,7 @@
 			    <li ng-repeat="question in questions">
 					<div class="input-group question-modal-wrapper" ng-if="section.answerable == question.answerable">
 		     			<div class="input-group-addon checkbox-wrapper">
-				        	<input type="checkbox" ng-checked="colActive(question._id, currentColumn._id)" ng-click="addVarToQuestion(question._id, currentColumn._id)" aria-label="...">
+				        	<input type="checkbox" ng-checked="colActive(question, currentColumn._id)" ng-click="addVarToQuestion(question, currentColumn._id)" aria-label="...">
  				        </div>
 				        <div class="q-modal-item-content">
 							<span ng-class="answerable(question._id)">
@@ -34,9 +34,9 @@
 				                	</li>
 				                </ul>
 				            </div>
-				        </div>    
+				        </div>
 				    </div><!-- /input-group -->
-				</li>    
+				</li>
 			</div>
 		</ul>
 
@@ -69,4 +69,3 @@
 	</div>
 
 </div>
-

@@ -288,34 +288,29 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
     });
 
     $scope.setCurrentColumn = function(col_id) {
-        $scope.currentColumn = Columns.findOne(col_id);
+        $scope.currentColumn = $meteorObject(Columns, col_id, false);
     }
 
-    $scope.addVarToQuestion = function(q_id, col_id) {
-
-        $scope.question = Questions.findOne(q_id);
-
+    $scope.addVarToQuestion = function(question, col_id) {
         // toggle in scope's col_refs
-        if (_.contains($scope.question.col_refs, col_id)) {
+        if (_.contains(question.col_refs, col_id)) {
             // remove
-            $scope.col_refs = _.without($scope.question.col_refs, col_id);
+            $scope.col_refs = _.without(question.col_refs, col_id);
         } else {
             // add
             // NOTE: this is a dumb hack to make getReactively (below)
             // recognize the change to col_refs, which it doesn't do for
             // some reason if we just push to the array
-            var newrefs = _.union($scope.question.col_refs, [col_id]);
+            var newrefs = _.union(question.col_refs, [col_id]);
             $scope.col_refs = newrefs;
         }
         // save to the questions collection
-        Questions.update({ _id: q_id }, { $set: { col_refs: $scope.col_refs} });
+        Questions.update({ _id: question._id }, { $set: { col_refs: $scope.col_refs} });
     }
 
 
-    $scope.colActive = function(q_id, col_id){
-        $scope.question = Questions.findOne(q_id);
-
-        return _.contains($scope.question.col_refs, col_id);
+    $scope.colActive = function(question, col_id){
+        return _.contains(question.col_refs, col_id);
     }
 
     $meteorSubscribe.subscribe('questions', $stateParams.datasetId)
@@ -324,7 +319,6 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
             return Questions.find({dataset_id:$stateParams.datasetId});
         });
         $scope.questionsLoading = false;
-
     });
 
     $scope.getVarName = function(var_id) {
@@ -332,7 +326,7 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
     };
 
     $scope.getVarType = function(var_id) {
-            return Columns.findOne(var_id).datatype;
+        return Columns.findOne(var_id).datatype;
     };
 
     $scope.percentNull = function(column) {
