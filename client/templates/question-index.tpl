@@ -31,7 +31,7 @@
 				                </span>
 
 	               				<span class="dropdown pull-right control q-list-dropdown">
-					            <a data-toggle="dropdown" tooltip="Move to different bin" tooltip-placement="bottom" tooltip-append-to-body="true">
+					            <a data-toggle="dropdown" tooltip="Move to different pile" tooltip-placement="bottom" tooltip-append-to-body="true">
 					                <i class="fa fa-exchange icon-grey"><span class="caret"></span></i>
 					            </a>
 
@@ -39,13 +39,13 @@
 
 					            	<li role="presentation" ng-repeat="s in sections">
 								      <a role="menuitem" tabindex="-1" href="#" ng-click="setAns(s.answerable)">
-								        <p ng-class="{'text-muted': question.answerable == s.answerable}">Move to {{s.name}} bin</p
+								        <p ng-class="{'text-muted': question.answerable == s.answerable}">Move to {{s.name}} pile</p
 								      </a>
 								    </li>
 					            </ul>
 					        	</span>
 					        	<span class= "pull-right control chart-view-link">
-				                	<a tooltip="Go to chart view" tooltip-placement="bottom" tooltip-append-to-body="true" ui-sref="dataset.questionSingle({questionId: question._id})">
+				                	<a tooltip="Go to question details" tooltip-placement="bottom" tooltip-append-to-body="true" ui-sref="dataset.questionSingle({questionId: question._id})">
 				                		<i class="fa fa-bar-chart icon-grey"></i>
 				                	</a>
 	               				</span>
