@@ -18,8 +18,8 @@
 			    <li ng-repeat="question in questions">
 					<div class="input-group question-modal-wrapper" ng-if="section.answerable == question.answerable">
 		     			<div class="input-group-addon checkbox-wrapper">
-				        	<input type="checkbox" aria-label="...">
-				        </div>
+				        	<input type="checkbox" ng-checked="colActive(question._id, currentColumn._id)" ng-click="addVarToQuestion(question._id, currentColumn._id)" aria-label="...">
+ 				        </div>
 				        <div class="q-modal-item-content">
 							<span ng-class="answerable(question._id)">
 							    <i class="fa ng-class:answerableIcon(question._id);"></i>
@@ -44,9 +44,7 @@
             <div class="form-group">
                 <label>Add a new question: </label>
                 <div class="input-group">
-                	<span class="input-group-addon">
-        				<input type="checkbox" aria-label="...">
-        			</span>
+                	<!-- <span class="input-group-addon"></span> -->
                     <input type="text" ng-model="newQuestion.text" name="text" class="form-control"/>
                     <span class="input-group-btn">
                         <button ng-click="addQuestion(qAdd.text)" class="btn btn-primary">
@@ -66,8 +64,8 @@
 	</div>
 
 	<div class="modal-footer">
-	 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	 <button type="button" class="btn btn-primary">Save changes</button>
+	 <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+	 <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
 	</div>
 
 </div>
