@@ -28,6 +28,24 @@
 @time-color: #fd8d3c;
 @time-color-light: #fee8d2;
 
+.string {
+    color: @string-color;
+}
+.integer {
+    color: @integer-color;
+}
+.float {
+    color: @float-color;
+}
+.date {
+    color: @date-color;
+}
+.time {
+    color: @time-color;
+}
+
+
+
 @navbar-padding: 70px;
 
 // Miscellaneous
@@ -39,6 +57,10 @@ body {
 .attention {
   //color: #d62728;
   color: #d9534f;
+}
+
+ul {
+  list-style-type: none;
 }
 
 li {
@@ -159,7 +181,7 @@ ul.questions-list {
 .q-icon-row{
     margin-right: inherit;
     margin-left: inherit;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 
 .q-notes-label{
@@ -183,28 +205,11 @@ li.var-pill {
     list-style: none;
     font-size: 14px;
     font-weight: 200;
-    color: white;
     display: inline;
     float: left;
     margin-right: 5px;
     margin-bottom: 2px;
     border: 1px solid #a8a8a8;
-    // opacity: 0.75;
-    &.string {
-        color: @string-color;
-    }
-    &.integer {
-        color: @integer-color;
-    }
-    &.float {
-        color: @float-color;
-    }
-    &.date {
-        color: @date-color;
-    }
-    &.time {
-        color: @time-color;
-    }
 }
 
 .chart-tooltip {
@@ -221,6 +226,22 @@ li.var-pill {
   border-style: solid;
   border-color: #000;
   border-radius: 3px;
+}
+
+/*******************************
+Question Modal
+*******************************/
+
+.question-modal-wrapper {
+  padding-bottom: 2px;
+  margin: 5px;
+}
+
+.q-modal-item-content {
+  padding: 5px;
+  /*background-color: #eeeeee;*/
+  border: 1px solid #cccccc;
+  border-radius: 0px 4px 4px 0px;
 }
 
 
@@ -412,14 +433,46 @@ Question Single
 .chart-container {
   overflow: visible;
   margin-bottom: 35px;
+  padding-right: 15px;
   .control {
-    margin-left: .5em;
+    margin-left: 1em;
   }
+}
+
+.add-to-q-row {
+  width: inherit;
+}
+
+.add-to-q-btn {
+  margin-left: 15px;
+  background-color: #eeeeee;
+  border: 1px solid #e0e0e0;
+}
+
+.col-chart-title {
+  font-weight: 400;
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.row.chart-controls-row {
+  width: inherit;
+  padding-right: 30px;
+  margin-bottom: 10px;
+
+}
+
+.chart-wrapper {
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-top: 25px;
 }
 
 .chart {
   background: #eee;
-  padding: 3px;
+  width: inherit;
+  padding-left: 10px;
+  padding-top: 10px;
 }
 
 .chart div {
@@ -430,10 +483,15 @@ Question Single
   font: 10px sans-serif;
   background-color: steelblue;
   text-align: right;
-  padding: 3px;
+  padding: 10px;
   margin: 5px;
   color: white;
   box-shadow: 2px 2px 2px #666;
+}
+
+.null-disclaimer {
+  margin-left: 15px;
+  margin-top: 5px;
 }
 
 .rickshaw-graph {

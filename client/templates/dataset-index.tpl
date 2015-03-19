@@ -8,7 +8,7 @@
             <section class="list-group" >
                 <div class="list-group-item" ng-repeat="dataset in datasets">
                     <h4 class="list-group-item-heading">
-                        <a ui-sref="dataset.questionIndex({datasetId: dataset._id})">{{dataset.name}}</a> <a class="pull-right text-danger" ng-confirm-click="Are you sure you want to delete this dataset ({{dataset.name}})?" confirmed-click="deleteDataset(dataset._id)" tooltip="Delete this dataset" tooltip-placement="bottom" tooltip-append-to-body="true" href="#">
+                        <a ui-sref="dataset.questionIndex({datasetId: dataset._id})">{{dataset.name}}</a> <a class="pull-right icon-grey" ng-confirm-click="Are you sure you want to delete this dataset ({{dataset.name}})?" confirmed-click="deleteDataset(dataset._id)" tooltip="Delete this dataset" tooltip-placement="bottom" tooltip-append-to-body="true" href="#">
                             <i class="fa fa-trash-o"></i>
                         </a>
                     </h4>

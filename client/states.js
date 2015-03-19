@@ -58,6 +58,16 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                 }
             }
         })
-        ;
+        // .state('dataset.addToQuestionModal', {
+        //     url: '/charts',
+        //     views: {
+        //         // the list of questions - separate from charts
+        //         'main@': {
+        //             templateUrl: 'client/templates/add-question.tpl',
+        //             controller: 'AddToQuestionController'
+        //         }
+        //     }
+        // })
+        // ;
 
 }]);

@@ -34,3 +34,12 @@
   </div>
 
 </div>
+
+<div class="modal fade" id="addToQuestionModal" tabindex="-1" role="dialog" 
+      aria-labelledby="addToQuestionModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <ng-include src="'client/templates/add-question.tpl'"></ng-include>
+    </div>
+  </div>
+</div>
