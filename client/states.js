@@ -1,6 +1,5 @@
 angular.module('dataFramer').config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
 function($urlRouterProvider, $stateProvider, $locationProvider){
-    // debugger;
     $locationProvider.html5Mode(true);
 
     $stateProvider
@@ -11,7 +10,7 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                     templateUrl: 'client/templates/nav-bar.tpl',
                     controller: 'NavBarController'
                 },
-                // in this state, all the navigation elements should be disabled
+                // In this state, all the navigation elements should be disabled
                 main: {
                     templateUrl: 'client/templates/dataset-index.tpl',
                     controller: 'DatasetIndexController'
@@ -21,7 +20,7 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
         .state('dataset', {
             url: '/dataset/:datasetId',
             views: {
-                // this will be inherited by all the other dataset.x states
+                // This will be inherited by all the other dataset.x states
                 navBar: {
                     templateUrl: 'client/templates/nav-bar.tpl',
                     controller: 'NavBarController'
@@ -31,7 +30,7 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
         .state('dataset.questionIndex', {
             url: '/questions',
             views: {
-                // the list of questions - separate from charts
+                // The list of questions - separate from charts
                 'main@': {
                     templateUrl: 'client/templates/question-index.tpl',
                     controller: 'QuestionIndexController'
@@ -41,7 +40,7 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
         .state('dataset.questionSingle', {
             url: '/questions/:questionId',
             views: {
-                // a single question view - not that different than before
+                // A single question view
                 'main@': {
                     templateUrl: 'client/templates/question-single.tpl',
                     controller: 'QuestionSingleController'
@@ -51,23 +50,12 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
         .state('dataset.charts', {
             url: '/charts',
             views: {
-                // all the charts, like before
+                // All the charts
                 "main@": {
                     templateUrl: 'client/templates/charts.tpl',
                     controller: 'ChartsController'
                 }
             }
         })
-        // .state('dataset.addToQuestionModal', {
-        //     url: '/charts',
-        //     views: {
-        //         // the list of questions - separate from charts
-        //         'main@': {
-        //             templateUrl: 'client/templates/add-question.tpl',
-        //             controller: 'AddToQuestionController'
-        //         }
-        //     }
-        // })
-        // ;
 
 }]);
