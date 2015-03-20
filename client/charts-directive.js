@@ -360,10 +360,6 @@ var renderTimeChart = function(scope, dimensions) {
       };
   });
 
-  var tooltip = d3.select("body")
-    .append("div")
-    .attr("class", "chart-tooltip");
-
   binLabel = function(t) {
     var h = t.getHours();
     return h + ":00-" + (h+1) + ":00";
@@ -381,11 +377,18 @@ var renderTimeChart = function(scope, dimensions) {
     .attr("height", function(d) {
       return (dimensions.height + dimensions.margin.top) - y(d.frequency); })
     .on("mouseover", function(d){
-        tooltip.text("Bin: [" + binLabel(d.bin) + ")\nNumber of items: " + d.frequency);
-        return tooltip.style("visibility", "visible"); })
-    .on("mousemove", function(){ return tooltip.style("top",
-        (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px"); })
-    .on("mouseout", function(){ return tooltip.style("visibility", "hidden"); });
+      var tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "chart-tooltip")
+        .attr("id", "time-chart-tooltip");
+      tooltip.text("Bin: [" + binLabel(d.bin) + ")\nNumber of items: " + d.frequency);
+      return tooltip.style("visibility", "visible"); })
+    .on("mousemove", function(){ 
+       var tooltip = d3.select("#time-chart-tooltip");
+       return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px"); })
+    .on("mouseout", function(){ 
+      d3.select("#time-chart-tooltip").remove();
+    });
 
   svg.append("g")
     .attr("class", "x axis")
