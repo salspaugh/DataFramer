@@ -258,11 +258,19 @@ var renderDateChart = function(scope, dimensions) {
     .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
     .style("fill", "none")
     .style("pointer-events", "all")
-    .on("mouseover", function() { focus.style("display", null); })
+    .on("mouseover", function() { 
+      var tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "chart-tooltip")
+        .attr("id", "date-chart-tooltip")
+        .attr("dx", 8)
+        .attr("dy", "1em");
+      focus.style("display", null); 
+    })
     .on("mouseout", function() {
-        focus.style("display", "none");
-        tooltip.style("visibility", "hidden");
-     })
+      focus.style("display", "none");
+      d3.select("#date-chart-tooltip").remove();
+    })
     .on("mousemove", mousemove);
 
   // Append the circle at the intersection
@@ -271,13 +279,6 @@ var renderDateChart = function(scope, dimensions) {
     .style("fill", "#000")
     .style("stroke", "#000")
     .attr("r", 4);
-
-  // Place the tooltip at the intersection
-  var tooltip = d3.select("body")
-    .append("div")
-    .attr("class", "chart-tooltip")
-    .attr("dx", 8)
-    .attr("dy", "1em");
 
   function mousemove() {
     var x0 = x.invert(d3.mouse(this)[0])
@@ -288,6 +289,8 @@ var renderDateChart = function(scope, dimensions) {
 
     focus.select("circle.y")
       .attr("transform", "translate(" + x(d.x) + "," + y(d.y) + ")");
+
+    var tooltip = d3.select("#date-chart-tooltip");
 
     tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px")
       .style("visibility", "visible")
