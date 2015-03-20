@@ -184,6 +184,9 @@ var renderDateChart = function(scope, dimensions) {
   var data = scope.$parent.column
     , bisectDate = d3.bisector(function(d) { return d.x; }).left;
 
+  var nFiltered = 0;
+  var nKept = 0;
+
   // Calculate frequency for each timestamp in the list
   var groups = _(data.values).chain()
     .groupBy(_.identity)
@@ -194,8 +197,25 @@ var renderDateChart = function(scope, dimensions) {
         x: new Date(+key)
       };
     })
+    .filter(function(d) { 
+      if (!_.isUndefined(d.x) && d.x != "Invalid Date") {
+        nKept += d.y;
+        return true;
+      }
+      nFiltered += d.y;
+      return false; 
+    })
     .sortBy(function(d) { return d.x; })
     .value();
+
+  var pctFiltered = nFiltered / data.values.length * 100;
+
+  if (nFiltered > 0) {
+    d3.select(scope.container[0])
+      .append("span")
+      .attr("class", "display-warning")
+      .text("Unable to cast " + nFiltered + " (" + pctFiltered + ')% values to type "date"!');
+  }
 
   var x = d3.time.scale()
     .domain(d3.extent(groups, function(d) { return d.x; }))
@@ -284,8 +304,11 @@ var renderDateChart = function(scope, dimensions) {
     var x0 = x.invert(d3.mouse(this)[0])
       , i = bisectDate(groups, x0, 1)
       , d0 = groups[i - 1]
-      , d1 = groups[i]
-      , d = x0 - d0.x > d1.x - x0 ? d1 : d0;
+      , d1 = groups[i];
+    
+    if (_.isUndefined(d0) || _.isUndefined(d1)) return; 
+
+    var d = x0 - d0.x > d1.x - x0 ? d1 : d0;
 
     focus.select("circle.y")
       .attr("transform", "translate(" + x(d.x) + "," + y(d.y) + ")");
@@ -424,11 +447,16 @@ var renderDefaultChart = function(scope, dimensions) {
     , max = _.max(data.values, function(v) {
       if (_.isNaN(v)) { return undefined; }
       return v;
-    });
+  });
   min = Math.floor(min);
   max = Math.ceil(max);
   while (min % 10) { min -= 1; }
   while (max % 10) { max += 1; }
+
+  var nFiltered = 0;
+  _.each(data.values, function(d) {
+    // TODO: Check which can't be cast and add error.  
+  });
 
   var x = d3.scale.linear()
     .domain([0, max])
