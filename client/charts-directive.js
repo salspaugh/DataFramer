@@ -463,21 +463,26 @@ var renderDefaultChart = function(scope, dimensions) {
     .classed("bar", true)
     .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
 
-  var tooltip = d3.select("body")
-    .append("div")
-    .attr("class", "chart-tooltip");
-
   bars.append("rect")
     .attr("x", 3)
     .attr("width", x(bins[0].dx) - 4)
     .attr("y", dimensions.margin.top)
     .attr("height", function(d) { return dimensions.height - y(d.y); })
     .on("mouseover", function(d){
-        tooltip.text("Bin: [" + d.x + " - " + (d.x + d.dx) +")\nNumber of items: " + d.y);
-        return tooltip.style("visibility", "visible"); })
-    .on("mousemove", function(){ return tooltip.style("top",
-        (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px"); })
-    .on("mouseout", function(){ return tooltip.style("visibility", "hidden"); });
+      var tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "chart-tooltip")
+        .attr("id", "default-chart-tooltip");
+      tooltip.text("Bin: [" + d.x + " - " + (d.x + d.dx) +")\nNumber of items: " + d.y);
+      return tooltip.style("visibility", "visible"); 
+    })
+    .on("mousemove", function(){ 
+        var tooltip = d3.select("#default-chart-tooltip");
+        return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px"); 
+     })
+    .on("mouseout", function(){
+      return $("#default-chart-tooltip").remove();
+     });
 
   svg.append("g")
     .attr("class", "x axis")
