@@ -453,10 +453,22 @@ var renderDefaultChart = function(scope, dimensions) {
   while (min % 10) { min -= 1; }
   while (max % 10) { max += 1; }
 
-  var nFiltered = 0;
+  var nFiltered = 0
+    , pctFiltered = 0;
   _.each(data.values, function(d) {
-    // TODO: Check which can't be cast and add error.  
+    if (checkNull(d, true) || _.isNaN(Number(d))) {
+      nFiltered += 1;
+    }
   });
+  
+  var pctFiltered = nFiltered / data.values.length * 100;
+
+  if (nFiltered > 0) {
+    d3.select(scope.container[0])
+      .append("span")
+      .attr("class", "display-warning")
+      .text("Unable to cast " + nFiltered + " (" + pctFiltered + ')% values to type "' + scope.$parent.column.datatype + '"!');
+  }
 
   var x = d3.scale.linear()
     .domain([0, max])
@@ -499,9 +511,13 @@ var renderDefaultChart = function(scope, dimensions) {
 
   bars.append("rect")
     .attr("x", 3)
-    .attr("width", x(bins[0].dx) - 4)
+    .attr("width", function () {
+      if (!_.isUndefined(bins[0])) return x(bins[0].dx) - 4;
+    })
     .attr("y", dimensions.margin.top)
-    .attr("height", function(d) { return dimensions.height - y(d.y); })
+    .attr("height", function(d) { 
+      if (!_.isUndefined(d)) return dimensions.height - y(d.y); 
+    })
     .on("mouseover", function(d){
       var tooltip = d3.select("body")
         .append("div")
