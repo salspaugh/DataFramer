@@ -331,15 +331,6 @@ var renderTimeChart = function(scope, dimensions) {
     .classed("date-chart", false)
     .classed("time-chart", true);
 
-  var svg = d3.select(scope.container[0])
-    .append("svg")
-    .attr("class", "time-chart")
-    .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
-    .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + dimensions.margin.left +",0)")
-    .attr("style", "overflow: visible;");
-
   var x = d3.time.scale()
     .range([0, dimensions.width + dimensions.margin.right]);
 
@@ -361,17 +352,36 @@ var renderTimeChart = function(scope, dimensions) {
 
   x.domain([firstTime, lastTime]);
   xAxis.tickFormat(format);
-
   var bins = x.ticks(24);
+
+  var nFiltered = 0;
   var groups = _.groupBy(data.values, function(d) {
     if (d != null) {
       d = format.parse(d);
-      return d.getHours();
+      if (d != null) return d.getHours();
+      nFiltered += 1;
     }
   });
   var max = _.max(_.map(_.values(groups), function(x) {
     return x.length; 
   }));
+
+  var pctFiltered = nFiltered / data.values.length * 100;
+  if (nFiltered > 0) {
+    d3.select(scope.container[0])
+      .append("span")
+      .attr("class", "display-warning")
+      .text("Unable to cast " + nFiltered + " (" + pctFiltered + ')% values to type "' + scope.$parent.column.datatype + '"!');
+  }
+
+  var svg = d3.select(scope.container[0])
+    .append("svg")
+    .attr("class", "time-chart")
+    .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
+    .attr("height", dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + dimensions.margin.left +",0)")
+    .attr("style", "overflow: visible;");
 
   y.domain([0, max]);
   var histogram = _.map(bins, function(b) {
@@ -420,11 +430,6 @@ var renderTimeChart = function(scope, dimensions) {
     .attr("class", "x axis")
     .attr("transform", "translate(0," + (dimensions.height + dimensions.margin.top) + ")")
     .call(xAxis)
-   .selectAll("text")
-    .attr("x", 9)
-    .attr("dy", ".1em")
-    .attr("transform", "rotate(60)")
-    .style("text-anchor", "start");
 
   svg.append("g")
     .attr("class", "y axis")
@@ -453,8 +458,7 @@ var renderDefaultChart = function(scope, dimensions) {
   while (min % 10) { min -= 1; }
   while (max % 10) { max += 1; }
 
-  var nFiltered = 0
-    , pctFiltered = 0;
+  var nFiltered = 0;
   _.each(data.values, function(d) {
     if (checkNull(d, true) || _.isNaN(Number(d))) {
       nFiltered += 1;
@@ -462,7 +466,6 @@ var renderDefaultChart = function(scope, dimensions) {
   });
   
   var pctFiltered = nFiltered / data.values.length * 100;
-
   if (nFiltered > 0) {
     d3.select(scope.container[0])
       .append("span")
