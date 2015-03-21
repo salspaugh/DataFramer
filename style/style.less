@@ -13,8 +13,9 @@
 
 // Colors
 // Taken from: https://github.com/mbostock/d3/wiki/Ordinal-Scales#categorical-colors
-@string-color: #756bb1;
-@string-color-light: #bcbddc;
+@string-color-dark: #756bb1;
+@string-color: #9e9ac8;
+@string-color-light: #ebebf4;
 
 @integer-color: #31a354;
 @integer-color-light: #ccf0d7;
@@ -79,11 +80,6 @@ a {
     width: 100%;
 }
 
-// #wrapper {
-//     padding-left: 250px;
-//     transition: all 0.4s ease 0s;
-// }
-
 .title-block {
     padding-bottom: 10px;
     margin-bottom: 30px;
@@ -118,98 +114,119 @@ Navbar
 /****QUESTIONS INDEX****/
 
 #q-list-title {
-    text-align: center;
-    font-weight: 400;
-    letter-spacing: 0.5px;
-    margin-bottom: 10px;
+  text-align: center;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
 }
 
 .question-bin {
-    /*border: 1px solid black;*/
-    background-color: #e2e4e6;
-    padding: 5px;
-    margin: 5px;
-    width: 32%;
+  /*border: 1px solid black;*/
+  background-color: #e2e4e6;
+  padding: 5px;
+  margin: 5px;
+  width: 32%;
 }
 
 .question-card {
-    padding: 10px;
-    margin-top: 8px;
-    margin-right: 3px;
-    margin-left: 3px;
-    background-color: white;
-    border-radius: 2px;
+  padding: 10px;
+  margin-top: 8px;
+  margin-right: 3px;
+  margin-left: 3px;
+  background-color: white;
+  border-radius: 2px;
 }
 
 .q-section-name {
-    font-size: 20px;
-    font-weight: 500;
-    margin-left: 10px;
-    margin-top: 15px;
+  margin-left: 10px;
+  margin-bottom: 0px;
+  vertical-align: middle;
 }
 
 ul.questions-list {
-    list-style: none;
-    padding-left: 0;
+  list-style: none;
+  padding-left: 0;
 
-    li.question-text {
-        font-size: 16px;
-        font-weight: 300;
-    }
+  li.question-text {
+    font-size: 16px;
+    font-weight: 300;
+  }
 }
 
 .question-editable {
-    // color: black;
-    position: relative;
+  // color: black;
+  position: relative;
 }
 
 .question-editable:hover {
-    background-color: #e3e3e3;
-    color: black;
+  background-color: #e3e3e3;
+  color: black;
 }
 
-.question-editable:empty:not(:focus):before{
-        content:attr(data-placeholder);
-        font-style: italic;
-    }
+.question-editable:empty:not(:focus):before {
+    content:attr(data-placeholder);
+    font-style: italic;
+  }
 
 .q-list-dropdown {
-    margin-left: 10px;
-    margin-right: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
-.q-icon-row{
-    margin-right: inherit;
-    margin-left: inherit;
-    /*margin-top: 10px;*/
+.q-icon-row {
+  margin-right: inherit;
+  margin-left: inherit;
+  margin-top: 10px;
 }
 
-.q-notes-label{
-    position: relative;
+.q-notes-label {
+  position: relative;
 }
 
 .q-notes-divider {
-    margin-top: 10px;
-    margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 
 ul[class~='vars-on-q'] {
-    display: inline-block;
-    padding: 0;
-    margin-top: 7px;
-    margin-bottom: 7px;
+  display: inline-block;
+  padding: 0;
+  margin-top: 7px;
+  margin-bottom: 7px;
 }
 
 li.var-pill {
-    list-style: none;
-    font-size: 14px;
-    font-weight: 200;
-    display: inline;
-    float: left;
-    margin-right: 5px;
-    margin-bottom: 2px;
-    border: 1px solid #a8a8a8;
+  list-style: none;
+  font-size: 14px;
+  font-weight: 200;
+  display: inline;
+  float: left;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #a8a8a8;
+  //color: #ffffff;
+  &.string {
+    //background-color: @string-color-light;
+    color: @string-color-dark;
+    border: 1px solid @string-color-dark;
+  }
+  &.integer {
+    //background-color: @integer-color-light;
+    border: 1px solid @integer-color;
+  }
+  &.float {
+    //background-color: @float-color-light;
+    border: 1px solid @float-color;
+  }
+  &.date {
+    //background-color: @date-color-light;
+    border: 1px solid @date-color;
+  }
+  &.time {
+    //background-color: @time-color-light;
+    border: 1px solid @time-color;
+  }
 }
 
 .chart-tooltip {
@@ -244,27 +261,35 @@ Question Modal
   border-radius: 0px 4px 4px 0px;
 }
 
+.question-modal-list {
+  list-style: none;
+  padding-left: 0;
+}
+ 
+.question-modal-input {
+
+}
 
 /*******************************
 Question Single
 *******************************/
 .question-header {
-    h1,h2,h3,h4,h5,h6 {
-        font-weight: normal;
+  h1,h2,h3,h4,h5,h6 {
+    font-weight: normal;
+  }
+  .btn {
+    opacity: 0.3;
+    &.activeStatus {
+      opacity: 1.0;
     }
-    .btn {
-        opacity: 0.3;
-        &.activeStatus {
-            opacity: 1.0;
-        }
-    }
-    margin-bottom: 45px;
+  }
+  margin-bottom: 45px;
 }
 
 
 // Navigation bar
 .df-login {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 // Icons
@@ -325,19 +350,8 @@ Question Single
   outline: 1px solid #ddd;
 }
 
-// .chart-area {
-//   @media (min-width: @screen-md-min){
-//       margin-left: (@container-md / 12 * 3);
-//   }
-//   @media (min-width: @screen-lg-min){
-//       margin-left: (@container-lg / 12 * 3);
-//   }
-//
-// }
-
 .datatype {
   &.string {
-    //border-left-color: @string-color;
     p, a {
       color: @string-color;
     }
@@ -346,7 +360,6 @@ Question Single
     }
   }
   &.integer {
-    //border-left-color: @integer-color;
     p, a {
       color: @integer-color;
     }
@@ -355,7 +368,6 @@ Question Single
     }
   }
   &.float {
-    //border-left-color: @float-color;
     p, a {
       color: @float-color;
     }
@@ -364,7 +376,6 @@ Question Single
     }
   }
   &.date {
-    //border-left-color: @date-color;
     p, a {
       color: @date-color;
     }
@@ -373,7 +384,6 @@ Question Single
     }
   }
   &.time {
-    //border-left-color: @time-color;
     p, a {
       color: @time-color;
     }
@@ -383,38 +393,37 @@ Question Single
   }
 }
 
-// set some color variables so we can lighten/darken
-@ans-unk: #b9b9b9;
+// Set some color variables so we can lighten/darken
+@ans-unk: #999999;
 @ans-true: #0fa007;
 @ans-false: #ec2424;
 
 .ans {
   display: inline-block;
-  margin-right: .5em;
-  color: #ffffff;
   width: 1.75em;
   text-align: center;
   &.unknown {
-    background-color: @ans-unk;
+    color: @ans-unk;
     &.fade {
-      background-color: lighten(desaturate(@ans-unk, 50%), 25%);
+      color: lighten(desaturate(@ans-unk, 50%), 25%);
     }
   }
   &.true {
-    background-color: @ans-true;
+    color: @ans-true;
     &.fade {
-      background-color: lighten(desaturate(@ans-true, 75%), 25%);
+      color: lighten(desaturate(@ans-true, 75%), 25%);
     }
   }
   &.false {
-    background-color: @ans-false;
+    color: @ans-false;
     &.fade {
-      background-color: lighten(desaturate(@ans-false, 50%), 25%);
+      color: lighten(desaturate(@ans-false, 50%), 25%);
     }
   }
 }
+
 .charts-container {
-  // same as height of floating column
+  // Same as height of floating column
   margin-bottom: 125px;
 }
 
@@ -432,21 +441,16 @@ Question Single
 
 .chart-container {
   overflow: visible;
-  margin-bottom: 35px;
+  margin-bottom: 70px;
   padding-right: 15px;
   .control {
     margin-left: 1em;
   }
 }
 
-.add-to-q-row {
-  width: inherit;
-}
-
-.add-to-q-btn {
-  margin-left: 15px;
-  background-color: #eeeeee;
-  border: 1px solid #e0e0e0;
+.navbar-chart {
+  padding: 5px;
+  border: none;
 }
 
 .col-chart-title {
@@ -459,13 +463,10 @@ Question Single
   width: inherit;
   padding-right: 30px;
   margin-bottom: 10px;
-
 }
 
 .chart-wrapper {
-  padding-left: 15px;
-  padding-right: 15px;
-  margin-top: 25px;
+  margin-top: 10px;
 }
 
 .chart {
@@ -495,9 +496,13 @@ Question Single
   font: 12px sans-serif;
   color: #d6616b;
 }
+
 .null-disclaimer {
-  margin-left: 15px;
   margin-top: 5px;
+}
+
+.null-disclaimer-hidden {
+  visibility: hidden;
 }
 
 .rickshaw-graph {
@@ -524,6 +529,7 @@ Question Single
 }
 
 .string-chart {
+  overflow: visible;
   .bar {
     rect {
       fill: @string-color;
@@ -542,13 +548,16 @@ Question Single
 }
 
 .date-chart {
+  overflow: visible;
   .line {
     stroke: @date-color;
     stroke-width: 1.5;
     fill: none;
   }
 }
+
 .float-chart {
+  overflow: visible;
   .bar {
     rect {
       fill: @float-color;
@@ -561,7 +570,9 @@ Question Single
     }
  }
 }
+
 .time-chart {
+  overflow: visible;
   .bar {
     rect {
       fill: @time-color;
@@ -588,6 +599,18 @@ Question Single
     }
  }
 }
-.form-group {
+
+.question-index-input {
   margin-top: 1em;
+  margin-left: -12px;
+}
+
+.fug-close {
+  border: none;
+  color: #777;
+  width: 30px;
+  height: 30px;
+  font-size: 24px;
+  font-weight: 500;
+  background: #ffffff;
 }

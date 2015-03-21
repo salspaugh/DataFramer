@@ -30,7 +30,7 @@ var renderStringChart = function(scope, dimensions) {
     .attr("class", "string-chart")
     .attr("style", "overflow: visible;");
 
-  if (groups.length < 10) {
+  if (groups.length < 12) {
 
     var yScale = d3.scale.ordinal()
       .domain(d3.range(groups.length))
@@ -49,7 +49,22 @@ var renderStringChart = function(scope, dimensions) {
      .attr("x", 0)
      .attr("y", function(d, i) { return yScale(i); })
      .attr("width", function(d) { return xScale(d.freq); })
-     .attr("height", yScale.rangeBand());
+     .attr("height", yScale.rangeBand())
+     .on("mouseover", function(d){
+       var tooltip = d3.select("body")
+         .append("div")
+         .attr("class", "chart-tooltip")
+         .attr("id", "string-chart-tooltip");
+       tooltip.text("Number of items: " + d.freq);
+       return tooltip.style("visibility", "visible"); 
+     })
+     .on("mousemove", function(){ 
+         var tooltip = d3.select("#string-chart-tooltip");
+         return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px"); 
+      })
+     .on("mouseout", function(){
+       return $("#string-chart-tooltip").remove();
+      });
 
     bars.append("text")
      .text(function(d) { return d.value; })
@@ -443,6 +458,7 @@ var renderTimeChart = function(scope, dimensions) {
 }
 
 var renderDefaultChart = function(scope, dimensions) {
+
   var data = scope.$parent.column;
 
   var min = _.min(data.values, function(v) {
@@ -488,7 +504,7 @@ var renderDefaultChart = function(scope, dimensions) {
 
   var y = d3.scale.linear()
     .domain([0, d3.max(bins, function(d) { return d.y; })])
-    .range([dimensions.height, dimensions.margin.top]);
+    .range([dimensions.height, 0]);
 
   var xAxis = d3.svg.axis()
     .scale(x)
@@ -517,7 +533,7 @@ var renderDefaultChart = function(scope, dimensions) {
     .attr("width", function () {
       if (!_.isUndefined(bins[0])) return x(bins[0].dx) - 4;
     })
-    .attr("y", dimensions.margin.top)
+    .attr("y", 0)
     .attr("height", function(d) { 
       if (!_.isUndefined(d)) return dimensions.height - y(d.y); 
     })
@@ -539,7 +555,7 @@ var renderDefaultChart = function(scope, dimensions) {
 
   svg.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0," + (dimensions.height + dimensions.margin.top) + ")")
+    .attr("transform", "translate(0," + dimensions.height + ")")
     .call(xAxis)
   .selectAll("text")
     .attr("x", 9)
@@ -550,7 +566,6 @@ var renderDefaultChart = function(scope, dimensions) {
   svg.append("g")
     .attr("class", "y axis")
     .call(yAxis)
-    .attr("transform", "translate(0," + dimensions.margin.top + ")")
   .append("text")
     .attr("transform", "rotate(-90)")
     .attr("y", -60)
