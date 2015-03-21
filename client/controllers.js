@@ -80,9 +80,9 @@ function($scope, $state, $meteorCollection, $meteorSubscribe){
 // ***********************************
 
 angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$meteorCollection',
-    '$stateParams', '$meteorSubscribe', '$state', '$meteorObject', '$rootScope', '$meteorUtils',
+    '$stateParams', '$meteorSubscribe', '$state', '$meteorObject',
     function($scope, $meteorCollection, $stateParams, $meteorSubscribe,
-        $state, $meteorObject, $rootScope, $meteorUtils){
+        $state, $meteorObject){
 
         $scope.questionsLoading = true;
 
@@ -127,7 +127,7 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
                 "user_id": Meteor.userId()
             };
 
-            $scope.questions.push(new_question);
+            Questions.insert(new_question);
         };
 
         $scope.answerable = function(q_id){
@@ -389,7 +389,7 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
            [{'name': 'Keep', 'answerable': true },
             {'name': 'Undecided' , 'answerable': null },
             {'name': 'Reject', 'answerable': false }];
-            
+
     var DATATYPE_SORT_IDX = {
       "string": 0,
       "integer": 1,
@@ -428,8 +428,7 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
                 break;
             }
         // Reload the page
-        $state.go($state.current, {}, {reload: true}); 
+        $state.go($state.current, {}, {reload: true});
     }
 
 }]);
-
