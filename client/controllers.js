@@ -212,33 +212,42 @@ function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollectio
     .then(function(sub){
         $scope.question = $meteorObject(Questions, $stateParams.questionId);
 
-        // store this in the scope so we can get and save it reactively
-        $scope.col_refs = $scope.question.col_refs;
-
         $scope.varClick = function(col_id){
-            // toggle in scope's col_refs
-            if (_.contains($scope.col_refs, col_id)) {
+            // toggle in question's col_refs
+            if (_.contains($scope.question.col_refs, col_id)) {
                 // remove
-                $scope.col_refs = _.without($scope.col_refs, col_id);
+                $scope.question.col_refs = _.without($scope.question.col_refs, col_id);
             } else {
                 // add
                 // NOTE: this is a dumb hack to make getReactively (below)
                 // recognize the change to col_refs, which it doesn't do for
                 // some reason if we just push to the array
-                var newrefs = _.union($scope.col_refs, [col_id]);
-                $scope.col_refs = newrefs;
+                var newrefs = _.union($scope.question.col_refs, [col_id]);
+                $scope.question.col_refs = newrefs;
             }
-            // save to the question object
-            $scope.question.col_refs = $scope.col_refs;
+
+            // query the DB again
+            $scope.activeColumns = $meteorCollection(function(){
+                // this seems redundant, but storing the col_refs directly
+                // on the $scope and getting them reactively causes the 
+                // activeColumns array to be briefly emptied while the function
+                // is running, triggering a redraw of the entire ng-repeat loop
+                return Columns.find({_id: {$in: $scope.question.col_refs}}, {sort: {datatypeIdx: 1, name: 1}});
+            });
         }
 
         $scope.colActive = function(col_id){
-            return _.contains($scope.col_refs, col_id);
+            return _.contains($scope.question.col_refs, col_id);
         }
 
         $scope.setAns = function(ans_value){
             $scope.question.answerable = ans_value;
         };
+
+        $scope.activeColumns = $meteorCollection(function(){
+            // react to add/remove actions in the sidebar
+            return Columns.find({_id: {$in: $scope.question.col_refs}}, {sort: {datatypeIdx: 1, name: 1}});
+        });
     });
 
     $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
@@ -254,12 +263,6 @@ function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollectio
     });
 
     $scope.datatypes = DATATYPE_LIST;
-
-    $scope.activeColumns = $meteorCollection(function(){
-        // react to add/remove actions in the sidebar
-        return Columns.find({_id: {$in: $scope.getReactively('col_refs')}}, {sort: {datatypeIdx: 1, name: 1}});
-    });
-
 }]);
 
 
