@@ -127,7 +127,11 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
                 "user_id": Meteor.userId()
             };
 
-            Questions.insert(new_question);
+            // inserting this way lets us add a new question without triggering
+            // the $meteorCollection call above to re-run, which temporarily
+            // empties the questions array and causes all the ng-repeat loops
+            // to redraw, which is very stupid
+            Meteor.call('addQuestion', new_question);
         };
 
         $scope.answerable = function(q_id){
@@ -219,7 +223,7 @@ function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollectio
                 $scope.question.col_refs = _.without($scope.question.col_refs, col_id);
             } else {
                 // add
-                // NOTE: this is a dumb hack to make getReactively (below)
+                // NOTE: this is a dumb hack to make activeColumns (below)
                 // recognize the change to col_refs, which it doesn't do for
                 // some reason if we just push to the array
                 var newrefs = _.union($scope.question.col_refs, [col_id]);
@@ -228,10 +232,6 @@ function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollectio
 
             // query the DB again
             $scope.activeColumns = $meteorCollection(function(){
-                // this seems redundant, but storing the col_refs directly
-                // on the $scope and getting them reactively causes the 
-                // activeColumns array to be briefly emptied while the function
-                // is running, triggering a redraw of the entire ng-repeat loop
                 return Columns.find({_id: {$in: $scope.question.col_refs}}, {sort: {datatypeIdx: 1, name: 1}});
             });
         }
@@ -360,7 +360,11 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
             "user_id": Meteor.userId()
         };
 
-        $scope.questions.push(new_question);
+        // inserting this way lets us add a new question without triggering
+        // the $meteorCollection call above to re-run, which temporarily
+        // empties the questions array and causes all the ng-repeat loops
+        // to redraw, which is very stupid
+        Meteor.call('addQuestion', new_question);
     };
 
     $scope.answerable = function(q_id){

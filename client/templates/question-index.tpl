@@ -7,9 +7,8 @@
 		    <div ng-repeat= "section in sections" class="col-md-4 question-bin">
 		    	<span class="q-section-name">{{ section.name }}</span>
 		        <ul class="questions-list">
-		            <li class="question-text" ng-repeat="question in questions">
-		            	<div class="question-card" ng-if="section.answerable == question.answerable">
-
+		            <li class="question-text" ng-repeat="question in questions track by question._id" ng-if="section.answerable == question.answerable">
+		            	<div class="question-card" >
 			                <span ng-class="answerable(question._id)">
 			                    <i class="fa ng-class:answerableIcon(question._id);"></i>
 			                </span>
