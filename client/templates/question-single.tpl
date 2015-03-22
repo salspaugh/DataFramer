@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="row">
-      <div class="col-md-6 chart-container" ng-repeat="column in activeColumns" id="{{column._id}}">
+      <div class="col-md-6 chart-container" ng-repeat="column in activeColumns track by column._id" id="{{column._id}}">
         <ng-include src="'client/templates/df-chart.tpl'"></ng-include>
       </div>
     </div>

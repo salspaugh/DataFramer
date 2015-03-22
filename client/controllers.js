@@ -80,9 +80,9 @@ function($scope, $state, $meteorCollection, $meteorSubscribe){
 // ***********************************
 
 angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$meteorCollection',
-    '$stateParams', '$meteorSubscribe', '$state', '$meteorObject', '$rootScope', '$meteorUtils',
+    '$stateParams', '$meteorSubscribe', '$state', '$meteorObject',
     function($scope, $meteorCollection, $stateParams, $meteorSubscribe,
-        $state, $meteorObject, $rootScope, $meteorUtils){
+        $state, $meteorObject){
 
         $scope.questionsLoading = true;
 
@@ -127,7 +127,11 @@ angular.module('dataFramer').controller('QuestionIndexController', ['$scope','$m
                 "user_id": Meteor.userId()
             };
 
-            $scope.questions.push(new_question);
+            // inserting this way lets us add a new question without triggering
+            // the $meteorCollection call above to re-run, which temporarily
+            // empties the questions array and causes all the ng-repeat loops
+            // to redraw, which is very stupid
+            Meteor.call('addQuestion', new_question);
         };
 
         $scope.answerable = function(q_id){
@@ -212,33 +216,38 @@ function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollectio
     .then(function(sub){
         $scope.question = $meteorObject(Questions, $stateParams.questionId);
 
-        // store this in the scope so we can get and save it reactively
-        $scope.col_refs = $scope.question.col_refs;
-
         $scope.varClick = function(col_id){
-            // toggle in scope's col_refs
-            if (_.contains($scope.col_refs, col_id)) {
+            // toggle in question's col_refs
+            if (_.contains($scope.question.col_refs, col_id)) {
                 // remove
-                $scope.col_refs = _.without($scope.col_refs, col_id);
+                $scope.question.col_refs = _.without($scope.question.col_refs, col_id);
             } else {
                 // add
-                // NOTE: this is a dumb hack to make getReactively (below)
+                // NOTE: this is a dumb hack to make activeColumns (below)
                 // recognize the change to col_refs, which it doesn't do for
                 // some reason if we just push to the array
-                var newrefs = _.union($scope.col_refs, [col_id]);
-                $scope.col_refs = newrefs;
+                var newrefs = _.union($scope.question.col_refs, [col_id]);
+                $scope.question.col_refs = newrefs;
             }
-            // save to the question object
-            $scope.question.col_refs = $scope.col_refs;
+
+            // query the DB again
+            $scope.activeColumns = $meteorCollection(function(){
+                return Columns.find({_id: {$in: $scope.question.col_refs}}, {sort: {datatypeIdx: 1, name: 1}});
+            });
         }
 
         $scope.colActive = function(col_id){
-            return _.contains($scope.col_refs, col_id);
+            return _.contains($scope.question.col_refs, col_id);
         }
 
         $scope.setAns = function(ans_value){
             $scope.question.answerable = ans_value;
         };
+
+        $scope.activeColumns = $meteorCollection(function(){
+            // react to add/remove actions in the sidebar
+            return Columns.find({_id: {$in: $scope.question.col_refs}}, {sort: {datatypeIdx: 1, name: 1}});
+        });
     });
 
     $meteorSubscribe.subscribe('columns', $stateParams.datasetId)
@@ -254,12 +263,6 @@ function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollectio
     });
 
     $scope.datatypes = DATATYPE_LIST;
-
-    $scope.activeColumns = $meteorCollection(function(){
-        // react to add/remove actions in the sidebar
-        return Columns.find({_id: {$in: $scope.getReactively('col_refs')}}, {sort: {datatypeIdx: 1, name: 1}});
-    });
-
 }]);
 
 
@@ -357,7 +360,11 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
             "user_id": Meteor.userId()
         };
 
-        $scope.questions.push(new_question);
+        // inserting this way lets us add a new question without triggering
+        // the $meteorCollection call above to re-run, which temporarily
+        // empties the questions array and causes all the ng-repeat loops
+        // to redraw, which is very stupid
+        Meteor.call('addQuestion', new_question);
     };
 
     $scope.answerable = function(q_id){
@@ -389,7 +396,7 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
            [{'name': 'Keep', 'answerable': true },
             {'name': 'Undecided' , 'answerable': null },
             {'name': 'Reject', 'answerable': false }];
-            
+
     var DATATYPE_SORT_IDX = {
       "string": 0,
       "integer": 1,
@@ -428,8 +435,7 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
                 break;
             }
         // Reload the page
-        $state.go($state.current, {}, {reload: true}); 
+        $state.go($state.current, {}, {reload: true});
     }
 
 }]);
-
