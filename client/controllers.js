@@ -263,7 +263,7 @@ function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollectio
 // ***********************************
 // ChartsController
 // ***********************************
-angular.module('dataFramer').controller('ChartsController', 
+angular.module("dataFramer").controller("ChartsController", 
 ["$scope", "$state", "$window", "$stateParams", "$meteorSubscribe", "$meteorCollection", "$meteorObject",
 function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollection, $meteorObject) {
 
@@ -289,9 +289,8 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
     if (_.contains(question.col_refs, col_id)) { // Remove
       $scope.col_refs = _.without(question.col_refs, col_id);
     } else { // Add
-      // NOTE: this is a dumb hack to make getReactively (below)
-      // recognize the change to col_refs, which it doesn"t do for
-      // some reason if we just push to the array
+      // NOTE: this is a dumb hack to make getReactively (below) recognize the 
+      // change to col_refs, which it doesn"t do for some reason if we just push to the array
       var newrefs = _.union(question.col_refs, [col_id]);
       $scope.col_refs = newrefs;
     }
@@ -318,10 +317,6 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
     return Columns.findOne(var_id).datatype;
   };
 
-  $scope.percentNull = function(column) {
-    return parseInt(column.nulls / $scope.dataset.rowCount * 100)
-  };
-
   $scope.datatypes = DATATYPE_LIST;
 
   $scope.checkState = function(name) {
@@ -329,7 +324,7 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
   };
 
   $scope.varClick = function(col) {
-     $window.scroll(0,$("#"+col._id).offset().top);
+     $window.scroll(0, $("#"+col._id).offset().top);
   };
 
   $scope.checkState = function(name) {

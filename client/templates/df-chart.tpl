@@ -8,7 +8,7 @@
 
 <span class="null-disclaimer bg-warning text-warning" 
   ng-class="{'null-disclaimer-hidden': column.nulls == 0}"> 
-  Number of nulls: <strong>{{column.nulls}}</strong> ({{percentNull(column)}}% of rows)
+  Number of nulls: <strong>{{column.nulls}}</strong> ({{column.pctNulls}}% of rows)
 </span>
 
 
