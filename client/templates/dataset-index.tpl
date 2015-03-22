@@ -7,17 +7,22 @@
 
       <p class="lead">Datasets</p>
 
-      <section class="list-group" >
+      <section class="list-group">
+
         <div class="list-group-item" ng-repeat="dataset in datasets">
           <p>
-            <a ui-sref="dataset.questionIndex({datasetId: dataset._id})">{{dataset.name}}</a> <a class="pull-right icon-grey" ng-confirm-click="Are you sure you want to delete this dataset ({{dataset.name}})?" confirmed-click="deleteDataset(dataset._id)" tooltip="Delete this dataset" tooltip-placement="bottom" tooltip-append-to-body="true" href="#">
-              <i class="fa fa-trash-o"></i>
+            <a ui-sref="dataset.questionIndex({datasetId: dataset._id})">{{dataset.name}}</a>
+            <a class="pull-right icon-grey"
+              ng-confirm-click="Are you sure you want to delete this dataset ({{dataset.name}})?" 
+              confirmed-click="deleteDataset(dataset._id)" 
+              tooltip="Delete this dataset" tooltip-placement="bottom" tooltip-append-to-body="true" href="#">
+              <i class="fa fa-trash-o fa-lg"></i>
             </a>
           </p>
         </div>
 
         <section ng-if="datasets.length == 0">
-          <p class="lead">You haven't uploaded any datasets yet.</p>
+          <p>You haven't uploaded any datasets yet.</p>
         </section>
 
         <section>
@@ -31,7 +36,7 @@
     </div>
 
     <div ng-if="!$root.currentUser">
-      <h3 class="text-center">Please sign in or create an account to start using DataFramer.</h3>
+      <p class="lead text-center">Please sign in or create an account to start using DataFramer.</p>
     </div>
   </div>
 </div>
