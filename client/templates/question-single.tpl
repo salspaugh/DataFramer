@@ -5,14 +5,14 @@
     <div class="row question-header">
       <div class="col-md-12">
         <h3>{{question.text}}</h3>
-        <a class="btn btn-success" ng-class="{activeStatus: question.answerable == true}" ng-click="setAns(true)">Keep</a>
-        <a class="btn btn-default" ng-class="{activeStatus: question.answerable == null}" ng-click="setAns(null)">Undecided</a>
-        <a class="btn btn-danger" ng-class="{activeStatus: question.answerable == false}" ng-click="setAns(false)">Reject</a>
+        <a class="btn btn-sm btn-success" ng-class="{activeStatus: question.answerable == true}" ng-click="setAns(true)">Keep</a>
+        <a class="btn btn-sm btn-default" ng-class="{activeStatus: question.answerable == null}" ng-click="setAns(null)">Undecided</a>
+        <a class="btn btn-sm btn-danger" ng-class="{activeStatus: question.answerable == false}" ng-click="setAns(false)">Reject</a>
       </div>
     </div>
 
-    <div style="margin: 50px;" ng-if="activeColumns.length == 0">
-      <p class="lead">What data will you need to answer this question?<br />Select column names on the right to add them to this space.</p>
+    <div ng-if="activeColumns.length == 0">
+      <p>What data will you need to answer this question?<br />Select column names on the right to add them to this space.</p>
     </div>
 
     <div class="row">
