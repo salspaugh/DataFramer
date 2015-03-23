@@ -49,7 +49,7 @@
               <ul class="dropdown-menu" role="menu">
                 <li role="presentation" ng-repeat="s in sections">
                   <a role="menuitem" tabindex="-1" href="#" ng-click="setAns(s.answerable)">
-                    <p ng-class="{'text-muted': question.answerable == s.answerable}">Move to {{s.name}} pile</p>
+                    <p ng-class="{'text-muted': question.answerable == s.answerable}">M<span class="text-lowercase">ove to {{s.name}} pile</span></p>
                   </a>
                 </li>
               </ul>
@@ -72,11 +72,11 @@
 </div>
 
 <div style="margin: 50px;" ng-if="questions.length == 0">
-  <p class="lead text-center">Looks like there are no questions here yet! Check out the charts to get started.</p>
+  <p class="text-center">Looks like there are no questions here yet! Check out the charts to get started.</p>
 </div>
 
 <form onsubmit="this.reset(); return false;" name="qAdd" role="form">
-  <div class="form-group">
+  <div class="form-group question-index-input">
 
     <!--<label>Add a new question: </label>-->
 

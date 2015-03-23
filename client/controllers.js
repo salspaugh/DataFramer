@@ -149,13 +149,13 @@ function($scope, $meteorCollection, $stateParams, $meteorSubscribe, $state, $met
   $scope.answerableIcon = function(q_id) {
     switch (_.findWhere($scope.questions, {_id: q_id}).answerable) {
       case true:
-        return "fa-check";
+        return "fa-check fa-lg";
         break;
       case false:
-        return "fa-close";
+        return "fa-ban fa-lg";
         break;
       default:
-        return "fa-question";
+        return "fa-question fa-lg";
         break;
     }
   };
