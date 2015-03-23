@@ -4,18 +4,21 @@
 </head>
 
 <body>
+  <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
-        <div class="row">
-            <div class="col-md-2" id="sidebar-wrapper">
-                <h3>DataFramer</h3>
-                <div ui-view="sidebar"></div>
-            </div>
-            <div class="col-md-10 col-md-offset-2">
-                <ul class="list-unstyled">
-                    {{>loginButtons}}
-                </ul>
-                <div ui-view="main"></div>
-            </div>
-        </div>
+      <div class="navbar-header navbar-left">
+        <a class="navbar-brand" ui-sref="start">DataFramer</a>
+      </div>
+      <ul class="nav navbar-nav df-login">
+        {{>loginButtons}}
+      </ul>
+      <div ui-view="navBar"></div>
     </div>
+
+  </nav>
+
+  <div class="container">
+    <div ui-view="main"></div>
+  </div>
+
 </body>

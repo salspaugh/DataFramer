@@ -1,3 +1,4 @@
+/*
 angular.module('data_qs').config(['$urlRouterProvider', '$stateProvider', '$locationProvider',
 function($urlRouterProvider, $stateProvider, $locationProvider){
     // debugger;
@@ -348,3 +349,4 @@ function changeType(col, type){
             break;
         }
 }
+*/
