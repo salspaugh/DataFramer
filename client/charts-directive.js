@@ -30,7 +30,7 @@ var renderStringChart = function(scope, dimensions) {
     .attr("class", "string-chart")
     .attr("style", "overflow: visible;");
 
-  if (groups.length < 10) {
+  if (groups.length < 12) {
 
     var yScale = d3.scale.ordinal()
       .domain(d3.range(groups.length))
@@ -49,7 +49,22 @@ var renderStringChart = function(scope, dimensions) {
      .attr("x", 0)
      .attr("y", function(d, i) { return yScale(i); })
      .attr("width", function(d) { return xScale(d.freq); })
-     .attr("height", yScale.rangeBand());
+     .attr("height", yScale.rangeBand())
+     .on("mouseover", function(d){
+       var tooltip = d3.select("body")
+         .append("div")
+         .attr("class", "chart-tooltip")
+         .attr("id", "string-chart-tooltip");
+       tooltip.text("Number of items: " + d.freq);
+       return tooltip.style("visibility", "visible"); 
+     })
+     .on("mousemove", function(){ 
+         var tooltip = d3.select("#string-chart-tooltip");
+         return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px"); 
+      })
+     .on("mouseout", function(){
+       return $("#string-chart-tooltip").remove();
+      });
 
     bars.append("text")
      .text(function(d) { return d.value; })
