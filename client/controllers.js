@@ -324,7 +324,7 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
   };
 
   $scope.varClick = function(col) {
-     $window.scroll(0, $("#"+col._id).offset().top);
+     $window.scroll(0, $("#"+col._id).offset().top - 60);
   };
 
   $scope.checkState = function(name) {
