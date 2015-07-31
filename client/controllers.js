@@ -12,7 +12,7 @@ var DATATYPE_SORT_IDX = {
 // ***********************************
 // LandingPageController
 // ***********************************
-angular.module("dataFramer").controller("NavBarController", ["$scope", function($scope){
+angular.module("dataFramer").controller("LandingPageController", ["$scope", function($scope){
   console.log("land")
 }]);
 
