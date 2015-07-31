@@ -11,7 +11,7 @@
 
         <div class="list-group-item" ng-repeat="dataset in datasets">
           <p>
-            <a ui-sref="dataset.questionIndex({datasetId: dataset._id})">{{dataset.name}}</a>
+            <a ui-sref="demo.dataset.questionIndex({datasetId: dataset._id})">{{dataset.name}}</a>
             <a class="pull-right icon-grey"
               ng-confirm-click="Are you sure you want to delete this dataset ({{dataset.name}})?" 
               confirmed-click="deleteDataset(dataset._id)" 

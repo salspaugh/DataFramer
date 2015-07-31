@@ -58,7 +58,7 @@
 
             <span class= "pull-right control chart-view-link">
               <a tooltip="Go to question details" tooltip-placement="bottom" tooltip-append-to-body="true" 
-                ui-sref="dataset.questionSingle({questionId: question._id})">
+                ui-sref="demo.dataset.questionSingle({questionId: question._id})">
                 <i class="fa fa-bar-chart icon-grey fa-lg"></i>
               </a>
             </span>

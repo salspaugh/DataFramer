@@ -10,6 +10,14 @@ var DATATYPE_SORT_IDX = {
 
 
 // ***********************************
+// LandingPageController
+// ***********************************
+angular.module("dataFramer").controller("NavBarController", ["$scope", function($scope){
+  console.log("land")
+}]);
+
+
+// ***********************************
 // NavBarController
 // ***********************************
 angular.module("dataFramer").controller("NavBarController", 
@@ -17,7 +25,7 @@ angular.module("dataFramer").controller("NavBarController",
 function($scope, $state, $stateParams, $meteorSubscribe, $meteorCollection, $meteorObject) {
 
   $scope.startPage = false;
-  if ($state.current.name == "start" || $state.current.name == "dataset") {
+  if ($state.current.name == "demo.datasets" || $state.current.name == "demo.dataset") {
     $scope.startPage = true;
   }
 
@@ -31,6 +39,18 @@ function($scope, $state, $stateParams, $meteorSubscribe, $meteorCollection, $met
 
 }]);
 
+
+
+// ***********************************
+// DemoPlaceholderController
+// ***********************************
+angular.module("dataFramer").controller("DemoPlaceholderController", ["$state",
+  function($state){
+    if ($state.current.name == "demo") {
+      $state.go('demo.datasets');
+    }
+    
+}] )
 
 
 // ***********************************
@@ -83,7 +103,7 @@ function($scope, $state, $meteorCollection, $meteorSubscribe) {
 // QuestionIndexController
 // ***********************************
 angular.module("dataFramer").controller("QuestionIndexController", 
-["$scope","$meteorCollection", "$stateParams", "$meteorSubscribe", "$state", "$meteorObject",
+["$scope", "$meteorCollection", "$stateParams", "$meteorSubscribe", "$state", "$meteorObject",
 function($scope, $meteorCollection, $stateParams, $meteorSubscribe, $state, $meteorObject) {
 
   $scope.questionsLoading = true;

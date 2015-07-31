@@ -3,8 +3,18 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
     $locationProvider.html5Mode(true);
 
     $stateProvider
-        .state('start', {
+        .state('landing', {
             url: '/',
+            templateUrl: 'client/templates/landing.tpl',
+            controller: 'LandingPageController'
+        })
+        .state('demo', {
+            url: '/demo',
+            templateUrl: 'client/templates/demo.tpl',
+            controller: 'DemoPlaceholderController'
+        })
+        .state('demo.datasets', {
+            url: '/datasets',
             views: {
                 navBar: {
                     templateUrl: 'client/templates/nav-bar.tpl',
@@ -17,7 +27,7 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                 }
             },
         })
-        .state('dataset', {
+        .state('demo.dataset', {
             url: '/dataset/:datasetId',
             views: {
                 // This will be inherited by all the other dataset.x states
@@ -27,31 +37,31 @@ function($urlRouterProvider, $stateProvider, $locationProvider){
                 }
             }
         })
-        .state('dataset.questionIndex', {
+        .state('demo.dataset.questionIndex', {
             url: '/questions',
             views: {
                 // The list of questions - separate from charts
-                'main@': {
+                'main@demo': {
                     templateUrl: 'client/templates/question-index.tpl',
                     controller: 'QuestionIndexController'
                 }
             }
         })
-        .state('dataset.questionSingle', {
+        .state('demo.dataset.questionSingle', {
             url: '/questions/:questionId',
             views: {
                 // A single question view
-                'main@': {
+                'main@demo': {
                     templateUrl: 'client/templates/question-single.tpl',
                     controller: 'QuestionSingleController'
                 }
             }
         })
-        .state('dataset.charts', {
+        .state('demo.dataset.charts', {
             url: '/charts',
             views: {
                 // All the charts
-                "main@": {
+                "main@demo": {
                     templateUrl: 'client/templates/charts.tpl',
                     controller: 'ChartsController'
                 }
