@@ -1,92 +1,158 @@
-<div class="landingPage">
-    <div id="header-wrapper">
-    <!-- <div id="header" class="container">
-        <div id="logo">
-            <h1><a href="#">DataFramer</a></h1>
-        </div>
-        <div id="menu">
-            <ul>
-                <li class="current_page_item"><a href="#" accesskey="1" title="">Homepage</a></li>
-                <li><a href="#" accesskey="2" title="">Our Clients</a></li>
-                <li><a href="#" accesskey="3" title="">About Us</a></li>
-                <li><a href="#" accesskey="4" title="">Careers</a></li>
-                <li><a href="#" accesskey="5" title="">Contact Us</a></li>
-            </ul>
-        </div>
-    </div> -->
-    <div id="header-featured">
-        <div id="banner-wrapper">
-            <div id="banner" class="container">
-                <h2>DataFramer</h2>
-                <p>This is <strong>SimpleWork</strong>, a free, fully standards-compliant CSS template designed by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>. The photos in this template are from <a href="http://fotogrph.com/"> Fotogrph</a>. This free template is released under the <a href="http://templated.co/license">Creative Commons Attribution</a> license, so you're pretty much free to do whatever you want with it (even use it commercially) provided you give us credit for it. Have fun :) </p>
-                
-                <a ui-sref="demo" class="button">Demo</a> 
-            </div>
-        </div>
+<nav class="navbar navbar-default navbar-fixed-top" id="topnav">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">DataFramer</a>
     </div>
-</div>
-<div id="wrapper">
-    <div id="page" class="container">
-        <div id="content">
-            <div class="title">
-                <h2>Why DataFramer?</h2>
-                <span class="byline">Something something exploratory data analysis</span> 
-            </div>
-            <p><img src="images/banner.jpg" alt="" class="image image-full" /> </p>
-            <p>Aliquam libero. Vivamus nisl nibh, iaculis vitae, viverra sit amet, ullamcorper vitae, turpis. Aliquam erat volutpat. Vestibulum dui sem, pulvinar sed, imperdiet nec, iaculis nec, leo. Fusce odio. Etiam arcu dui, faucibus eget, placerat vel, sodales eget, orci. Donec ornare neque ac sem. Mauris aliquet. Aliquam sem leo, vulputate sed, convallis at, ultricies quis, justo. Donec nonummy magna quis risus. Quisque eleifend. Phasellus tempor vehicula justo. Aliquam lacinia metus ut elit. Suspendisse iaculis mauris nec lorem. Donec leo. Vivamus fermentum nibh in augue. Praesent a lacus at urna congue rutrum. Nulla enim eros, porttitor eu, tempus id, varius non, nibh. </p>
-            <p>Donec condimentum, urna non molestie semper, ligula enim ornare nibh, quis laoreet eros quam eget ante. Aliquam libero. Vivamus nisl nibh, iaculis vitae, viverra sit amet, ullamcorper vitae, turpis. Aliquam erat volutpat. Vestibulum dui sem, pulvinar sed, imperdiet nec, iaculis nec, leo. Fusce odio. Etiam arcu dui, faucibus eget, placerat vel, sodales eget, orci. Donec ornare neque ac sem. Mauris aliquet. Aliquam sem leo, vulputate sed, convallis at, ultricies quis, justo. Donec nonummy magna quis risus. Quisque eleifend. Phasellus tempor vehicula justo.</p>
-            
-            <h3>Something about our findings?</h3>
-            <p>Donec condimentum, urna non molestie semper, ligula enim ornare nibh, quis laoreet eros quam eget ante. Aliquam libero. Vivamus nisl nibh, iaculis vitae, viverra sit amet, ullamcorper vitae, turpis. Aliquam erat volutpat. Vestibulum dui sem, pulvinar sed, imperdiet nec, iaculis nec, leo. Fusce odio. Etiam arcu dui, faucibus eget, placerat vel, sodales eget, orci. Donec ornare neque ac sem. Mauris aliquet. Aliquam sem leo, vulputate sed, convallis at, ultricies quis, justo. Donec nonummy magna quis risus. Quisque eleifend. Phasellus tempor vehicula justo.</p>
-        </div>
-        <div id="sidebar">
-            <ul class="style1">
-                <li class="first">
-                    <h3>Question-driven workflow</h3>
-                    <p><a href="#">In posuere eleifend odio. Quisque semper augue mattis wisi. Pellentesque viverra vulputate enim. Aliquam erat volutpat.</a></p>
-                </li>
-                <li>
-                    <h3>Automatic chart generation</h3>
-                    <p><a href="#">In posuere eleifend odio. Quisque semper augue mattis wisi. Pellentesque viverra vulputate enim. Aliquam erat volutpat.</a></p>
-                </li>
-                <li>
-                    <h3>Data-question linkage</h3>
-                    <p><a href="#">In posuere eleifend odio. Quisque semper augue mattis wisi. Pellentesque viverra vulputate enim. Aliquam erat volutpat.</a></p>
-                </li>
-                <li>
-                    <h3>Analysis without distractions</h3>
-                    <p><a href="#">In posuere eleifend odio. Quisque semper augue mattis wisi. Pellentesque viverra vulputate enim. Aliquam erat volutpat.</a></p>
-                </li>
-                <li>
-                    <h3>Web technologies</h3>
-                    <p><a href="#">In posuere eleifend odio. Quisque semper augue mattis wisi. Pellentesque viverra vulputate enim. Aliquam erat volutpat.</a></p>
-                </li>
-            </ul>
-            <!-- <div id="stwo-col">
-                <div class="sbox1">
-                    <h2>Etiam rhoncus</h2>
-                    <ul class="style2">
-                        <li><a href="#">Semper quis egetmi dolore</a></li>
-                        <li><a href="#">Quam turpis feugiat dolor</a></li>
-                        <li><a href="#">Amet ornare hendrerit lectus</a></li>
-                        <li><a href="#">Quam turpis feugiat dolor</a></li>
-                    </ul>
-                </div>
-                <div class="sbox2">
-                    <h2>Integer gravida</h2>
-                    <ul class="style2">
-                        <li><a href="#">Semper quis egetmi dolore</a></li>
-                        <li><a href="#">Quam turpis feugiat dolor</a></li>
-                        <li><a href="#">Consequat lorem phasellus</a></li>
-                        <li><a href="#">Amet turpis feugiat amet</a></li>
-                    </ul>
-                </div>
-            </div> -->
-        </div>
-    </div>
-</div>
-<div id="copyright" class="container">
-    <p>&copy; Untitled. All rights reserved. | Photos by <a href="http://fotogrph.com/">Fotogrph</a> | Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>.</p>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        
+        <li><a class="" href="#why" role="button">Why DataFramer?</a></li>
+        <li><a class="" href="#how" role="button">How it works</a></li>
+        <li><button class="btn btn-default navbar-btn" ui-sref="demo" role="button">Launch the demo &raquo;</button></li>
+        
+      </ul>
+    </div><!--/.navbar-collapse -->
+  </div>
+</nav>
+
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+  <div class="container">
+    <h1>DataFramer</h1>
+    <p>A visual data exploration tool with a focus on asking the right questions.</p>
+  </div>
 </div>
 
+<div class="container">
+  <div class="row" id="why">
+    <div class="col-md-11 col-md-offset-1">
+      <h1>Why DataFramer?</h1>
+    </div>
+    <div class="col-md-8 col-md-offset-1">
+      <p>DataFramer is an interactive tool for exploring and annotating overviews of high-dimensional datasets, inspired by the seminal principles of exploratory data analysis (EDA) and implemented with flexible web technologies. </p>
+      <p>Identifying good research questions is one of the most critical and difficult steps in data science. As John Tukey, the influential statistician who popularized exploratory data analysis, put it: “Far better an approximate answer to the right question, which is often vague, than an exact answer to the wrong question, which can always be made precise.”</p>
+      <p>Though exploration is thought to be an open-ended process, determining the right questions is actually a primary, concrete, and actionable end goal. It is, however, not without its challenges, and DataFramer helps users overcome them by automatically generating appropriate summary charts for various datatypes, allowing users to test their assumptions about the dataset as they generate and refine their hypotheses. </p>
+      <p>The focused, minimalistic design of DataFramer strives to minimize data-driven distractions, enable rapid comprehension of the landscape of a dataset, and produce an actionable research plan to guide and support deeper analysis.</p>
+    </div>
+    <div class="col-md-2">
+      <h4>Creators</h4>
+      <ul>
+        <li>Sara Alspaugh <br>
+          <i class="fa fa-envelope"></i>
+          <i class="fa fa-twitter"></i>
+          <i class="fa fa-globe"></i>
+        </li>
+        <li>Anna Swigart <br>
+          <i class="fa fa-envelope"></i>
+          <i class="fa fa-twitter"></i>
+          <i class="fa fa-globe"></i>
+        </li>
+        <li>Ian MacFarland <br>
+          <i class="fa fa-envelope"></i>
+          <i class="fa fa-twitter"></i>
+          <i class="fa fa-globe"></i>
+        </li>
+      </ul>
+      <h4>Advisers</h4>
+      <ul>
+        <li>Marti Hearst</li>
+        <li>Randy Katz</li>
+      </ul>
+      <h4>Publications</h4>
+      <ul>
+        <li><a href="#">Hopefully a paper?</a></li>
+        <li><a href="https://github.com/salspaugh/DataFramer">Code on GitHub</a></li>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <h3>Question-driven workflow</h3>
+      <!-- <img src="http://placehold.it/500x250" class="img-responsive"> -->
+      <div class="text-center text-muted">
+        <i class="fa fa-question-circle fa-4x"></i>
+      </div>
+      <p>Generate, reflect upon, and organize your potential lines of inquiry. Make deeper exploration easier by creating a persistent reference document to support your subsequent work.</p>
+    </div>
+    <div class="col-md-4">
+      <h3>Automatic chart generation</h3>
+      <div class="text-center text-muted">
+        <i class="fa fa-database fa-4x"></i>
+        <i class="fa fa-long-arrow-right fa-4x"></i>
+        <i class="fa fa-bar-chart fa-4x"></i>
+      </div>
+      <p>Quickly survey your dataset while avoiding the tedium of creating the visualizations yourself. Free yourself to focus on asking questions and identifying potential invalid assumptions.</p>
+    </div>
+    <div class="col-md-4">
+      <h3>Data-question linkage</h3>
+      <div class="text-center text-muted">
+        <i class="fa fa-question-circle fa-4x"></i>
+        <i class="fa fa-arrows-h fa-4x"></i>
+        <i class="fa fa-bar-chart fa-4x"></i>
+      </div>
+      <p>Tag your questions with relevant variables to easily identify the subsets you need. Easily spot potential problems, such as missing, incomplete, or erroneous entries.</p>
+    </div>
+    <div class="col-md-4 col-md-offset-2">
+      <h3>Analysis without distractions</h3>
+      <div class="text-center text-muted">
+        <i class="fa fa-lightbulb-o fa-4x"></i>
+      </div>
+      <p>Avoid the temptation of diving into rabbit-holes before developing a broad familiarity with your data. Make solid plans instead of fancy charts.</p>
+    </div>
+    <div class="col-md-4">
+      <h3>Data as a document</h3>
+      <div class="text-center text-muted">
+        <i class="fa fa-bookmark-o fa-4x"></i>
+      </div>
+      <p>Each dataset and question has a persistent URL that you can share, bookmark, and revisit. Runs on your local machine as well — no web server required.</p>
+    </div>
+
+
+
+    <div class="row" id="how">
+      <div class="col-md-12">
+        <h2>How to DataFramer <br>
+          <small>Something something exploratory data analysis</small> 
+        </h2>
+      </div>
+      <div class="col-md-9">
+        <img src="http://placehold.it/1280x720?text=video+here" alt="" class="img-responsive img-thumbnail" />
+        <p>Aliquam libero. Vivamus nisl nibh, iaculis vitae, viverra sit amet, ullamcorper vitae, turpis. Aliquam erat volutpat. Vestibulum dui sem, pulvinar sed, imperdiet nec, iaculis nec, leo. Fusce odio. Etiam arcu dui, faucibus eget, placerat vel, sodales eget, orci. Donec ornare neque ac sem. Mauris aliquet. Aliquam sem leo, vulputate sed, convallis at, ultricies quis, justo. Donec nonummy magna quis risus. Quisque eleifend. Phasellus tempor vehicula justo. Aliquam lacinia metus ut elit. Suspendisse iaculis mauris nec lorem. Donec leo. Vivamus fermentum nibh in augue. Praesent a lacus at urna congue rutrum. Nulla enim eros, porttitor eu, tempus id, varius non, nibh. </p>
+      </div>
+      <div class="col-md-3">
+        <h4>Sample datasets to try out</h4>
+        <p>Aliquam libero. Vivamus nisl nibh, iaculis vitae, viverra sit amet, ullamcorper vitae, turpis. Aliquam erat volutpat. Vestibulum dui sem, pulvinar sed, imperdiet nec, iaculis nec, leo. </p>
+        <ul>
+          <li><a href="#">Dataset</a></li>
+          <li><a href="#">Dataset</a></li>
+          <li><a href="#">Dataset</a></li>
+          <li><a href="#">Dataset</a></li>
+        </ul>
+
+        <h4>Contributing to DataFramer</h4>
+        <p>DataFramer is an <a href="https://github.com/salspaugh/DataFramer">open-source</a> web application coded entirely in JavaScript; it is powered by Meteor, a Node/Mongo framework that facilitates fast and easy passing of data between client and server. Page templates use <a href="https://angularjs.org/">AngularJS</a> and <a href="http://getbootstrap.com">Bootstrap</a>.</p>
+        <p>Because of the ease of data transfer, this platform has the potential to enable concurrent, collaborative use of DataFramer as well. That&#39;s one of many avenues for contributing if you&#39;re interested in working on DataFramer: both techies and non-techies (designers, researchers, etc) welcome! Feel free to <a href="mailto:alspaugh@eecs.berkeley.edu">contact Sara (the project lead)</a> or check us out on <a href="https://github.com/salspaugh/DataFramer">GitHub</a>.</p>
+
+      </div>
+    </div>
+
+
+  </div>
+
+  <hr>
+
+
+  <footer class="container">
+    <p>
+      <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">
+        <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" />
+      </a>
+      <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">DataFramer</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://dataframer.berkeley.edu" property="cc:attributionName" rel="cc:attributionURL">Sara Alspaugh, Anna Swigart, and Ian MacFarland</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+    </p>
+  </footer>
 </div>
