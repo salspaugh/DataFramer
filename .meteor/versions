@@ -11,7 +11,7 @@ boilerplate-generator@1.0.2
 callback-hook@1.0.2
 check@1.0.4
 d3@1.0.0
-dataframer:accounts-ui-bootstrap-3@1.2.76
+dataframer:accounts-ui-bootstrap-3@1.2.77
 ddp@1.0.14
 deps@1.0.6
 dsyko:meteor-node-csv@0.3.7

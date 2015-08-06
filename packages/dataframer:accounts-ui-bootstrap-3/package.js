@@ -1,7 +1,7 @@
 Package.describe({
 	name: 'dataframer:accounts-ui-bootstrap-3',
-	summary: 'Bootstrap-styled accounts-ui with multi-language support.',
-	version: '1.2.76',
+	summary: '##HACKED for dataframer bugfixes## Bootstrap-styled accounts-ui with multi-language support.',
+	version: '1.2.77',
 	git: "https://github.com/ianmartorell/meteor-accounts-ui-bootstrap-3"
 })
 
@@ -57,14 +57,14 @@ Package.on_use(function (api) {
 		'login_buttons.html',
 		'login_buttons_single.html',
 		'login_buttons_dropdown.html',
-		'login_buttons_dialogs.html',
+		// 'login_buttons_dialogs.html',
 
 		'login_buttons_session.js',
 
 		'login_buttons.js',
 		'login_buttons_single.js',
 		'login_buttons_dropdown.js',
-		'login_buttons_dialogs.js',
+		// 'login_buttons_dialogs.js',
 		'accounts_ui.styl'
 		], 'client')
 
