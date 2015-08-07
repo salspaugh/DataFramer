@@ -302,6 +302,7 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
 
   $scope.setCurrentColumn = function(col_id) {
     $scope.currentColumn = $meteorObject(Columns, col_id, false);
+    $scope.modalErrors = {};
   };
 
   $scope.addVarToQuestion = function(question, col_id) {
@@ -352,6 +353,18 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
   };
 
   $scope.addQuestion = function(text) {
+    // check for blank or duplicate questions first
+    if (text.$modelValue == undefined || text.$modelValue == "") {
+      $scope.modalErrors["qAdd"] = "Questions cannot be blank."
+      return;
+    } else if(Questions.find({dataset_id:$stateParams.datasetId, text:text.$modelValue}).count() != 0){
+      $scope.modalErrors["qAdd"] = "This question already exists."
+      return;
+    }
+
+    // if we pass error checks, clear any existing errors
+    $scope.modalErrors = {}
+
     var new_question = {
       "dataset_id": $stateParams.datasetId,
       "text": text.$modelValue,
