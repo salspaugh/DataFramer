@@ -1,41 +1,49 @@
-<div class="question-single">
-        <h1>{{ question.text }}</h1>
+<div ng-if="chartsLoading" ng-include="'client/templates/loading.tpl'"></div>
 
-        <h2 ng-show="!columns.length">select variables to add them to your question</h2>
-
-        <div class="row charts-container">
-            <div class="col-md-6 chart-container" ng-repeat="col in columns"
-            id="{{ col._id }}">
-            <ng-include src="'client/templates/df_chart.tpl'"></ng-include>
-        </div>
+<div class="row" ng-if="!chartsLoading">
+  <div class="col-md-9 chart-area">
+    <div class="row question-header">
+      <div class="col-md-12">
+        <h3>{{question.text}}</h3>
+        <a class="btn btn-sm btn-success" ng-class="{activeStatus: question.answerable == true}" ng-click="setAns(true)">Keep</a>
+        <a class="btn btn-sm btn-default" ng-class="{activeStatus: question.answerable == null}" ng-click="setAns(null)">Undecided</a>
+        <a class="btn btn-sm btn-danger" ng-class="{activeStatus: question.answerable == false}" ng-click="setAns(false)">Reject</a>
+      </div>
     </div>
-</div>
 
-<div class="floating-column">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-10 col-md-offset-2 answerable-form">
-                <form role="form">
-                    <div class="form-group">
-                        Can you answer your question with this dataset?
-                        <span class="ans false pull-right" ng-class="isSet(false)"
-                        ng-click="setAns(false)">
-                        <i class="fa fa-close"></i>
-                    </span>
-                    <span class="ans true pull-right" ng-class="isSet(true)"
-                    ng-click="setAns(true)">
-                    <i class="fa fa-check"></i>
-                </span>
-            </div>
-            <div class="form-group">
-                <textarea class="form-control" rows="2"
-                    ng-model="question.notes"
-                    ng-model-options="{debounce: 750}"
-                    placeholder="Notes"></textarea>
-            </div>
-
-        </form>
+    <div ng-if="activeColumns.length == 0">
+      <p>What data will you need to answer this question?<br />Select column names on the right to add them to this space.</p>
     </div>
-</div>
-</div>
+
+    <div class="row">
+      <div class="col-md-6 chart-container" ng-repeat="column in activeColumns track by column._id" id="{{column._id}}">
+        <ng-include src="'client/templates/df-chart.tpl'"></ng-include>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="sidebar">
+      <input type="text" placeholder="Search full text of dataset" class="search-box"
+        ng-model="columns.search" ng-model-options="{debounce: 250}"/>
+
+      <div class="title-block">
+        <h5>Total rows: {{dataset.rowCount}}</h5>
+        <h5>Total columns: {{columns.length}}</h5>
+      </div>
+
+      <div ng-repeat="type in datatypes" class="datatype" ng-class="type">
+      <div ng-show="(columns | filter:{datatype: type}).length" class="ng-show">
+        <p><strong>[<span class="text-lowercase">{{type}}</span> columns]</strong></p>
+      </div>
+      <ul class="nav nav-stacked">
+        <li ng-repeat="col in columns | filter:{datatype: type} | filter:columns.search">
+          <a href="#" ng-click="varClick(col._id)" ng-class="{active: colActive(col._id)}">{{col.name}}</a>
+        </li>
+      </ul>
+      </div>
+    </div>
+
+  </div>
+
 </div>
