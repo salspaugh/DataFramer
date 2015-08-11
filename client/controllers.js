@@ -7,8 +7,6 @@ var DATATYPE_SORT_IDX = {
   "time": 4
 };
 
-
-
 // ***********************************
 // LandingPageController
 // ***********************************
@@ -44,12 +42,19 @@ angular.module("dataFramer").controller("NavBarController",
 // ***********************************
 // DemoPlaceholderController
 // ***********************************
-angular.module("dataFramer").controller("DemoPlaceholderController", ["$state",
-  function($state){
+angular.module("dataFramer").controller("DemoPlaceholderController", ["$state", "$scope", "$meteorUtils",
+  function($state, $scope, $meteorUtils){
+    // redirect if someone navigated to the bare demo URL
     if ($state.current.name == "demo") {
       $state.go('demo.datasets');
     }
 
+    // authenticate - only the datasets state is allowed for anon users
+    $meteorUtils.autorun($scope, function(){
+      if (Meteor.user() === null) {
+        $state.go('demo.datasets'); 
+      }
+    })
   }] )
 
 
