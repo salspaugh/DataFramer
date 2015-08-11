@@ -21,23 +21,23 @@ angular.module("dataFramer").controller("NavBarController", ["$scope", function(
 // NavBarController
 // ***********************************
 angular.module("dataFramer").controller("NavBarController", 
-["$scope", "$state", "$stateParams", "$meteorSubscribe", "$meteorCollection", "$meteorObject",
-function($scope, $state, $stateParams, $meteorSubscribe, $meteorCollection, $meteorObject) {
+  ["$scope", "$state", "$stateParams", "$meteorSubscribe", "$meteorCollection", "$meteorObject",
+  function($scope, $state, $stateParams, $meteorSubscribe, $meteorCollection, $meteorObject) {
 
-  $scope.startPage = false;
-  if ($state.current.name == "demo.datasets" || $state.current.name == "demo.dataset") {
-    $scope.startPage = true;
-  }
+    $scope.startPage = false;
+    if ($state.current.name == "demo.datasets" || $state.current.name == "demo.dataset") {
+      $scope.startPage = true;
+    }
 
-  $meteorSubscribe.subscribe("datasets", $stateParams.datasetId).then(function(sub) {
-    $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
-  });
+    $meteorSubscribe.subscribe("datasets", $stateParams.datasetId).then(function(sub) {
+      $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
+    });
 
-  $scope.checkState = function(name) {
-    return $state.current.name == name;
-  }
+    $scope.checkState = function(name) {
+      return $state.current.name == name;
+    }
 
-}]);
+  }]);
 
 
 
@@ -49,47 +49,118 @@ angular.module("dataFramer").controller("DemoPlaceholderController", ["$state",
     if ($state.current.name == "demo") {
       $state.go('demo.datasets');
     }
-    
-}] )
+
+  }] )
 
 
 // ***********************************
 // DatasetIndexController
 // ***********************************
 angular.module("dataFramer").controller("DatasetIndexController", 
-["$scope", "$state", "$meteorCollection", "$meteorSubscribe",
-function($scope, $state, $meteorCollection, $meteorSubscribe) {
+  ["$scope", "$state", "$meteorCollection", "$meteorSubscribe", "$meteorUtils",
+  function($scope, $state, $meteorCollection, $meteorSubscribe, $meteorUtils) {
 
-  $scope.subLoading = true;
+    $scope.subLoading = true;
+    $scope.uploadError = null;
+    $scope.uploadErrorFile = null;
 
-  $meteorSubscribe.subscribe("datasets").then(function(sub) {
-    $scope.datasets = $meteorCollection(function() {
-      return Datasets.find({}, {fields: {name: 1}, sort: {name: 1}});
+    $meteorSubscribe.subscribe("datasets").then(function(sub) {
+      $scope.datasets = $meteorCollection(function() {
+        return Datasets.find({}, {fields: {name: 1}, sort: {name: 1}});
+      });
+      $scope.subLoading = false;
     });
-    $scope.subLoading = false;
-  });
 
-  $scope.deleteDataset = function(dataset_id) {
-    Meteor.call("removeDataset", dataset_id);
-  };
+    $scope.deleteDataset = function(dataset_id) {
+      Meteor.call("removeDataset", dataset_id);
+    };
 
-  $scope.processCsv = function(event) {
-    var files = event.target.files;
-    for (var i = 0, ln = files.length; i < ln; i++) {
-      var file = files[i];
-      var reader = new FileReader();
-      reader.onload = function(event) {
-        var contents = event.target.result;
-        Meteor.call('processCsv', contents, file.name);
-      };
+    $scope.processCsv = function(event) {
+      // NOTE: this method is meant to be called from outside Angular, 
+      // so we need to use $apply to interact with the scope
+      $scope.$apply(function($scope){
+        $scope.uploadInProgress = true;
+      })    
+      var files = event.target.files;
+      for (var i = 0, ln = files.length; i < ln; i++) {
+        var file = files[i];
+        // check the MIME type
+        if (file.type == "text/csv") {
+          // NOTE: this is an arbitrary limit set for demo usage 
+          if (file.size > 10485760) { // 10MB
+            
+            // too big, display an error
+            $scope.$apply(function($scope){
+              $scope.uploadErrorFile = file.name;
+              $scope.uploadError = "File is too large; this demo only accepts files < 10MB.";
+              $scope.uploadInProgress = false;
+            })
 
-      reader.onerror = function(event) {
-        console.error("File could not be read! Code " + event.target.error.code);
-      };
-      reader.readAsText(file);
+          }  else {
+            
+            // read the CSV and try to  upload
+
+            var reader = new FileReader();
+            reader.onload = function(event) {
+              var contents = event.target.result;
+              // TODO: this catches errors where the file is too big to read into memory
+              // as a string, but not ones where it's only big enough to break the DDP connection
+              // (Meteor will fail to transfer the data, reset connection, and repeat forever)
+              // FOR NOW, the demo size limit should prevent these errors from ever occurring 
+              // in the first place.
+              try {
+                Meteor.call('processCsv', contents, file.name, function(error, response){
+                  if (error) {
+                    $scope.$apply(function($scope){
+                      $scope.uploadErrorFile = file.name;
+                      $scope.uploadError = error.reason;
+                    })
+                  } else {
+                    $scope.$apply(function($scope){
+                      $scope.uploadError = null;
+                      $scope.uploadErrorFile = null;
+                    })
+                  }
+                  $scope.uploadInProgress = false;
+                });
+                
+                $scope.$apply(function($scope){
+                  $scope.uploadError = null;
+                  $scope.uploadErrorFile = null;
+                })
+
+              } catch (e){
+
+                $scope.$apply(function($scope){
+                  $scope.uploadErrorFile = file.name;
+                  $scope.uploadError = e.message;
+                  $scope.uploadInProgress = false;
+                })
+
+              }
+            };
+
+            reader.onerror = function(event) {
+              $scope.$apply(function($scope){
+                $scope.uploadErrorFile = file.name;
+                $scope.uploadError = "File could not be read! Code " + event.target.error.code;
+              });
+            };
+            reader.readAsText(file);
+
+          }
+        
+      } else {
+        $scope.$apply(function($scope){
+          $scope.uploadErrorFile = file.name;
+          $scope.uploadError = "Only valid CSV files are accepted";
+          $scope.uploadInProgress = false;
+        })
+      }
+
       event.target.value = ""; // Reset the upload form
     }
-  };
+  }
 
   $scope.checkState = function(name) {
     return $state.current.name == name;
@@ -103,51 +174,51 @@ function($scope, $state, $meteorCollection, $meteorSubscribe) {
 // QuestionIndexController
 // ***********************************
 angular.module("dataFramer").controller("QuestionIndexController", 
-["$scope", "$meteorCollection", "$stateParams", "$meteorSubscribe", "$state", "$meteorObject",
-function($scope, $meteorCollection, $stateParams, $meteorSubscribe, $state, $meteorObject) {
+  ["$scope", "$meteorCollection", "$stateParams", "$meteorSubscribe", "$state", "$meteorObject",
+  function($scope, $meteorCollection, $stateParams, $meteorSubscribe, $state, $meteorObject) {
 
-  $scope.questionsLoading = true;
+    $scope.questionsLoading = true;
 
-  $meteorSubscribe.subscribe("columns", $stateParams.datasetId);
+    $meteorSubscribe.subscribe("columns", $stateParams.datasetId);
 
-  $meteorSubscribe.subscribe("questions", $stateParams.datasetId).then(function(sub) {
-    $scope.questions = $meteorCollection(function() {
-      return Questions.find({dataset_id:$stateParams.datasetId});
+    $meteorSubscribe.subscribe("questions", $stateParams.datasetId).then(function(sub) {
+      $scope.questions = $meteorCollection(function() {
+        return Questions.find({dataset_id:$stateParams.datasetId});
+      });
+      $scope.questionsLoading = false;
     });
-    $scope.questionsLoading = false;
-  });
 
-  $meteorSubscribe.subscribe("datasets", $stateParams.datasetId).then(function(sub) {
-    $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
-  });
+    $meteorSubscribe.subscribe("datasets", $stateParams.datasetId).then(function(sub) {
+      $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
+    });
 
-  $scope.sections = [
+    $scope.sections = [
     {"name": "Keep", "answerable": true },
     {"name": "Undecided" , "answerable": null },
     {"name": "Reject", "answerable": false }
-  ];
+    ];
 
-  $scope.getVarName = function(var_id) {
-    return Columns.findOne(var_id).name;
-  };
-
-  $scope.getVarType = function(var_id) {
-    return Columns.findOne(var_id).datatype;
-  };
-
-  $scope.checkState = function(name) {
-    return $state.current.name == name;
-  };
-
-  $scope.addQuestion = function(text) {
-    var new_question = {
-      "dataset_id": $stateParams.datasetId,
-      "text": text.$modelValue,
-      "notes": null,
-      "answerable": null,
-      "col_refs": [],
-      "user_id": Meteor.userId()
+    $scope.getVarName = function(var_id) {
+      return Columns.findOne(var_id).name;
     };
+
+    $scope.getVarType = function(var_id) {
+      return Columns.findOne(var_id).datatype;
+    };
+
+    $scope.checkState = function(name) {
+      return $state.current.name == name;
+    };
+
+    $scope.addQuestion = function(text) {
+      var new_question = {
+        "dataset_id": $stateParams.datasetId,
+        "text": text.$modelValue,
+        "notes": null,
+        "answerable": null,
+        "col_refs": [],
+        "user_id": Meteor.userId()
+      };
 
     // Inserting this way lets us add a new question without triggering the 
     // $meteorCollection call above to re-run, which temporarily empties the 
@@ -158,25 +229,25 @@ function($scope, $meteorCollection, $stateParams, $meteorSubscribe, $state, $met
   $scope.answerable = function(q_id) {
     switch (_.findWhere($scope.questions, {_id: q_id}).answerable) {
       case true:
-        return "ans true";
+      return "ans true";
       case false:
-        return "ans false";
+      return "ans false";
       default:
-        return "ans unknown";
+      return "ans unknown";
     }
   };
 
   $scope.answerableIcon = function(q_id) {
     switch (_.findWhere($scope.questions, {_id: q_id}).answerable) {
       case true:
-        return "fa-check fa-lg";
-        break;
+      return "fa-check fa-lg";
+      break;
       case false:
-        return "fa-ban fa-lg";
-        break;
+      return "fa-ban fa-lg";
+      break;
       default:
-        return "fa-question fa-lg";
-        break;
+      return "fa-question fa-lg";
+      break;
     }
   };
 
@@ -194,9 +265,9 @@ function($scope, $meteorCollection, $stateParams, $meteorSubscribe, $state, $met
 
   $scope.editQuestion = function(event, q_id) {
     var esc = event.which == 27
-      , nl = event.which == 13
-      , el = event.target
-      , input = el.nodeName != "INPUT" && el.nodeName != "TEXTAREA";
+    , nl = event.which == 13
+    , el = event.target
+    , input = el.nodeName != "INPUT" && el.nodeName != "TEXTAREA";
 
     if (input) {
       if (esc) { // Restore state
@@ -222,17 +293,17 @@ function($scope, $meteorCollection, $stateParams, $meteorSubscribe, $state, $met
 // QuestionSingleController
 // ***********************************
 angular.module("dataFramer").controller("QuestionSingleController", ["$scope",
-"$meteorSubscribe", "$stateParams", "$meteorObject", "$meteorCollection", "$meteorUtils",
-function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollection, $meteorUtils) {
+  "$meteorSubscribe", "$stateParams", "$meteorObject", "$meteorCollection", "$meteorUtils",
+  function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollection, $meteorUtils) {
 
-  $scope.col_refs = [];
+    $scope.col_refs = [];
 
-  $scope.chartsLoading = true;
+    $scope.chartsLoading = true;
 
-  $meteorSubscribe.subscribe("questions", $stateParams.datasetId, $stateParams.questionId).then(function(sub) {
-    $scope.question = $meteorObject(Questions, $stateParams.questionId);
+    $meteorSubscribe.subscribe("questions", $stateParams.datasetId, $stateParams.questionId).then(function(sub) {
+      $scope.question = $meteorObject(Questions, $stateParams.questionId);
 
-    $scope.varClick = function(col_id) {
+      $scope.varClick = function(col_id) {
       // toggle in question's col_refs
       if (_.contains($scope.question.col_refs, col_id)) { // Remove
         $scope.question.col_refs = _.without($scope.question.col_refs, col_id);
@@ -264,18 +335,18 @@ function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollectio
     });
   });
 
-  $meteorSubscribe.subscribe("columns", $stateParams.datasetId).then(function(sub) {
-    $scope.columns = $meteorCollection(function() {
-      return Columns.find({dataset_id: $stateParams.datasetId}, {sort: {datatypeIdx: 1, name: 1}});
-    });
-    $scope.chartsLoading = false;
+$meteorSubscribe.subscribe("columns", $stateParams.datasetId).then(function(sub) {
+  $scope.columns = $meteorCollection(function() {
+    return Columns.find({dataset_id: $stateParams.datasetId}, {sort: {datatypeIdx: 1, name: 1}});
   });
+  $scope.chartsLoading = false;
+});
 
-  $meteorSubscribe.subscribe("datasets", $stateParams.datasetId).then(function(sub) {
-    $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
-  });
+$meteorSubscribe.subscribe("datasets", $stateParams.datasetId).then(function(sub) {
+  $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
+});
 
-  $scope.datatypes = DATATYPE_LIST;
+$scope.datatypes = DATATYPE_LIST;
 }]);
 
 
@@ -284,28 +355,28 @@ function($scope, $meteorSubscribe, $stateParams, $meteorObject, $meteorCollectio
 // ChartsController
 // ***********************************
 angular.module("dataFramer").controller("ChartsController", 
-["$scope", "$state", "$window", "$stateParams", "$meteorSubscribe", "$meteorCollection", "$meteorObject",
-function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollection, $meteorObject) {
+  ["$scope", "$state", "$window", "$stateParams", "$meteorSubscribe", "$meteorCollection", "$meteorObject",
+  function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollection, $meteorObject) {
 
-  $scope.chartsLoading = true;
-  $meteorSubscribe.subscribe("datasets", $stateParams.datasetId).then(function(sub) {
-    $scope.$emit("datasetReady");
-    $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
-  });
-
-  $meteorSubscribe.subscribe("columns", $stateParams.datasetId).then(function(sub) {
-    $scope.columns = $meteorCollection(function() {
-      return Columns.find({dataset_id: $stateParams.datasetId}, {sort: {datatypeIdx: 1, name: 1}});
+    $scope.chartsLoading = true;
+    $meteorSubscribe.subscribe("datasets", $stateParams.datasetId).then(function(sub) {
+      $scope.$emit("datasetReady");
+      $scope.dataset = $meteorObject(Datasets, $stateParams.datasetId);
     });
-    $scope.chartsLoading = false;
-  });
 
-  $scope.setCurrentColumn = function(col_id) {
-    $scope.currentColumn = $meteorObject(Columns, col_id, false);
-    $scope.modalErrors = {};
-  };
+    $meteorSubscribe.subscribe("columns", $stateParams.datasetId).then(function(sub) {
+      $scope.columns = $meteorCollection(function() {
+        return Columns.find({dataset_id: $stateParams.datasetId}, {sort: {datatypeIdx: 1, name: 1}});
+      });
+      $scope.chartsLoading = false;
+    });
 
-  $scope.addVarToQuestion = function(question, col_id) {
+    $scope.setCurrentColumn = function(col_id) {
+      $scope.currentColumn = $meteorObject(Columns, col_id, false);
+      $scope.modalErrors = {};
+    };
+
+    $scope.addVarToQuestion = function(question, col_id) {
     // Toggle in scope"s col_refs
     if (_.contains(question.col_refs, col_id)) { // Remove
       $scope.col_refs = _.without(question.col_refs, col_id);
@@ -345,14 +416,14 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
   };
 
   $scope.varClick = function(col) {
-     $window.scroll(0, $("#"+col._id).offset().top - 60);
-  };
+   $window.scroll(0, $("#"+col._id).offset().top - 60);
+ };
 
-  $scope.checkState = function(name) {
-    return $state.current.name == name;
-  };
+ $scope.checkState = function(name) {
+  return $state.current.name == name;
+};
 
-  $scope.addQuestion = function(text) {
+$scope.addQuestion = function(text) {
     // check for blank or duplicate questions first
     if (text.$modelValue == undefined || text.$modelValue == "") {
       $scope.modalErrors["qAdd"] = "Questions cannot be blank."
@@ -384,32 +455,32 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
   $scope.answerable = function(q_id) {
     switch (_.findWhere($scope.questions, {_id: q_id}).answerable) {
       case true:
-        return "ans true";
+      return "ans true";
       case false:
-        return "ans false";
+      return "ans false";
       default:
-        return "ans unknown";
+      return "ans unknown";
     }
   };
 
   $scope.answerableIcon = function(q_id) {
     switch (_.findWhere($scope.questions, {_id: q_id}).answerable) {
       case true:
-        return "fa-check";
-        break;
+      return "fa-check";
+      break;
       case false:
-        return "fa-close";
-        break;
+      return "fa-close";
+      break;
       default:
-        return "fa-question";
-        break;
+      return "fa-question";
+      break;
     }
   };
 
   $scope.sections = [
-    {'name': 'Keep', 'answerable': true },
-    {'name': 'Undecided' , 'answerable': null },
-    {'name': 'Reject', 'answerable': false }
+  {'name': 'Keep', 'answerable': true },
+  {'name': 'Undecided' , 'answerable': null },
+  {'name': 'Reject', 'answerable': false }
   ];
 
   $scope.changeType = function changeType(col, type) {
@@ -419,28 +490,28 @@ function($scope, $state, $window, $stateParams, $meteorSubscribe, $meteorCollect
     scope = this.$parent
     switch (type) {
       case "string":
-        col = processString(col);
-        scope.renderChart(scope);
-        break;
+      col = processString(col);
+      scope.renderChart(scope);
+      break;
       case "date":
-        col = processDate(col);
-        scope.renderChart(scope);
-        break;
+      col = processDate(col);
+      scope.renderChart(scope);
+      break;
       case "float":
-        col = processFloat(col);
-        scope.renderChart(scope);
-        break;
+      col = processFloat(col);
+      scope.renderChart(scope);
+      break;
       case "integer":
-        col = processInt(col);
-        scope.renderChart(scope);
-        break;
+      col = processInt(col);
+      scope.renderChart(scope);
+      break;
       case "time":
-        col = processTime(col);
-        scope.renderChart(scope);
-        break;
+      col = processTime(col);
+      scope.renderChart(scope);
+      break;
       default:
-        break;
-      }
+      break;
+    }
     // Reload the page
     $state.go($state.current, {}, {reload: true});
   }
