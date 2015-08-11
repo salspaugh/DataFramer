@@ -50,21 +50,7 @@ var renderStringChart = function(scope, dimensions) {
      .attr("y", function(d, i) { return yScale(i); })
      .attr("width", function(d) { return xScale(d.freq); })
      .attr("height", yScale.rangeBand())
-     .on("mouseover", function(d){
-       var tooltip = d3.select("body")
-         .append("div")
-         .attr("class", "chart-tooltip")
-         .attr("id", "string-chart-tooltip");
-       tooltip.text("Number of items: " + d.freq);
-       return tooltip.style("visibility", "visible"); 
-     })
-     .on("mousemove", function(){ 
-         var tooltip = d3.select("#string-chart-tooltip");
-         return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px"); 
-      })
-     .on("mouseout", function(){
-       return $("#string-chart-tooltip").remove();
-      });
+     ;
 
     bars.append("text")
      .text(function(d) { return d.value; })
@@ -143,6 +129,23 @@ var renderStringChart = function(scope, dimensions) {
         .classed("hidden", true);
     }
   }
+
+  // tooltip code for all bars in string charts
+  bars.on("mouseover", function(d){
+       var tooltip = d3.select("body")
+         .append("div")
+         .attr("class", "chart-tooltip")
+         .attr("id", "string-chart-tooltip");
+       tooltip.html("Value: " + d.value + "<br/>Number of items: " + d.freq);
+       return tooltip.style("visibility", "visible"); 
+     })
+     .on("mousemove", function(){ 
+         var tooltip = d3.select("#string-chart-tooltip");
+         return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px"); 
+      })
+     .on("mouseout", function(){
+       return $("#string-chart-tooltip").remove();
+      });
 
   // Add X-axis
   var xAxis = d3.svg.axis()
