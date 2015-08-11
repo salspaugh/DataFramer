@@ -22,7 +22,7 @@
   "badges":               false,
   "jumbotron":            false,
   "thumbnails":           true,
-  "alerts":               false,
+  "alerts":               true,
   "progress-bars":        true,
   "media":                false,
   "list-group":           true,
