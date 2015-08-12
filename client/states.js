@@ -14,6 +14,18 @@ angular.module('dataFramer')
                     templateUrl: 'client/templates/demo.tpl',
                     controller: 'DemoPlaceholderController'
                 })
+
+                .state('demo.loggedOut', {
+                    url: '/loggedOut',
+                    views: {
+                        main: {
+                            // a page with login & temp account instructions
+                            templateUrl: 'client/templates/logged-out.tpl',
+                            controller: 'LoggedOutController'
+                        }
+                    }
+                })
+                
                 .state('demo.datasets', {
                     url: '/datasets',
                     views: {
