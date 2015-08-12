@@ -78,6 +78,10 @@ function($scope, $state, $meteorUtils){
   $scope.tempAccount = function(){
     // put button into loading state and reset errors
     $scope.acctLoading = true;
+    $scope.createError = false;
+    $scope.loginError = false;
+    $scope.errorInfo = "";
+
     // call a server method to make the temp account and load it with data
     Meteor.call('tempAccount', function(error, result){
       if (error){
@@ -85,7 +89,6 @@ function($scope, $state, $meteorUtils){
         $scope.acctLoading = false;
 
         //report errors
-        $scope.loginError = false;
         $scope.createError = true;
         $scope.errorInfo = error;
       } else {
