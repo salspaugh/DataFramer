@@ -257,17 +257,64 @@ function tempAccount(){
     
 
     // set a timer to delete this account after self-destruct period ends
-    var seconds = 60 * 60,
-      selfDestruct = 1000 * seconds; // in ms
-    Meteor.setTimeout(function(){
-      // delete user - this will log the client out immediately
-      Meteor.users.remove({_id: userId});
-      // delete the user's data also
-      Datasets.remove({user_id: userId});
-      Columns.remove({user_id: userId});
-      Questions.remove({user_id: userId})
-    }, selfDestruct);
+    var countdown = {
+      userId: userId,
+      date: moment().add(1, 'hours').toDate()
+    }
+    selfDestruct(countdown);
 
     // return newId so the client can log in
     return newId;
+}
+
+// a function to delete a temporary account
+deleteUser = function(userId){
+  // delete user - this will log the client out immediately
+  Meteor.users.remove({_id: userId});
+  // delete the user's data also
+  Datasets.remove({user_id: userId});
+  Columns.remove({user_id: userId});
+  Questions.remove({user_id: userId})
+}
+
+// schedule and record cron jobs for self destruct timers
+SelfDestructTimers = new Meteor.Collection('self_destruct_timers');
+
+function addSelfDestructTimer(taskId, details) {
+  // known issue: this job throws an error on the server like "Exception in setTimeout callback: TypeError: Cannot call method 'getTime' of undefined"
+  // but it doesn't seem to affect this functionality at all
+  // see https://github.com/percolatestudio/meteor-synced-cron/issues/41 for deets
+  SyncedCron.add({
+    name: taskId,
+    schedule: function(parser) {
+      return parser.recur().on(details.date).fullDate();
+    },
+    job: function() {
+      deleteUser(details.userId);
+      SelfDestructTimers.remove(taskId);
+      SyncedCron.remove(taskId);
+            return taskId;
+    }
+  });
+}
+
+function selfDestruct(details){
+  if (details.date < new Date()) {
+    deleteUser(details.userId);
+  } else {
+    var thisId = SelfDestructTimers.insert(details);
+    addSelfDestructTimer(thisId, details);   
   }
+  return true;
+}
+
+Meteor.startup(function () {
+  SelfDestructTimers.find().forEach(function(details) {
+    if (details.date < new Date()) {
+      deleteUser(details.userId)
+    } else {
+      addSelfDestructTimer(details._id, details);
+    }
+  });
+  SyncedCron.start();
+});
