@@ -8,9 +8,15 @@ var DATATYPE_SORT_IDX = {
 
 Meteor.methods({
   "processCsv": processCsv,
+  "tempAccount": tempAccount
 });
 
-function processCsv(csvfile, name){
+function processCsv(csvfile, name, userId, type_overrides){
+  // if no user specified, use currently logged in user
+  if (userId === undefined) {
+    userId = Meteor.userId()
+  }
+
   try {
     CSV()
       .from.string(csvfile)
@@ -18,22 +24,22 @@ function processCsv(csvfile, name){
       .to.array(Meteor.bindEnvironment(function(data){
 
         var dataset = {
-          "user_id": Meteor.userId(),
+          "user_id": userId,
           "name": name,
-              "rowCount": data.length - 1, // subtract the header row
+          "rowCount": data.length - 1, // subtract the header row
               "questions": []
             };
 
           // Add to database or replace existing with same name
           var d_id = Datasets.insert(dataset);
-          console.log("Added dataset ", name);
 
           // Convert rows to columns
           var cols = _.zip.apply(_, data);
+          
           // Convert arrays to objects, separate name from values
           _.each(cols, function(v,i,a){
             a[i] = {
-              "user_id": Meteor.userId(),
+              "user_id": userId,
               name: v[0],
               values: [],
               "orig_values": _.rest(v),
@@ -44,23 +50,32 @@ function processCsv(csvfile, name){
           // Detect the datatype
           _.each(cols, function(col) {
             var datatype = detectDataType(col.orig_values);
-            col["datatype"] = datatype[0];
-            col["datatypeIdx"] = DATATYPE_SORT_IDX[datatype[0]];
+            col['datatype'] = datatype[0];
+
+            if (type_overrides != undefined){
+              _.each(type_overrides, function(override){
+                if (name == override.dataset && col['name'] == override.column) {
+                  col['datatype'] = override.datatype;
+                }
+              })
+            }
+
+            col["datatypeIdx"] = DATATYPE_SORT_IDX[col["datatype"]];
 
               // Cast numbers and dates before storing
-              if (datatype[0] == "float"){
+              if (col['datatype'] == "float"){
                 col = processFloat(col);
 
-              } else if (datatype[0] == "integer") {
+              } else if (col['datatype'] == "integer") {
                 col = processInt(col);
 
-              } else if (datatype[0] == "string") {
+              } else if (col['datatype'] == "string") {
                 col = processString(col);
 
-              } else if (datatype[0] == "date") {
+              } else if (col['datatype'] == "date") {
                 col = processDate(col);
 
-              } else if (datatype[0] == "time") {
+              } else if (col['datatype'] == "time") {
                 col = processTime(col);
               }
 
@@ -145,7 +160,7 @@ function checkIsDate(item) {
   return moment(item).isValid(); 
 }
 
-detectDataType = function(items) {
+function detectDataType(items) {
 
   var validItems = _.filter(items, function(item, idx) {
     return !checkNull(item, true);
@@ -214,3 +229,45 @@ detectDataType = function(items) {
   return result;
   
 }
+
+function tempAccount(){
+    // create an account
+    var newId = Random.id(),
+      username = "user-" + newId
+      ;
+
+    var userId = Accounts.createUser({
+      username: username,
+      password: newId
+    });
+
+    // preload the account with some data
+    var csvFiles = ['faa-on-time-performance-sample.csv', 'faa-wildlife-strike-clean.csv'];
+    
+    // some manual overrides for ambiguous variables
+    var overrides = [
+      {dataset: 'faa-on-time-performance-sample.csv', column: 'Year', datatype: 'string'},
+      {dataset: 'faa-wildlife-strike-clean.csv', column: 'BIRDS_STRUCK', datatype: 'string'},
+      {dataset: 'faa-wildlife-strike-clean.csv', column: 'TIME', datatype: 'time'},
+    ];
+
+    _.each(csvFiles, function(name){
+      processCsv(Assets.getText(name), name, userId, overrides);
+    })
+    
+
+    // set a timer to delete this account after self-destruct period ends
+    var seconds = 60 * 60,
+      selfDestruct = 1000 * seconds; // in ms
+    Meteor.setTimeout(function(){
+      // delete user - this will log the client out immediately
+      Meteor.users.remove({_id: userId});
+      // delete the user's data also
+      Datasets.remove({user_id: userId});
+      Columns.remove({user_id: userId});
+      Questions.remove({user_id: userId})
+    }, selfDestruct);
+
+    // return newId so the client can log in
+    return newId;
+  }
