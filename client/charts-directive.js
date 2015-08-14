@@ -69,7 +69,7 @@ var renderStringChart = function(scope, dimensions) {
 
     var yFisheye = d3.fisheye.ordinal()
       .rangeBands([0, dimensions.height], 0.1)
-      .distortion(groups.length / 20);
+      .distortion(groups.length / 15);
 
     yFisheye.domain(_.range(groups.length));
 
