@@ -23,6 +23,30 @@ var renderStringChart = function(scope, dimensions) {
   groups = _.filter(groups, function(obj) { return obj.value != "null"; });
   var maxFreq = d3.max(groups, function(d) { return d.freq; });
 
+  // how many orders of magnitude does the range span?
+  var minFreq = d3.min(groups, function(d) { return d.freq; });
+  // take the difference of the base 10 logs, then round to the nearest integer
+
+  // log base 10 polyfill
+  Math.log10 = Math.log10 || function(x) {
+    return Math.log(x) / Math.LN10;
+  };
+
+  var ordersOfMagnitude = Math.round(Math.log10(maxFreq) - Math.log10(minFreq));
+  if (ordersOfMagnitude > 2){
+    var useDotPlot = true;
+    var domainMin = minFreq;
+    var xScale = d3.scale.log();
+  } else {
+    var xScale = d3.scale.linear();
+    var domainMin = 0;
+    var useDotPlot = false;
+  }
+
+  xScale
+    .domain([domainMin, maxFreq])
+    .range([0, dimensions.width + dimensions.margin.left + dimensions.margin.right]);
+
   var svg = d3.select(scope.container[0])
     .append("svg")
     .attr("width", dimensions.width + dimensions.margin.left + dimensions.margin.right)
@@ -31,26 +55,31 @@ var renderStringChart = function(scope, dimensions) {
     .attr("style", "overflow: visible;");
 
   if (groups.length < 12) {
-
     var yScale = d3.scale.ordinal()
       .domain(d3.range(groups.length))
       .rangeBands([0, dimensions.height + dimensions.margin.top], 0.15);
-
-    var xScale = d3.scale.linear()
-      .domain([0, maxFreq])
-      .range([0, dimensions.width + dimensions.margin.left + dimensions.margin.right]);
 
     var bars = svg.selectAll(".bar")
       .data(groups)
       .enter().append("g")
       .classed("bar", true);
 
-    bars.append("rect")
-     .attr("x", 0)
-     .attr("y", function(d, i) { return yScale(i); })
-     .attr("width", function(d) { return xScale(d.freq); })
-     .attr("height", yScale.rangeBand())
-     ;
+    if (useDotPlot) {
+      bars.append("circle")
+        .attr("cx", function(d) { 
+          return xScale(d.freq); 
+        })
+        .attr("cy", function(d, i) { return yScale(i) + (yScale.rangeBand() / 2); })
+        .attr('r', yScale.rangeBand() / 4)
+        ;
+    } else {
+      bars.append("rect")
+       .attr("x", 0)
+       .attr("y", function(d, i) { return yScale(i); })
+       .attr("width", function(d) { return xScale(d.freq); })
+       .attr("height", yScale.rangeBand())
+       ;
+   }
 
     bars.append("text")
      .text(function(d) { return d.value; })
@@ -58,14 +87,15 @@ var renderStringChart = function(scope, dimensions) {
      .attr("y", function(d, i) { return yScale(i) + yScale.rangeBand()/2; });
 
   } else {
+    // use fisheye effect on chart
 
     var yScale = d3.scale.ordinal()
      .domain(d3.range(groups.length))
      .rangeBands([0, dimensions.height + dimensions.margin.top], 0.1);
 
-    var xScale = d3.scale.linear()
-     .domain([0, maxFreq])
-     .range([0, dimensions.width + dimensions.margin.left + dimensions.margin.right]);
+    // var xScale = d3.scale.linear()
+    //  .domain([0, maxFreq])
+    //  .range([0, dimensions.width + dimensions.margin.left + dimensions.margin.right]);
 
     var yFisheye = d3.fisheye.ordinal()
       .rangeBands([0, dimensions.height], 0.1)
@@ -78,11 +108,21 @@ var renderStringChart = function(scope, dimensions) {
       .enter().append("g")
       .classed("bar", true);
 
-    bars.append("rect")
-     .attr("x", 0)
-     .attr("y", function(d, i) { return yScale(i) })
-     .attr("width", function(d) { return xScale(d.freq); })
-     .attr("height", yScale.rangeBand());
+    if (useDotPlot){
+      bars.append("circle")
+        .attr("cx", function(d) { 
+          return xScale(d.freq); 
+        })
+        .attr("cy", function(d, i) { return yScale(i) + (yScale.rangeBand() / 2); })
+        .attr('r', d3.max([1, yScale.rangeBand() / 4]))
+        ;
+    } else {
+      bars.append("rect")
+       .attr("x", 0)
+       .attr("y", function(d, i) { return yScale(i) })
+       .attr("width", function(d) { return xScale(d.freq); })
+       .attr("height", yScale.rangeBand());  
+    }
 
     bars.append("text")
      .text(function(d) { return d.value; })
@@ -115,6 +155,9 @@ var renderStringChart = function(scope, dimensions) {
       svg.selectAll("rect")
         .attr("y", function(d,i) { return yFisheye(i); })
         .attr("height", function(d,i) { return yFisheye.rangeBand(i); });
+      svg.selectAll("circle")
+        .attr("cy", function(d,i) { return yFisheye(i); })
+        .attr("r", function(d,i) { return d3.max([1, yFisheye.rangeBand(i) / 4]); });
       svg.selectAll("text.bar-label")
         .attr("y", function(d,i) { return yFisheye(i); })
         .attr("font-size", function(d,i) { return yFisheye.rangeBand(i); });
@@ -123,6 +166,9 @@ var renderStringChart = function(scope, dimensions) {
       svg.selectAll("rect")
         .attr("y", function(d,i) { return yScale(i); })
         .attr("height", function(d,i) { return yScale.rangeBand(); });
+      svg.selectAll("circle")
+        .attr("cy", function(d,i) { return yScale(i); })
+        .attr("r", function(d,i) { return d3.max([1, yScale.rangeBand() / 4]); });
       svg.selectAll("text.bar-label")
         .attr("y", function(d,i) { return yScale(i); })
         .attr("height", function(d,i) { return yScale.rangeBand(); })
@@ -151,8 +197,16 @@ var renderStringChart = function(scope, dimensions) {
   var xAxis = d3.svg.axis()
     .orient("bottom")
     .scale(xScale)
-    .tickFormat(d3.format("d"))
-    .tickSubdivide(0);
+    ;
+  if (useDotPlot){
+    xAxis.tickFormat(function(d){
+      return xScale.tickFormat(ordersOfMagnitude, d3.format(",d"))(d)
+    })
+  } else {
+    xAxis.tickFormat(d3.format("d"))
+      .tickSubdivide(0);
+  }
+    
 
   var xCall = svg.append("g")
     .classed("axis", true)
