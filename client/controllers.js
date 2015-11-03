@@ -7,8 +7,6 @@ var DATATYPE_SORT_IDX = {
   "time": 4
 };
 
-
-
 // ***********************************
 // LandingPageController
 // ***********************************
@@ -44,13 +42,76 @@ angular.module("dataFramer").controller("NavBarController",
 // ***********************************
 // DemoPlaceholderController
 // ***********************************
-angular.module("dataFramer").controller("DemoPlaceholderController", ["$state",
-  function($state){
+angular.module("dataFramer").controller("DemoPlaceholderController", ["$state", "$scope", "$meteorUtils",
+  function($state, $scope, $meteorUtils){
+
+    // redirect if someone navigated to the bare demo URL
     if ($state.current.name == "demo") {
       $state.go('demo.datasets');
     }
 
+    // authenticate or redirect
+    $meteorUtils.autorun($scope, function(){
+      if (Meteor.user() === null) {
+        $state.go('demo.loggedOut'); 
+      }
+    })
   }] )
+
+
+
+
+// ***********************************
+// LoggedOutContorller
+// ***********************************
+angular.module("dataFramer").controller("LoggedOutController", ['$scope', '$state', '$meteorUtils',
+function($scope, $state, $meteorUtils){
+
+  // once logged in, go to the datasets page
+  $meteorUtils.autorun($scope, function(){
+      if (Meteor.user() !== null) {
+        $state.go('demo.datasets'); 
+      }
+    })
+
+  // create a temp account and log the user in
+  $scope.tempAccount = function(){
+    // put button into loading state and reset errors
+    $scope.acctLoading = true;
+    $scope.createError = false;
+    $scope.loginError = false;
+    $scope.errorInfo = "";
+
+    // call a server method to make the temp account and load it with data
+    Meteor.call('tempAccount', function(error, result){
+      if (error){
+        // end the loading state 
+        $scope.acctLoading = false;
+
+        //report errors
+        $scope.createError = true;
+        $scope.errorInfo = error;
+      } else {
+        $scope.createError = false;
+        // log the user in
+        Meteor.loginWithPassword("user-"+result, result, function(error) {
+          if (error) {
+          // end the loading state 
+            $scope.acctLoading = false;
+
+            // report errors
+            $scope.loginError = true;
+            $scope.errorInfo = error;
+          }
+        });
+      }
+    });
+     
+  }
+
+}]);
+
+
 
 
 // ***********************************
