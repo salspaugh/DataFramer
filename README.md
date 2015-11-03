@@ -27,6 +27,6 @@ Developing for DataFramer requires [Meteor](http://docs.meteor.com).
 
 ## Contributors
 
-[@macfarlandian](https://github.com/macfarlandian)
-[@annaswigart](https://github.com/annaswigart)
-[@salspaugh](https://github.com/salspaugh)
+* [@macfarlandian](https://github.com/macfarlandian)
+* [@annaswigart](https://github.com/annaswigart)
+* [@salspaugh](https://github.com/salspaugh)
