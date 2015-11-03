@@ -28,7 +28,7 @@
   <div class="jumbotron">
     <div class="container">
       <h1>DataFramer</h1>
-      <p>A visual data exploration tool with a focus on asking the right questions.</p>
+      <p>A visual data exploration tool with a focus on asking the right questions</p>
     </div>
   </div>
 
@@ -44,38 +44,36 @@
         <p>The focused, minimalistic design of DataFramer strives to minimize data-driven distractions, enable rapid comprehension of the landscape of a dataset, and produce an actionable research plan to guide and support deeper analysis.</p>
       </div>
       <div class="col-md-2 col-md-offset-1">
-        <h4>Creators</h4>
+        <h4>Developers</h4>
         <ul class="list-unstyled">
           <li>Sara Alspaugh <br>
             <span class="contact-block">
-              <a><i class="fa fa-envelope"></i></a>
-              <a><i class="fa fa-twitter"></i></a>
-              <a><i class="fa fa-globe"></i></a>
+              <a href="mailto:alspaugh@eecs.berkeley.edu"><i class="fa fa-envelope"></i></a>
+              <a href="https://twitter.com/salspaugh"><i class="fa fa-twitter"></i></a>
+              <a href="http://www.eecs.berkeley.edu/~alspaugh/"><i class="fa fa-globe"></i></a>
             </span>
           </li>
           <li>Anna Swigart <br>
             <span class="contact-block">
-              <a><i class="fa fa-envelope"></i></a>
-              <a><i class="fa fa-twitter"></i></a>
-              <a><i class="fa fa-globe"></i></a>
+              <a href="mailto:annagswigart@gmail.com"><i class="fa fa-envelope"></i></a>
             </span>
           </li>
           <li>Ian MacFarland <br>
             <span class="contact-block">
-              <a><i class="fa fa-envelope"></i></a>
-              <a><i class="fa fa-twitter"></i></a>
-              <a><i class="fa fa-globe"></i></a>
+              <a href="mailto:ian.macfarland@gmail.com"><i class="fa fa-envelope"></i></a>
+              <a href="https://twitter.com/macfarlandian"><i class="fa fa-twitter"></i></a>
+              <a href="https://macfarlandian.withknown.com/"><i class="fa fa-globe"></i></a>
             </span>
           </li>
         </ul>
         <h4>Advisers</h4>
         <ul>
-          <li>Marti Hearst</li>
-          <li>Randy Katz</li>
+          <li><a href="http://people.ischool.berkeley.edu/~hearst/">Marti Hearst</a></li>
+          <li><a href="http://bnrg.cs.berkeley.edu/~randy/">Randy Katz</a></li>
         </ul>
-        <h4>Publications</h4>
+        <h4>More</h4>
         <ul>
-          <li><a href="#">Hopefully a paper?</a></li>
+          <li><a href="http://www.eecs.berkeley.edu/Pubs/TechRpts/2015/EECS-2015-208.html">Tech report</a></li>
           <li><a href="https://github.com/salspaugh/DataFramer">Code on GitHub</a></li>
         </ul>
       </div>
@@ -128,30 +126,36 @@
 
     <div class="row" id="how">
       <div class="col-md-12">
-        <h2>How to DataFramer <br>
-          <small>Something something exploratory data analysis</small> 
+        <h2>DataFramer in Action<br>
+          <small>Watch how to get an overview of your data and organize your questions</small> 
         </h2>
       </div>
       <div class="col-md-9">
-        <img src="http://placehold.it/1280x720?text=video+here" alt="" class="img-responsive img-thumbnail" />
-        <p>Aliquam libero. Vivamus nisl nibh, iaculis vitae, viverra sit amet, ullamcorper vitae, turpis. Aliquam erat volutpat. Vestibulum dui sem, pulvinar sed, imperdiet nec, iaculis nec, leo. Fusce odio. Etiam arcu dui, faucibus eget, placerat vel, sodales eget, orci. Donec ornare neque ac sem. Mauris aliquet. Aliquam sem leo, vulputate sed, convallis at, ultricies quis, justo. Donec nonummy magna quis risus. Quisque eleifend. Phasellus tempor vehicula justo. Aliquam lacinia metus ut elit. Suspendisse iaculis mauris nec lorem. Donec leo. Vivamus fermentum nibh in augue. Praesent a lacus at urna congue rutrum. Nulla enim eros, porttitor eu, tempus id, varius non, nibh. </p>
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/szJZpGSRcXs" allowfullscreen>
+          </iframe>
+        </div>
+        <p>
+          After creating an account, users can upload CSV files to explore. Users are then directed to the Questions page, where they can create, reflect upon, and organize questions about the dataset. Before asking questions, it's useful to get an overview of the available columns in the dataset by navigating to the Charts page. In the Charts page, users can browse graphs of each of the columns, which are organized and color-coded by datatype. As the user browses, many questions will likely arise about the individual columns and how they relate. Users can create these questions and associate the relevant columns with them, to keep track of which data is needed. When users navigate back to the Questions page, their questions appear there. They can organize these questions to prioritize them for later analysis, and sort out the questions that are dead-ends, for example, because the data needed to answer them is not available. Users can also view a Details page for each question, where they can add additional columns. In the future, users will be able to combine columns in this view into compound graphs to explore the relationships between them.
+        </p>
         <div class="text-center">
           <a ui-sref="demo" class="btn btn-primary btn-lg">Launch the demo &raquo;</a>
         </div>
       </div>
       <div class="col-md-3">
-        <h4>Sample datasets to try out</h4>
-        <p>Aliquam libero. Vivamus nisl nibh, iaculis vitae, viverra sit amet, ullamcorper vitae, turpis. Aliquam erat volutpat. Vestibulum dui sem, pulvinar sed, imperdiet nec, iaculis nec, leo. </p>
+        <h4>Sample datasets</h4>
+        <p>
+          Try out DataFramer with these:  
+        </p>
         <ul>
-          <li><a href="#">Dataset</a></li>
-          <li><a href="#">Dataset</a></li>
-          <li><a href="#">Dataset</a></li>
-          <li><a href="#">Dataset</a></li>
+          <li><a href="movies.csv">Movies</a></li>
+          <li><a href="faa-on-time-performance-sample.csv">Airline Delays</a></li>
+          <li><a href="faa-wildlife-strike-clean.csv">Wildlife Strikes</a></li>
         </ul>
 
         <h4>Contributing to DataFramer</h4>
         <p>DataFramer is an <a href="https://github.com/salspaugh/DataFramer">open-source</a> web application coded entirely in JavaScript; it is powered by Meteor, a Node/Mongo framework that facilitates fast and easy passing of data between client and server. Page templates use <a href="https://angularjs.org/">AngularJS</a> and <a href="http://getbootstrap.com">Bootstrap</a>.</p>
-        <p>Because of the ease of data transfer, this platform has the potential to enable concurrent, collaborative use of DataFramer as well. That&#39;s one of many avenues for contributing if you&#39;re interested in working on DataFramer: both techies and non-techies (designers, researchers, etc) welcome! Feel free to <a href="mailto:alspaugh@eecs.berkeley.edu">contact Sara (the project lead)</a> or check us out on <a href="https://github.com/salspaugh/DataFramer">GitHub</a>.</p>
+        <p>Because of the ease of data transfer, this platform has the potential to enable concurrent, collaborative use of DataFramer as well. That&#39;s one of many avenues for contributing if you&#39;re interested in working on DataFramer: both techies and non-techies (designers, researchers, etc) welcome! Feel free to <a href="mailto:alspaugh@eecs.berkeley.edu">contact us</a> or check us out on <a href="https://github.com/salspaugh/DataFramer">GitHub</a>.</p>
 
       </div>
     </div>
