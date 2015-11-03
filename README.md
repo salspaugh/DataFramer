@@ -15,7 +15,7 @@ answered with the given dataset.
 
 ## Usage
 
-DataFramer is hosted courtesy of Meteor at http://dataframer.meteor.com/. 
+DataFramer is hosted at http://persimmon.ischool.berkeley.edu:8880 
 
 If you would like to run DataFramer locally, download and install the 
 dependencies. Run `meteor` from the top-level directory to run a 
@@ -25,3 +25,8 @@ DataFramer server locally. Then navigate your browser to the given URL.
 
 Developing for DataFramer requires [Meteor](http://docs.meteor.com).
 
+## Contributors
+
+[@macfarlandian](https://github.com/macfarlandian)
+[@annaswigart](https://github.com/annaswigart)
+[@salspaugh](https://github.com/salspaugh)
