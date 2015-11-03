@@ -12,8 +12,8 @@ var DATATYPE_SORT_IDX = {
 // ***********************************
 // LandingPageController
 // ***********************************
-angular.module("dataFramer").controller("NavBarController", ["$scope", function($scope){
-  console.log("land")
+angular.module("dataFramer").controller("LandingPageController", ["$scope", function($scope){
+  $('body').scrollspy({ target: '#topnav' })
 }]);
 
 

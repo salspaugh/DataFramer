@@ -4,7 +4,7 @@
 
   "scaffolding":          true,
   "type":                 true,
-  "code":                 false,
+  "code":                 true,
   "grid":                 true,
   "tables":               false,
   "forms":                true,
@@ -20,7 +20,7 @@
   "pager":                false,
   "labels":               true,
   "badges":               false,
-  "jumbotron":            false,
+  "jumbotron":            true,
   "thumbnails":           true,
   "alerts":               true,
   "progress-bars":        true,
@@ -31,7 +31,7 @@
   "wells":                false,
   "close":                false,
 
-  "component-animations": false,
+  "component-animations": true,
   "dropdowns":            true,
   "modals":               true,
   "tooltip":              true,
@@ -42,9 +42,9 @@
   "alert":                false,
   "button":               false,
   "collapse":             false,
-  "scrollspy":            false,
+  "scrollspy":            true,
   "tab":                  false,
-  "transition":           false,
+  "transition":           true,
 
   "utilities":            true,
   "responsive-utilities": true
